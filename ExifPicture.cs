@@ -18,7 +18,7 @@ namespace PictureList {
 
     public class ExifPicture {
 
-        private const int BYTE = 1, ASCII = 2, SHORT = 3, LONG = 4, RATIONAL = 5, UNDEFINED = 7, SLONG = 9, SRATIONAL = 10;
+        private const int BYTE = 1, ASCII = 2, SHORT = 3, LONG = 4, RATIONAL = 5, UNDEFINED = 7, SLONG = 9, SRATIONAL = 10, UTF8 = 129;
         //ファイルとしての普通の属性
         public string FullPath { get; private set; }
         public string Name { get; private set; }
@@ -36,8 +36,8 @@ namespace PictureList {
         //Exif情報
         //
         //TIFF Rev6.0の付属情報からのもの
-        public long ImageWidth { get; private set; } //0x0100 画像の幅 JPRG圧縮データでは記録不可
-        public long ImageLength { get; private set; } //0x0101 画像の高さ JPRG圧縮データでは記録不可
+        public string ImageWidth { get; private set; } //0x0100 画像の幅 JPRG圧縮データでは記録不可
+        public string ImageLength { get; private set; } //0x0101 画像の高さ JPRG圧縮データでは記録不可
         public string BitsPerSample { get; private set; } //0x0102 画像のビットの深さ JPRG圧縮データでは記録不可
         public string Compression { get; private set; } //0x0103 圧縮の種類 JPRG圧縮データでは記録不可
         public string PhotometricInterpretation { get; private set; } //0x0106 画素構成
@@ -46,11 +46,11 @@ namespace PictureList {
         public string Model { get; private set; } //0x0110 画像入力機器のモデル名
         public string StripOffsets { get; private set; } //0x0111 画像データのロケーション
         public string Orientation { get; private set; } //0x0112 画像方向
-        public long SamplesPerPixel { get; private set; } //0x0115 コンポーネント数
-        public long RowsPerStrip { get; private set; } //0x0116 1ストリップあたりの行の数
+        public string SamplesPerPixel { get; private set; } //0x0115 コンポーネント数
+        public string RowsPerStrip { get; private set; } //0x0116 1ストリップあたりの行の数
         public string StripByteCounts { get; private set; } //0x0117 ストリップの総バイト数
-        public double XResolution { get; private set; } //0x011A 画像の幅の解像度
-        public double YResolution { get; private set; } //0x011B 画像の高さの解像度
+        public string XResolution { get; private set; } //0x011A 画像の幅の解像度
+        public string YResolution { get; private set; } //0x011B 画像の高さの解像度
         public string PlanarConfiguration { get; private set; } //0x011C 画像データの並び
         public string ResolutionUnit { get; private set; } //0x0128 画像の幅と高さの解像度の単位
         public string TransferFunction { get; private set; } //0x012D 再生階調カーブ特性
@@ -59,30 +59,30 @@ namespace PictureList {
         public string Artist { get; private set; } //0x013B アーティスト
         public string WhitePoint { get; private set; } //0x013E 参照白色点の色度座標値
         public string PrimaryChromaticities { get; private set; } //0x013F 原色の色度座標値
-        public long JPEGInterchangeFormat { get; private set; } //0x0201 JPEGのSOIへのオフセット
-        public long JPEGInterchangeFormatLength { get; private set; } //0x0202 JPEGデータのバイト数(サムネイル）
+        public string JPEGInterchangeFormat { get; private set; } //0x0201 JPEGのSOIへのオフセット
+        public string JPEGInterchangeFormatLength { get; private set; } //0x0202 JPEGデータのバイト数(サムネイル）
         public string YCbCrCoefficients { get; private set; } //0x0211 色変換マトリクス係数
         public string YCbCrSubSampling { get; private set; } //0x0212 YCCの画素構成(Cの間引き率)
         public string YCbCrPositioning { get; private set; } //0x0213 YCCの画素構成(YとCの位置)
         public string ReferenceBlackWhite { get; private set; } //0x0214 参照黒色点値と参照白色点値
         public string Copyright { get; private set; } //0x8298 撮影著作権者/編集著作権者        
-        public long Exif_IFD_Pointer { get; private set; } //0x8769 Exifタグ
-        public long GPSInfoIFDPointer { get; private set; } //0x8825 GPSタグ
+        public string Exif_IFD_Pointer { get; private set; } //0x8769 Exifタグ
+        public string GPSInfoIFDPointer { get; private set; } //0x8825 GPSタグ
         //
         //Exif固有のIFD
         //
-        public double ExposureTime { get; private set; } //0x829A 露出時間
-        public double FNumber { get; private set; } //0x829D Fナンバー
+        public string ExposureTime { get; private set; } //0x829A 露出時間
+        public string FNumber { get; private set; } //0x829D Fナンバー
         public string ExposureProgram { get; private set; } //0x8822 露出プログラム
         public string SpectralSensitivity { get; private set; } //0x8824 スペクトル感度
-        public long PhotographicSensitivity { get; private set; } //0x8827 撮影感度
+        public string PhotographicSensitivity { get; private set; } //0x8827 撮影感度
         public string OECF { get; private set; } //0x8828 光電変換関数
         public string SensitivityType { get; private set; } //0x8830 感度種別 XXXX
-        public long StandardOutputSensitivity { get; private set; } //0x8831 標準出力感度 XXXX
-        public long RecommendedExposureIndex { get; private set; } //0x8832 推奨露光指数 XXXX
-        public long ISOSpeed { get; private set; } //0x8833 ISOスピード XXXX
-        public long ISOSpeedLatitudeyyy { get; private set; } //0x8834 ISOスピードラチチュードyyy XXXX
-        public long ISOSpeedLatitudezzz { get; private set; } //0x8835 ISOスピードラチチュードzzz XXXX
+        public string StandardOutputSensitivity { get; private set; } //0x8831 標準出力感度 XXXX
+        public string RecommendedExposureIndex { get; private set; } //0x8832 推奨露光指数 XXXX
+        public string ISOSpeed { get; private set; } //0x8833 ISOスピード XXXX
+        public string ISOSpeedLatitudeyyy { get; private set; } //0x8834 ISOスピードラチチュードyyy XXXX
+        public string ISOSpeedLatitudezzz { get; private set; } //0x8835 ISOスピードラチチュードzzz XXXX
         public string ExifVersion { get; private set; } //0x9000 Exifバージョン
         public string DateTimeOriginal { get; private set; } //0x9003 原画像データの生成日時
         public string DateTimeDigitized { get; private set; } //0x9004 デジタルデータの作成日時
@@ -90,39 +90,39 @@ namespace PictureList {
         public string OffsetTimeOriginal { get; private set; } //0X9011 DateTimeOrigialの時差データ Exif2.31で追加 oooo
         public string OffsetTimeDigitized { get; private set; } //0X9012 DateTimeDigitizedの時差データ Exif2.31で追加 oooo
         public string ComponentsConfiguration { get; private set; } //0x9101 各コンポーネントの意味
-        public double CompressedBitsPerPixel { get; private set; } //0x9102 画像圧縮モード
-        public double ShutterSpeedValue { get; private set; } //0x9201 シャッタースピード
-        public double ApertureValue { get; private set; } //0x9202 絞り値
-        public double BrightnessValue { get; private set; } //0x9203 輝度値
-        public double ExposureBiasValue { get; private set; } //0x9204 露光補正値
-        public double MaxApertureValue { get; private set; } //0x9205 レンズ最小Ｆ値
-        public double SubjectDistance { get; private set; } //0x9206 被写体距離
+        public string CompressedBitsPerPixel { get; private set; } //0x9102 画像圧縮モード
+        public string ShutterSpeedValue { get; private set; } //0x9201 シャッタースピード
+        public string ApertureValue { get; private set; } //0x9202 絞り値
+        public string BrightnessValue { get; private set; } //0x9203 輝度値
+        public string ExposureBiasValue { get; private set; } //0x9204 露光補正値
+        public string MaxApertureValue { get; private set; } //0x9205 レンズ最小Ｆ値
+        public string SubjectDistance { get; private set; } //0x9206 被写体距離
         public string MeteringMode { get; private set; } //0x9207 測光方式
         public string LightSource { get; private set; } //0x9208 光源
         public string Flash { get; private set; } //0x9209 フラッシュ
-        public double FocalLength { get; private set; } //0x920A レンズ焦点距離
+        public string FocalLength { get; private set; } //0x920A レンズ焦点距離
         public string SubjectArea { get; private set; } //0x9214 被写体領域 XXXX
         public string MakerNote { get; private set; } //0x927C メーカノート
         public string UserComment { get; private set; } //0x9286 ユーザコメント
         public string SubSecTime { get; private set; } //0x9290 DateTimeのサブセック
         public string SubSecTimeOriginal { get; private set; } //0x9291 DateTimeOriginalのサブセック
         public string SubSecTimeDigitized { get; private set; } //0x9292 DateTimeDigitizedのサブセック
-        public double Temperature { get; private set; } //0x9400 温度 XXXX
-        public double Humidity { get; private set; } //0x9401 湿度 XXXX
-        public double Pressure { get; private set; } //0x9402 圧力 XXXX
-        public double WaterDepth { get; private set; } //0x9403 水深 XXXX
-        public double Acceleration { get; private set; } //0x9404 加速度 XXXX
-        public double CameraElevationAngle { get; private set; } //0x9405 カメラの迎角 XXXX
+        public string Temperature { get; private set; } //0x9400 温度 XXXX
+        public string Humidity { get; private set; } //0x9401 湿度 XXXX
+        public string Pressure { get; private set; } //0x9402 圧力 XXXX
+        public string WaterDepth { get; private set; } //0x9403 水深 XXXX
+        public string Acceleration { get; private set; } //0x9404 加速度 XXXX
+        public string CameraElevationAngle { get; private set; } //0x9405 カメラの迎角 XXXX
         public string FlashpixVersion { get; private set; } //0xA000 対応フラッシュピックスバージョン
         public string ColorSpace { get; private set; } //0xA001 色空間情報
-        public long PixelXDimension { get; private set; } //0xA002 実効画像幅
-        public long PixelYDimension { get; private set; } //0xA003 実効画像高さ
+        public string PixelXDimension { get; private set; } //0xA002 実効画像幅
+        public string PixelYDimension { get; private set; } //0xA003 実効画像高さ
         public string RelatedSoundFile { get; private set; } //0xA004 関連音声ファイル
-        public long InteroperabilityIFDPointer { get; private set; } //0xA005 互換性IFDへのポインタ このプログラムでは不要？
-        public double FlashEnergy { get; private set; } //0xA20B フラッシュ強度
+        public string InteroperabilityIFDPointer { get; private set; } //0xA005 互換性IFDへのポインタ このプログラムでは不要？
+        public string FlashEnergy { get; private set; } //0xA20B フラッシュ強度
         public string SpatialFrequencyResponse { get; private set; } //0xA20C 空間周波数応答
-        public double FocalPlaneXResolution { get; private set; } //0xA20E 焦点面の幅の解像度
-        public double FocalPlaneYResolution { get; private set; } //0xA20F 焦点面の高さの解像度
+        public string FocalPlaneXResolution { get; private set; } //0xA20E 焦点面の幅の解像度
+        public string FocalPlaneYResolution { get; private set; } //0xA20F 焦点面の高さの解像度
         public string FocalPlaneResolutionUnit { get; private set; } //0xA210 焦点面解像度単位
         public string SubjectLocation { get; private set; } //0xA214 被写体位置
         public double ExposureIndex { get; private set; } //0xA215 露出インデックス
@@ -156,10 +156,10 @@ namespace PictureList {
         public string RAWDevelopingSoftware { get; private set; } //0xA43A RAW現像ソフトウェア XXXX
         public string ImageEditingSoftware { get; private set; } //0xA43B 画像編集ソフトウェア XXXX
         public string MetadataEditingSoftware { get; private set; } //0xA43C メタデータ編集ソフトウェア XXXX
-        public long CompositeImage { get; private set; } //0xA460 合成画像 XXXX
-        public long SourceImageNumberOfCompositeImage { get; private set; } //0xA461 合成画像のソース画像数 XXXX
+        public string CompositeImage { get; private set; } //0xA460 合成画像 XXXX
+        public string SourceImageNumberOfCompositeImage { get; private set; } //0xA461 合成画像のソース画像数 XXXX
         public string SourceExposureTimesOfCompositeImage { get; private set; } //0xA462 合成画像のソース画像露光時間 XXXX
-        public double Gamma { get; private set; } //0xA500 再生ガンマ XXXX
+        public string Gamma { get; private set; } //0xA500 再生ガンマ XXXX
         //
         //GPS
         //
@@ -169,16 +169,16 @@ namespace PictureList {
         public string GPSLongitudeRef { get; private set; } //0x0003 東経(E) or 西経(W)
         public double GPSLongitude { get; private set; } //0x0004 経度(数値)
         public string GPSAltitudeRef { get; private set; } //0x0005 高度の基準
-        public double GPSAltitude { get; private set; } //0x0006 高度(数値)
+        public string GPSAltitude { get; private set; } //0x0006 高度(数値)
         public string GPSTimeStamp { get; private set; } //0x0007 GPS時間(原子時計の時間)
         public string GPSSatellites { get; private set; } //0x0008 測位に使った衛星信号
         public string GPSStatus { get; private set; } //0x0009 GPS受信機の状態
         public string GPSMeasureMode { get; private set; } //0x000A GPSの測位方法
-        public double GPSDOP { get; private set; } //0x000B 測位の信頼性
+        public string GPSDOP { get; private set; } //0x000B 測位の信頼性
         public string GPSSpeedRef { get; private set; } //0x000C 速度の単位
-        public double GPSSpeed { get; private set; } //0x000D 速度(数値)
+        public string GPSSpeed { get; private set; } //0x000D 速度(数値)
         public string GPSTrackRef { get; private set; } //0x000E 進行方向の単位
-        public double GPSTrack { get; private set; } //0x000F 進行方向(数値)
+        public string GPSTrack { get; private set; } //0x000F 進行方向(数値)
         public string GPSImgDirectionRef { get; private set; } //0x0010 撮影した画像の方向の単位
         public double GPSImgDirection { get; private set; } //0x0011 撮影した画像の方向(数値)
         public string GPSMapDatum { get; private set; } //0x0012 測位に用いた地図データ
@@ -187,18 +187,22 @@ namespace PictureList {
         public string GPSDestLongitudeRef { get; private set; } //0x0015 目的地の東経(E) or 西経(W)
         public double GPSDestLongitude { get; private set; } //0x0016 目的地の経度(数値)
         public string GPSDestBearingRef { get; private set; } //0x0017 目的地の方角の単位
-        public double GPSDestBearing { get; private set; } //0x0018 目的の方角(数値)
+        public string GPSDestBearing { get; private set; } //0x0018 目的の方角(数値)
         public string GPSDestDistanceRef { get; private set; } //0x0019 目的地までの距離の単位
-        public double GPSDestDistance { get; private set; } //0x001A 目的地までの距離(数値)
+        public string GPSDestDistance { get; private set; } //0x001A 目的地までの距離(数値)
         public string GPSProcessingMethod { get; private set; } //0x001B 測位方式の名称 oooo
         public string GPSAreaInformation { get; private set; } //0x001C 測位地点の名称 XXXX
         public string GPSDateStamp { get; private set; } //0x001D GPS日付 oooo
-        public long GPSDifferential { get; private set; } //0x001E GPS補正測位 XXXX
-        public double GPSHPositioningError { get; private set; } //0x001F 水平方向測位誤差 XXXX
+        public string GPSDifferential { get; private set; } //0x001E GPS補正測位 XXXX
+        public string GPSHPositioningError { get; private set; } //0x001F 水平方向測位誤差 XXXX
         //
         //このクラスの中で計算したほうが良いと思われるもの
         //
         public string GPSLocation { get; private set; } //GPSのGoogleMapなどで指定できる緯度経度値
+        public string GPSHeight { get; private set; } //GPS高度（海抜- の表示有)
+        public string Resolution { get; private set; } //幅ｘ高さの解像度（DPI）
+        public string WidthHeight { get; private set; } //幅ｘ高さ(Pixel)
+        public string ShutterSpeed { get; private set; } //1/n 秒　または n 秒表示
 
 
         /// <summary>
@@ -249,9 +253,9 @@ namespace PictureList {
                 //ここからがExifデータの取得
                 foreach (System.Drawing.Imaging.PropertyItem item in bmp.PropertyItems) {
                     switch (item.Id) {
-                        case 0x0100: ImageWidth = GetShortOrLong(item); break;
-                        case 0x0101: ImageLength = GetShortOrLong(item); break;
-                        case 0x0102: BitsPerSample = GetMultiByteToString(item, 3); break;
+                        case 0x0100: ImageWidth = AnyTypeAndCount(item); break;
+                        case 0x0101: ImageLength = AnyTypeAndCount(item); break;
+                        case 0x0102: BitsPerSample = GetMultiShortToString(item, 3); break;
                         case 0x0103: Compression = GetCommpression(item); break;
                         case 0x0106: PhotometricInterpretation = GetPhotometricInterpretation(item); break;
                         case 0x010E: ImageDescription = GetExifAsci(item); break;
@@ -259,11 +263,11 @@ namespace PictureList {
                         case 0x0110: Model = GetExifAsci(item); break;
                         case 0x0111: StripOffsets = AnyTypeAndCount(item, ","); break;
                         case 0x0112: Orientation = GetOrientation(item); break;
-                        case 0x0115: SamplesPerPixel = GetExifShort(item); break;
-                        case 0x0116: RowsPerStrip = GetShortOrLong(item); break;
+                        case 0x0115: SamplesPerPixel = AnyTypeAndCount(item); break;
+                        case 0x0116: RowsPerStrip = AnyTypeAndCount(item); break;
                         case 0x0117: StripByteCounts = AnyTypeAndCount(item, ","); break;
-                        case 0x011A: XResolution = GetExifRational(item); break;
-                        case 0x011B: YResolution = GetExifRational(item); break;
+                        case 0x011A: XResolution = AnyTypeAndCount(item); break;
+                        case 0x011B: YResolution = AnyTypeAndCount(item); break;
                         case 0x011C: PlanarConfiguration = GetPlanarConfiguration(item); break;
                         case 0x012D: TransferFunction = "未実装"; break;
                         case 0x0128: ResolutionUnit = GetResolutionUnit(item); break;
@@ -272,67 +276,67 @@ namespace PictureList {
                         case 0x013B: Artist = GetExifAsci(item); break;
                         case 0x013E: WhitePoint = GetMultiRationalToString(item, " "); break;
                         case 0x013F: PrimaryChromaticities = GetMultiRationalToString(item, " "); break;
-                        case 0x0201: JPEGInterchangeFormat = GetExifLong(item); break;
-                        case 0x0202: JPEGInterchangeFormatLength = GetExifLong(item); break;
+                        case 0x0201: JPEGInterchangeFormat = AnyTypeAndCount(item); break;
+                        case 0x0202: JPEGInterchangeFormatLength = AnyTypeAndCount(item); break;
                         case 0x0211: YCbCrCoefficients = GetMultiRationalToString(item, " "); break;
                         case 0x0212: YCbCrSubSampling = GetYCbCrSubSampling(item); break;
                         case 0x0213: YCbCrPositioning = GetYCbPositioning(item); break;
                         case 0x0214: ReferenceBlackWhite = GetMultiRationalToString(item, ","); break;
                         case 0x8298: Copyright = GetExifAsci(item); break;
-                        case 0x829A: ExposureTime = GetExifRational(item); break;
-                        case 0x829D: FNumber = GetExifRational(item); break;
-                        case 0x8769: Exif_IFD_Pointer = GetExifLong(item); break;
+                        case 0x829A: ExposureTime = AnyTypeAndCount(item); break;
+                        case 0x829D: FNumber = "F" + AnyTypeAndCount(item); break;
+                        case 0x8769: Exif_IFD_Pointer = AnyTypeAndCount(item); break;
                         case 0x8822: ExposureProgram = GetExposureProgram(item); break;
                         case 0x8824: SpectralSensitivity = GetExifAsci(item); break;
-                        case 0x8825: GPSInfoIFDPointer = GetExifLong(item); break;
-                        case 0x8827: PhotographicSensitivity = GetPhotographicSensitivity(item); break;
-                        case 0x8828: OECF = "未実装"; break;
+                        case 0x8825: GPSInfoIFDPointer = AnyTypeAndCount(item); break;
+                        case 0x8827: PhotographicSensitivity = "ISO " + AnyTypeAndCount(item, ","); break;
+                        case 0x8828: OECF = GetOECF(item); break;
                         case 0x8830: SensitivityType = GetSensitivityType(item); break; // XXXX
-                        case 0x8831: StandardOutputSensitivity = GetExifLong(item); break; // XXXX
-                        case 0x8832: RecommendedExposureIndex = GetExifLong(item); break; // XXXX
-                        case 0x8833: ISOSpeed = GetExifLong(item); break; // XXXX
-                        case 0x8834: ISOSpeedLatitudeyyy = GetExifLong(item); break; // XXXX
-                        case 0x8835: ISOSpeedLatitudezzz = GetExifLong(item); break; // XXXX
-                        case 0x9000: ExifVersion = GetExifAsci(item); break;
+                        case 0x8831: StandardOutputSensitivity = AnyTypeAndCount(item); break; // XXXX
+                        case 0x8832: RecommendedExposureIndex = AnyTypeAndCount(item); break; // XXXX
+                        case 0x8833: ISOSpeed = AnyTypeAndCount(item); break; // XXXX
+                        case 0x8834: ISOSpeedLatitudeyyy = AnyTypeAndCount(item); break; // XXXX
+                        case 0x8835: ISOSpeedLatitudezzz = AnyTypeAndCount(item); break; // XXXX
+                        case 0x9000: ExifVersion = GetUndefinedMultiByteToString(item, "."); break;
                         case 0x9003: DateTimeOriginal = GetExifAsci(item); break;
                         case 0x9004: DateTimeDigitized = GetExifAsci(item); break;
                         case 0X9010: OffsetTime = GetExifAsci(item); break; // oooo
                         case 0X9011: OffsetTimeOriginal = GetExifAsci(item); break; // oooo
                         case 0X9012: OffsetTimeDigitized = GetExifAsci(item); break; // oooo
                         case 0x9101: ComponentsConfiguration = GetComponentsConfiguration(item); break;
-                        case 0x9102: CompressedBitsPerPixel = GetExifRational(item); break;
-                        case 0x9201: ShutterSpeedValue = GetExifSRational(item); break;
-                        case 0x9202: ApertureValue = GetExifRational(item); break;
-                        case 0x9203: BrightnessValue = GetExifSRational(item); break;
-                        case 0x9204: ExposureBiasValue = GetExifSRational(item); break;
-                        case 0x9205: MaxApertureValue = GetExifRational(item); break;
-                        case 0x9206: SubjectDistance = GetExifRational(item); break;
+                        case 0x9102: CompressedBitsPerPixel = AnyTypeAndCount(item); break;
+                        case 0x9201: ShutterSpeedValue = AnyTypeAndCount(item); break;
+                        case 0x9202: ApertureValue = AnyTypeAndCount(item); break;
+                        case 0x9203: BrightnessValue = AnyTypeAndCount(item); break;
+                        case 0x9204: ExposureBiasValue = AnyTypeAndCount(item); break;
+                        case 0x9205: MaxApertureValue = AnyTypeAndCount(item); break;
+                        case 0x9206: SubjectDistance = AnyTypeAndCount(item); break;
                         case 0x9207: MeteringMode = GetMeteringMode(item); break;
                         case 0x9208: LightSource = GetLightSource(item); break;
                         case 0x9209: Flash = GetFlash(item); break;
-                        case 0x920A: FocalLength = GetExifRational(item); break;
+                        case 0x920A: FocalLength = AnyTypeAndCount(item) + "mm"; break;
                         case 0x9214: SubjectArea = GetSubjectArea(item); break; // XXXX
                         case 0x927C: MakerNote = GetMakerNote(item); break;
                         case 0x9286: UserComment = "UserComment未実装"; break;
                         case 0x9290: SubSecTime = GetExifAsci(item); break;
                         case 0x9291: SubSecTimeOriginal = GetExifAsci(item); break;
                         case 0x9292: SubSecTimeDigitized = GetExifAsci(item); break;
-                        case 0x9400: Temperature = GetExifRational(item); break;
-                        case 0x9401: Humidity = GetExifRational(item); break;
-                        case 0x9402: Pressure = GetExifRational(item); break;
-                        case 0x9403: WaterDepth = GetExifRational(item); break;
-                        case 0x9404: Acceleration = GetExifRational(item); break;
-                        case 0x9405: CameraElevationAngle = GetExifRational(item); break;
+                        case 0x9400: Temperature = AnyTypeAndCount(item); break;
+                        case 0x9401: Humidity = AnyTypeAndCount(item); break;
+                        case 0x9402: Pressure = AnyTypeAndCount(item); break;
+                        case 0x9403: WaterDepth = AnyTypeAndCount(item); break;
+                        case 0x9404: Acceleration = AnyTypeAndCount(item); break;
+                        case 0x9405: CameraElevationAngle = AnyTypeAndCount(item); break;
                         case 0xA000: FlashpixVersion = GetFlashpixVersion(item); break;
                         case 0xA001: ColorSpace = GetColorSpace(item); break;
-                        case 0xA002: PixelXDimension = GetShortOrLong(item); break;
-                        case 0xA003: PixelYDimension = GetShortOrLong(item); break;
+                        case 0xA002: PixelXDimension = AnyTypeAndCount(item); break;
+                        case 0xA003: PixelYDimension = AnyTypeAndCount(item); break;
                         case 0xA004: RelatedSoundFile = GetExifAsci(item); break;
-                        case 0xA005: InteroperabilityIFDPointer = GetExifLong(item); break;
-                        case 0xA20B: FlashEnergy = GetExifRational(item); break;
+                        case 0xA005: InteroperabilityIFDPointer = AnyTypeAndCount(item); break;
+                        case 0xA20B: FlashEnergy = AnyTypeAndCount(item); break;
                         case 0xA20C: SpatialFrequencyResponse = "空間周波数応答未実装"; break;
-                        case 0xA20E: FocalPlaneXResolution = GetExifRational(item); break;
-                        case 0xA20F: FocalPlaneYResolution = GetExifRational(item); break;
+                        case 0xA20E: FocalPlaneXResolution = AnyTypeAndCount(item); break;
+                        case 0xA20F: FocalPlaneYResolution = AnyTypeAndCount(item); break;
                         case 0xA210: FocalPlaneResolutionUnit = GetFocalPlaneResolutionUnit(item); break;
                         case 0xA214: SubjectLocation = GetSubjectLocation(item); break;
                         case 0xA215: ExposureIndex = GetExifRational(item); break;
@@ -355,7 +359,7 @@ namespace PictureList {
                         case 0xA420: ImageUniqueID = GetExifAsci(item); break; // XXXX
                         case 0xA430: CameraOwnerName = GetExifAsci(item); break; // XXXX
                         case 0xA431: BodySerialNumber = GetExifAsci(item); break; // XXXX
-                        case 0xA432: LensSpecification = GetMultiRationalToString(item, " "); break; // XXXX
+                        case 0xA432: LensSpecification = GetLensSpecificatGet(item); break; // XXXX
                         case 0xA433: LensMake = GetExifAsci(item); break; // XXXX
                         case 0xA434: LensModel = GetExifAsci(item); break; // XXXX
                         case 0xA435: LensSerialNumber = GetExifAsci(item); break; // XXXX
@@ -366,10 +370,10 @@ namespace PictureList {
                         case 0xA43A: RAWDevelopingSoftware = GetExifAsci(item); break; // XXXX
                         case 0xA43B: ImageEditingSoftware = GetExifAsci(item); break; // XXXX
                         case 0xA43C: MetadataEditingSoftware = GetExifAsci(item); break; // XXXX
-                        case 0xA460: CompositeImage = GetExifShort(item); break; // XXXX
-                        case 0xA461: SourceImageNumberOfCompositeImage = GetExifShort(item); break; // XXXX
-                        case 0xA462: SourceExposureTimesOfCompositeImage = GetExifAsci(item); break; // XXXX
-                        case 0xA500: Gamma = GetExifRational(item); break; // XXXX
+                        case 0xA460: CompositeImage = AnyTypeAndCount(item); break; // XXXX
+                        case 0xA461: SourceImageNumberOfCompositeImage = AnyTypeAndCount(item); break; // XXXX
+                        case 0xA462: SourceExposureTimesOfCompositeImage = "未実装"; break; // XXXX
+                        case 0xA500: Gamma = AnyTypeAndCount(item); break; // XXXX
                         // GPS
                         case 0x0000: GPSVersionID = GetGPSVersionID(item); break;
                         case 0x0001: GPSLatitudeRef = GetExifAsci(item); break;
@@ -377,16 +381,16 @@ namespace PictureList {
                         case 0x0003: GPSLongitudeRef = GetExifAsci(item); break;
                         case 0x0004: GPSLongitude = GetGPSValue(item); break;
                         case 0x0005: GPSAltitudeRef = GetGPSAltitudeRef(item); break;
-                        case 0x0006: GPSAltitude = GetExifRational(item); break;
+                        case 0x0006: GPSAltitude = AnyTypeAndCount(item); break;
                         case 0x0007: GPSTimeStamp = GetGPSTimeStamp(item); break;
                         case 0x0008: GPSSatellites = GetExifAsci(item); break;
                         case 0x0009: GPSStatus = GetExifAsci(item); break;
                         case 0x000A: GPSMeasureMode = GetExifAsci(item); break;
-                        case 0x000B: GPSDOP = GetExifRational(item); break;
+                        case 0x000B: GPSDOP = AnyTypeAndCount(item); break;
                         case 0x000C: GPSSpeedRef = GetExifAsci(item); break;
-                        case 0x000D: GPSSpeed = GetExifRational(item); break;
+                        case 0x000D: GPSSpeed = AnyTypeAndCount(item); break;
                         case 0x000E: GPSTrackRef = GetExifAsci(item); break;
-                        case 0x000F: GPSTrack = GetExifRational(item); break;
+                        case 0x000F: GPSTrack = AnyTypeAndCount(item); break;
                         case 0x0010: GPSImgDirectionRef = GetExifAsci(item); break;
                         case 0x0011: GPSImgDirection = GetExifRational(item); break;
                         case 0x0012: GPSMapDatum = GetExifAsci(item); break;
@@ -395,17 +399,22 @@ namespace PictureList {
                         case 0x0015: GPSDestLongitudeRef = GetExifAsci(item); break;
                         case 0x0016: GPSDestLongitude = GetGPSValue(item); break;
                         case 0x0017: GPSDestBearingRef = GetExifAsci(item); break;
-                        case 0x0018: GPSDestBearing = GetExifRational(item); break;
+                        case 0x0018: GPSDestBearing = AnyTypeAndCount(item); break;
                         case 0x0019: GPSDestDistanceRef = GetExifAsci(item); break;
-                        case 0x001A: GPSDestDistance = GetExifRational(item); break;
-                        case 0x001B: GPSProcessingMethod = GetExifAsci(item); break; // oooo
-                        case 0x001C: GPSAreaInformation = GetExifAsci(item); break; // oooo
+                        case 0x001A: GPSDestDistance = AnyTypeAndCount(item); break;
+                        case 0x001B: GPSProcessingMethod = GetUndefinedUniStringValue(item); break; // oooo
+                        case 0x001C: GPSAreaInformation = GetUndefinedUniStringValue(item); break; // oooo
                         case 0x001D: GPSDateStamp = GetExifAsci(item); break; // XXXX
-                        case 0x001E: GPSDifferential = GetExifShort(item); break; // XXXX
-                        case 0x001F: GPSHPositioningError = GetExifRational(item); break; // XXXX
+                        case 0x001E: GPSDifferential = AnyTypeAndCount(item); break; // XXXX
+                        case 0x001F: GPSHPositioningError = AnyTypeAndCount(item); break; // XXXX
                     }
                 }
                 GPSLocation = GetGPSLocation();
+                ShutterSpeed = GetShutterSpeed(ExposureTime);
+                GPSHeight = GetGPSHeight();
+                Resolution = GetResolution();
+                WidthHeight = GetWidthHeight();
+
                 bmp.Dispose();
             }
 
@@ -501,6 +510,15 @@ namespace PictureList {
             }
             return str;
         }
+        private string GetLensSpecificatGet(System.Drawing.Imaging.PropertyItem Pitem) {
+            string str;
+            if (Pitem.Type != BYTE && LenToCount(Pitem) != 4) {
+                str = "異常値"; return str;
+            }
+            str = AnyValueToString(Pitem, 0) + "-" + AnyValueToString(Pitem, 1);
+            str += "mm F" + AnyValueToString(Pitem, 2) + "-" + AnyValueToString(Pitem, 3);
+            return str;
+        }
         private string GetExposureProgram(System.Drawing.Imaging.PropertyItem Pitem) { //0x8822
             string str;
             if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
@@ -520,12 +538,6 @@ namespace PictureList {
                 }
             }
             return str;
-        }
-        private long GetPhotographicSensitivity(System.Drawing.Imaging.PropertyItem Pitem) { //0x8827
-            long vl = BitConverter.ToInt16(Pitem.Value, 0);
-            if (LenToCount(Pitem) > 1)
-                vl += BitConverter.ToInt16(Pitem.Value, 2);
-            return vl;
         }
         private string GetOECF(System.Drawing.Imaging.PropertyItem Pitem) { //0x0x8828
             int type = Pitem.Type;
@@ -715,7 +727,7 @@ namespace PictureList {
             if (Pitem.Type == SHORT)
                 str = GetExifShort(Pitem).ToString();
             else if (Pitem.Type == LONG)
-                str = GetExifLong(Pitem).ToString();
+                str = AnyTypeAndCount(Pitem);
             else
                 str = "未定義";
             return str;
@@ -853,7 +865,7 @@ namespace PictureList {
             double rtn = GetExifRational(Pitem);
             if (Double.IsNaN(rtn)) {
                 //if (GetSRational(Pitem.Value) == 0) {
-                if (BitConverter.ToInt32(Pitem.Value,0) == 0) {
+                if (BitConverter.ToInt32(Pitem.Value, 0) == 0) {
                     return "デジタルズーム未使用";
                 }
             }
@@ -965,7 +977,7 @@ namespace PictureList {
             }
             return str;
         }
-        private double GetGPSValue(System.Drawing.Imaging.PropertyItem Pitem) { //0x0002,0x0004用
+        private double GetGPSValue(System.Drawing.Imaging.PropertyItem Pitem) { //0x0002,0x0004,0x0014,0x0016用
             UInt32 deg_numerator = BitConverter.ToUInt32(Pitem.Value, 0);
             UInt32 deg_denominator = BitConverter.ToUInt32(Pitem.Value, 4);
             double deg = (double)deg_numerator / (double)deg_denominator;
@@ -1013,22 +1025,92 @@ namespace PictureList {
         }
         private string GetGPSLocation() {
             string str;
-            if (GPSVersionID == "") str = "";
+            if (string.IsNullOrEmpty(GPSVersionID)) str = "";
             else {
-                str = $"{GPSLatitudeRef} {GPSLatitude:#,.########} , {GPSLongitudeRef} {GPSLongitude:#,.##########}";
+                str = $"{GPSLatitudeRef} {GPSLatitude:#.########} , {GPSLongitudeRef} {GPSLongitude:#.##########}";
             }
             return str;
+        }
+        private string GetShutterSpeed(string speedStr) {
+            double sSpeed;
+            bool lessThan1 = false;
+            string str;
+            if (!double.TryParse(speedStr, out sSpeed)) {
+                return "不正なシャッター速度値";
+            }
+            if (sSpeed <= 1) {
+                lessThan1 = true; sSpeed = 1.0 / sSpeed;
+            }
+            double sSpeed0 = Math.Round(sSpeed, MidpointRounding.AwayFromZero);
+            str = sSpeed0.ToString();
+            if (sSpeed < 100) {
+                double sSpeed1 = Math.Round(sSpeed, 1, MidpointRounding.AwayFromZero);
+                if (sSpeed < 10) {
+                    double sSpeed2 = Math.Round(sSpeed, 2, MidpointRounding.AwayFromZero);
+                    if (sSpeed2 != sSpeed1) {
+                        str = sSpeed2.ToString();
+                    } else if (sSpeed1 != sSpeed0) {
+                        str = sSpeed1.ToString();
+                    } else {
+                        str = sSpeed0.ToString();
+                    }
+                }
+            }
+            if (lessThan1) {
+                str = "1/" + str + " 秒";
+            } else {
+                str += " 秒";
+            }
+            return str;
+        }
+        private string GetGPSHeight() {
+            if (!string.IsNullOrEmpty(GPSAltitude))
+                return GPSAltitudeRef + GPSAltitude + "m";
+            return "";
+        }
+
+        private string GetResolution() {
+            if (!string.IsNullOrEmpty(XResolution) && !string.IsNullOrEmpty(YResolution))
+                return XResolution + " x " + YResolution + ResolutionUnit;
+            return "";
+        }
+
+        private string GetWidthHeight() {
+            if (!string.IsNullOrEmpty(PixelXDimension) && !string.IsNullOrEmpty(PixelYDimension)) {
+                return PixelXDimension + " x " + PixelYDimension;
+            }
+            return "";
         }
 
         //
         // Typeによって値を得る
         //
+
         private string GetExifAsci(System.Drawing.Imaging.PropertyItem PItem) {
-            string val = System.Text.Encoding.ASCII.GetString(PItem.Value);
-            //return val.Trim(new char[] { '\0' });
+            string val;
+            switch (PItem.Type) {
+                case ASCII: val = System.Text.Encoding.ASCII.GetString(PItem.Value); break;
+                case UTF8: val = System.Text.Encoding.UTF8.GetString(PItem.Value); break;
+                default: val = ""; break;
+            }
+            return val.Replace("\0", ""); //ValueにはNuullが含まれるとあるので削除する
+        }
+        // Byte[]の文字をCharとし、 COUNT数 区切子 spr でつなぐ
+        private string GetUndefinedMultiByteToString(System.Drawing.Imaging.PropertyItem Pitem, string spr) {
+            string str = "";
+            int cnt = LenToCount(Pitem);
+            for (int i = 0; i < cnt; i++) {
+                str += (char)Pitem.Value[i];
+                if (i != cnt - 1)
+                    str += spr;
+            }
+            return str.Trim();
+        }
+        // Undefinedを一つのAscii文字列として返す
+        private string GetUndefinedUniStringValue(System.Drawing.Imaging.PropertyItem Pitem) {
+            string val = System.Text.Encoding.ASCII.GetString(Pitem.Value);
             return val.Replace("\0", "");
         }
-
         private int GetExifByte(System.Drawing.Imaging.PropertyItem Pitem) {
 
             //return BitConverter.ToChar(Pitem.Value, 0);
@@ -1070,27 +1152,6 @@ namespace PictureList {
             double dbl = (double)numerator / (double)nominator;
             return dbl;
         }
-        private double GetExifSRational(System.Drawing.Imaging.PropertyItem Pitem) {
-            int numerator = BitConverter.ToInt32(Pitem.Value, 0);
-            int nominator = BitConverter.ToInt32(Pitem.Value, 4);
-            double dbl = (double)numerator / (double)nominator;
-            return dbl;
-        }
-        private long GetShortOrLong(System.Drawing.Imaging.PropertyItem Pitem) {
-            if (Pitem.Type == SHORT)
-                return GetExifShort(Pitem);
-            else if (Pitem.Type == LONG)
-                return GetExifLong(Pitem);
-            else
-                return -1;
-        }
-        private string GetMultiByteToString(System.Drawing.Imaging.PropertyItem Pitem, int cnt) {
-            string str = "";
-            for (int i = 0; i < cnt; i++) {
-                str += BitConverter.ToUInt16(Pitem.Value, i * 2).ToString() + " ";
-            }
-            return str.Trim();
-        }
         private string GetMultiShortToString(System.Drawing.Imaging.PropertyItem Pitem, int cnt) {
             string str = "";
             for (int i = 0; i < cnt; i++) {
@@ -1115,26 +1176,37 @@ namespace PictureList {
             return str.Trim();
         }
         //TypeとCOUNTが変動しても順に spr（セパレーター）でつないで文字列にする
+        //ASCIIとUNDEFINEDはサポートしない。ASCIIはCOUNTが文字列の全体の文字数。
+        //UNDEFINEDはこの文字列の数などにも使われるため個々のケースで対応する
         private string AnyTypeAndCount(System.Drawing.Imaging.PropertyItem Pitem, string spr) {
+            if (Pitem.Type == ASCII || Pitem.Type == UTF8) return "文字列で無いものを余のを呼ぶ誤りがありました";
             string str = "";
             int len = LenToCount(Pitem);
-            string st = "";
+            string st;
             for (int i = 0; i < len; i++) {
-                switch (Pitem.Type) {
-                    case BYTE: st = Pitem.Value[i].ToString(); ; break;
-                    case SHORT: st = BitConverter.ToUInt16(Pitem.Value, i * 2).ToString(); ; break;
-                    case LONG: st = BitConverter.ToUInt32(Pitem.Value, i * 4).ToString(); ; break;
-                    case RATIONAL: st = GetRational(Pitem.Value, i * 8).ToString(); break;
-                    case SLONG: st = BitConverter.ToInt32(Pitem.Value, i * 8).ToString(); break;
-                    case SRATIONAL: st = GetSRational(Pitem.Value, i * 8).ToString(); break;
-                    default: break;
-                }
+                st = AnyValueToString(Pitem, i);
                 if (i != len - 1) st = spr;
                 str += st;
             }
             return str;
         }
-
+        //オーバーロード
+        private string AnyTypeAndCount(System.Drawing.Imaging.PropertyItem Pitem) {
+            return AnyTypeAndCount(Pitem, "");
+        }
+        private string AnyValueToString(System.Drawing.Imaging.PropertyItem Pitem, int i) {
+            string st = "";
+            switch (Pitem.Type) {
+                case BYTE: st = Pitem.Value[i].ToString(); break;
+                case SHORT: st = BitConverter.ToUInt16(Pitem.Value, i * 2).ToString(); break;
+                case LONG: st = BitConverter.ToUInt32(Pitem.Value, i * 4).ToString(); break;
+                case RATIONAL: st = GetRational(Pitem.Value, i * 8).ToString(); break;
+                case SLONG: st = BitConverter.ToInt32(Pitem.Value, i * 8).ToString(); break;
+                case SRATIONAL: st = GetSRational(Pitem.Value, i * 8).ToString(); break;
+                default: break;
+            }
+            return st;
+        }
         private int LenToCount(System.Drawing.Imaging.PropertyItem Pitem) {
             return LenToCount(Pitem.Len, Pitem.Type);
         }
