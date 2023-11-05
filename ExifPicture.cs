@@ -29,6 +29,7 @@ namespace PictureList {
         public long ImgWidth { get; private set; }
         public long ImgHeight { get; private set; }
         public bool IsExifDate { get; private set; }
+        public bool IsImage { get;private set; }
 
 
         //以下のExif情報はNetFrameWorkで取得対象タグでないものは XXXX で示す
@@ -238,6 +239,7 @@ namespace PictureList {
 
 
             IsExifDate = false;
+            IsImage = false;
             System.Drawing.Bitmap bmp = null;
             try {
                 bmp = new System.Drawing.Bitmap(fullPath);
@@ -246,7 +248,7 @@ namespace PictureList {
                 //System.Windows.Forms.MessageBox.Show(error);
             }
             if (bmp != null) {
-                IsExifDate = true;
+                IsImage = true;
                 ImgWidth = bmp.Width;
                 ImgHeight = bmp.Height;
 
@@ -260,7 +262,7 @@ namespace PictureList {
                         case 0x0106: PhotometricInterpretation = GetPhotometricInterpretation(item); break;
                         case 0x010E: ImageDescription = GetExifAsci(item); break;
                         case 0x010F: Make = GetExifAsci(item); break;
-                        case 0x0110: Model = GetExifAsci(item); break;
+                        case 0x0110: Model = GetExifAsci(item);IsExifDate = true; break;
                         case 0x0111: StripOffsets = AnyTypeAndCount(item, ","); break;
                         case 0x0112: Orientation = GetOrientation(item); break;
                         case 0x0115: SamplesPerPixel = AnyTypeAndCount(item); break;
@@ -297,7 +299,7 @@ namespace PictureList {
                         case 0x8833: ISOSpeed = AnyTypeAndCount(item); break; // XXXX
                         case 0x8834: ISOSpeedLatitudeyyy = AnyTypeAndCount(item); break; // XXXX
                         case 0x8835: ISOSpeedLatitudezzz = AnyTypeAndCount(item); break; // XXXX
-                        case 0x9000: ExifVersion = GetUndefinedMultiByteToString(item, "."); break;
+                        case 0x9000: ExifVersion = GetUndefinedMultiByteToString(item, ".");IsExifDate = true; break;
                         case 0x9003: DateTimeOriginal = GetExifAsci(item); break;
                         case 0x9004: DateTimeDigitized = GetExifAsci(item); break;
                         case 0X9010: OffsetTime = GetExifAsci(item); break; // oooo
@@ -449,7 +451,7 @@ namespace PictureList {
             n = GetExifShort(Pitem);
             string str;
             switch (n) {
-                case 1: str = "そのまま"; break;
+                case 1: str = "Exif回転無し"; break;
                 case 2: str = "上下反転"; break;
                 case 3: str = "180度回転"; break;
                 case 4: str = "左右反転"; break;

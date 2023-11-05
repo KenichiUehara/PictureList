@@ -22,5 +22,161 @@ namespace PictureList.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("探索するフォルダ名")]
+        public string StartDir {
+            get {
+                return ((string)(this["StartDir"]));
+            }
+            set {
+                this["StartDir"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("*.*")]
+        public string MaskString {
+            get {
+                return ((string)(this["MaskString"]));
+            }
+            set {
+                this["MaskString"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsLastWriteTime {
+            get {
+                return ((bool)(this["IsLastWriteTime"]));
+            }
+            set {
+                this["IsLastWriteTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsCreationTime {
+            get {
+                return ((bool)(this["IsCreationTime"]));
+            }
+            set {
+                this["IsCreationTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsLastAccessTime {
+            get {
+                return ((bool)(this["IsLastAccessTime"]));
+            }
+            set {
+                this["IsLastAccessTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsSize {
+            get {
+                return ((bool)(this["IsSize"]));
+            }
+            set {
+                this["IsSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsAttribute {
+            get {
+                return ((bool)(this["IsAttribute"]));
+            }
+            set {
+                this["IsAttribute"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int OutPutType {
+            get {
+                return ((int)(this["OutPutType"]));
+            }
+            set {
+                this["OutPutType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsTab {
+            get {
+                return ((bool)(this["IsTab"]));
+            }
+            set {
+                this["IsTab"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("保存するフフォルダ名")]
+        public string OutputDir {
+            get {
+                return ((string)(this["OutputDir"]));
+            }
+            set {
+                this["OutputDir"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsIncludeSubDir {
+            get {
+                return ((bool)(this["IsIncludeSubDir"]));
+            }
+            set {
+                this["IsIncludeSubDir"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsMaskDir {
+            get {
+                return ((bool)(this["IsMaskDir"]));
+            }
+            set {
+                this["IsMaskDir"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsExif {
+            get {
+                return ((bool)(this["IsExif"]));
+            }
+            set {
+                this["IsExif"] = value;
+            }
+        }
     }
 }
