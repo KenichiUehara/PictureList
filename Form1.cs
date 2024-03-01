@@ -18,8 +18,8 @@ using System.Windows.Shapes;
 
 namespace PictureList {
     public partial class Form1 : Form {
-        List<Exiflist> ExifItremLists = new List<Exiflist>();
-        List<Exiflist> ExifItemOutLists = new List<Exiflist>();
+        public List<Exiflist> ExifLists = new List<Exiflist>();
+        List<Exiflist> ExifTagOutLists = new List<Exiflist>();
         string ExifListTitle;
         StringBuilder OutText = new StringBuilder();
         StringBuilder OutTitleList = new StringBuilder();
@@ -28,10 +28,10 @@ namespace PictureList {
         const int ProgressBarDivide = 200;
         string mask, dmask, sepa, sepaHead, sepaTail = "\r\n";
         //出力するもののリスト
-        private struct IdxOredr {
+        internal struct IdxOrder {
             public int Idx;
             public int Order;
-            public IdxOredr(int idx, int order) {
+            public IdxOrder(int idx, int order) {
                 Idx = idx;
                 Order = order;
             }
@@ -43,12 +43,14 @@ namespace PictureList {
         public Form1() {
             InitializeComponent();
         }
-        private class Exiflist {
+        
+        public class Exiflist {
             public string Property { get; set; }
             public string TagName { get; set; }
             public string Type { get; set; }
             public bool Availeble { get; set; }
             public int Order { get; set; }
+            
             /// <summary>
             /// コンストラクト
             /// </summary>
@@ -64,7 +66,11 @@ namespace PictureList {
                 if (available.ToLower() == "true") { Availeble = true; } else { Availeble = false; }
                 SetOrder(order);
             }
+            public Exiflist() {
+
+            }
             public void SetOrder(string str) {
+                if (str == "") return;
                 try {
                     Order = int.Parse(str);
                 } catch (ArgumentNullException) {
@@ -75,12 +81,13 @@ namespace PictureList {
             }
 
         }
+
         /// <summary>
         /// Exifの出力項目をビルドに含まれるcsvファイルのコンテンツから得る
         /// </summary>
-        private void ReadExifListFromContent() {
+        public void ReadExifListFromContent() {
             string strs;
-            ExifItremLists.Clear();
+            ExifLists.Clear();
             string path = SettingCSVPath;
             using (var sr = new StreamReader(path, System.Text.Encoding.GetEncoding("shift_jis"))) {
                 ExifListTitle = sr.ReadLine();
@@ -89,17 +96,43 @@ namespace PictureList {
                     string[] str = strs.Split(',');
                     if (str.Length > 4) {
                         Exiflist exiflist = new Exiflist(str[0], str[1], str[2], str[3], str[4]);
-                        ExifItremLists.Add(exiflist);
+                        ExifLists.Add(exiflist);
                     }
                 }
             }
+            ////出力するリストの作成
+            ////まずは順番の値の持つ出力リストのindexと順番の値のリストを作成
+            //var IdxOrders = new List<IdxOrder>();
+            //for (int i = 0; i < ExifLists.Count; i++) {
+            //    int order = ExifLists[i].Order;
+            //    if (order != 0) {
+            //        var tmpIOrder = new IdxOrder(i, order);
+            //        IdxOrders.Add(tmpIOrder);
+            //    }
+            //}
+            ////順番でソートされた出力リストのindexのリスト
+            //var sortedIxdOrders = IdxOrders.OrderBy(x => x.Order);
+            ////ExifListsの順番の値を次で1から順番の値にする
+            //int num = 1;
+            //foreach (var item in sortedIxdOrders) {
+            //    ExifLists[item.Idx].Order = num++;
+            //    ExifTagOutLists.Add(ExifLists[item.Idx]);
+            //}
+            ////WriteExifListToContent();
+        }
+
+        /// <summary>
+        /// ExifListsをExiflist.Orderが1以上のものをソートしたExifListの出力用のExifTagOutListsを作る
+        /// </summary>
+        private void makeExifTagOutLists() {
+            ExifTagOutLists.Clear();
             //出力するリストの作成
             //まずは順番の値の持つ出力リストのindexと順番の値のリストを作成
-            var IdxOrders = new List<IdxOredr>();
-            for (int i = 0; i < ExifItremLists.Count; i++) {
-                int order = ExifItremLists[i].Order;
+            var IdxOrders = new List<IdxOrder>();
+            for (int i = 0; i < ExifLists.Count; i++) {
+                int order = ExifLists[i].Order;
                 if (order != 0) {
-                    var tmpIOrder = new IdxOredr(i, order);
+                    var tmpIOrder = new IdxOrder(i, order);
                     IdxOrders.Add(tmpIOrder);
                 }
             }
@@ -108,19 +141,22 @@ namespace PictureList {
             //ExifListsの順番の値を次で1から順番の値にする
             int num = 1;
             foreach (var item in sortedIxdOrders) {
-                ExifItremLists[item.Idx].Order = num++;
-                ExifItemOutLists.Add(ExifItremLists[item.Idx]);
+                ExifLists[item.Idx].Order = num++;
+                ExifTagOutLists.Add(ExifLists[item.Idx]);
             }
-            WriteExifListToContent();
         }
+
         /// <summary>
         /// ExifItemListsを出力する
         /// </summary>
         private void WriteExifListToContent() {
+            //以下の2行は開発時に不用意に属性候補リストを変更しないため
+            DialogResult result =MessageBox.Show("表示属性の変更を保存するなら ハイ", "確認",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+            if (result != DialogResult.Yes) return; //ハイでなければ保存しない
             string path = SettingCSVPath;
             using (StreamWriter sw = new StreamWriter(path, false, System.Text.Encoding.GetEncoding("shift_jis"))) {
                 sw.WriteLine(ExifListTitle);
-                foreach (var exifItem in ExifItremLists) {
+                foreach (var exifItem in ExifLists) {
                     string property = exifItem.Property;
                     string tagName = exifItem.TagName;
                     string type = exifItem.Type;
@@ -147,7 +183,8 @@ namespace PictureList {
             btnFolderSelect.Enabled = !busy;
             btnOut2File.Enabled = !busy;
             btnCopy2Clip.Enabled = !busy;
-
+            rbtnTab.Enabled = !busy;
+            rbtnCSV.Enabled = !busy;
         }
 
         /// <summary>
@@ -155,6 +192,7 @@ namespace PictureList {
         /// </summary>
         /// <param name="Dir">探索の基準になるディレクトリ</param>
         private void GetDirsFilesList(string Dir) {
+            InSaerching(true);
             //Exif項目を読む必要がある場合はExif項目を読み込む Imageの場合はその判定に必要
             if (chkExif.Checked || rbtnOnlyImage.Checked || rbtnOnlyExif.Checked) {
                 ReadExifListFromContent();
@@ -165,7 +203,6 @@ namespace PictureList {
             if (chkSubDir.Checked)
                 serchOption = SearchOption.AllDirectories;
             txtComment.Text = "";
-            InSaerching(true);
             try {
                 // LINQ
                 var dirs = from dir in Directory.EnumerateDirectories(Dir, dmask, serchOption)
@@ -202,7 +239,7 @@ namespace PictureList {
             //ファイルの一般的な情報を個々に取り出す 
             foreach (var dirList in dirLists) { //DirListsのDir名毎の回す
                 System.IO.DirectoryInfo dirInfo = new System.IO.DirectoryInfo(dirList);
-                //出力がディレクトリが含まれるならディレクトリ情報を出力に追加する
+                //出力にディレクトリが含まれるならディレクトリ情報を出力に追加する
                 makeDirData(dirInfo, dirList);
                 //個々のファイルの情報を追加する
                 if (rbtnOnlyDir.Checked) break; //ディレクトリのみのときはここで抜ける
@@ -276,9 +313,14 @@ namespace PictureList {
             progressBar1.Value = FileDone;
         }
 
+        /// <summary>
+        /// 引数で指定したクラスのデータからExifTagOutListsを順番に調べてそれと一致する情報をOutTextに追加していく
+        /// </summary>
+        /// <param name="exifData">調べるファイルのExif情報</param>
         private void makeExifData(ExifPicture exifData) {
-            foreach (var item in ExifItemOutLists) {
+            foreach (var item in ExifTagOutLists) {
                 string type = item.Type.ToLower();
+                //ExifTagOutListのProperty名と一致するExifPicturesクラスのプロパティを探す
                 PropertyInfo propertyInfo = exifData.GetType().GetProperty(item.Property);
                 if (type == "string") {
                     //string tmp = (string)propertyInfo.GetValue(exifData);
@@ -409,14 +451,7 @@ namespace PictureList {
 
         private void btnFind_Click(object sender, EventArgs e) {
             if (System.IO.Directory.Exists(lblSearchPath.Text)) {
-                //btnFind.Enabled = false;
-                //FileSum = 0;
-                //DateTime t1 = DateTime.Now;
                 GetDirsFilesList(lblSearchPath.Text);
-                //lblRows.Text = FileSum.ToString();
-                //DateTime t2 = DateTime.Now;
-                // MessageBox.Show((t2 - t1).ToString());
-                //btnFind.Enabled = true;
             } else {
                 MessageBox.Show("ディレクトリ " + lblSearchPath.Text + "\nは見つかりません");
             }
@@ -457,6 +492,15 @@ namespace PictureList {
             Clipboard.SetDataObject(OutText.ToString());
         }
 
+        // SelctFormでEXIF項目を変更する
+        private void btnSetExif_Click(object sender, EventArgs e) {
+            ReadExifListFromContent();
+            SelectForm tgtForm = new SelectForm();
+            tgtForm.AllLists = ExifLists;
+            tgtForm.exifListTitle = ExifListTitle;
+            tgtForm.ShowDialog();
+        }
+
         private void rbtnTab_CheckedChanged(object sender, EventArgs e) {
             SetOutPutFileType();
         }
@@ -486,7 +530,7 @@ namespace PictureList {
             if (chkAttribute.Checked)
                 OutTitleList.Append(sepa + "属性");
             if (chkExif.Checked) {
-                foreach (var exiflist in ExifItemOutLists) {
+                foreach (var exiflist in ExifTagOutLists) {
                     OutTitleList.Append(sepa + exiflist.TagName);
                 }
             }

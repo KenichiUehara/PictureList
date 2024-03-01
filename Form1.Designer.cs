@@ -125,12 +125,13 @@
             // 
             // btnFolderSelect
             // 
+            this.btnFolderSelect.BackColor = System.Drawing.Color.Gold;
             this.btnFolderSelect.Location = new System.Drawing.Point(5, 1);
             this.btnFolderSelect.Name = "btnFolderSelect";
             this.btnFolderSelect.Size = new System.Drawing.Size(94, 24);
             this.btnFolderSelect.TabIndex = 0;
             this.btnFolderSelect.Text = "フォルダーの選択";
-            this.btnFolderSelect.UseVisualStyleBackColor = true;
+            this.btnFolderSelect.UseVisualStyleBackColor = false;
             this.btnFolderSelect.Click += new System.EventHandler(this.btnFolderSelect_Click);
             // 
             // lblSearchPath
@@ -144,12 +145,13 @@
             // 
             // btnCopy2Clip
             // 
+            this.btnCopy2Clip.BackColor = System.Drawing.Color.Gold;
             this.btnCopy2Clip.Location = new System.Drawing.Point(5, 103);
             this.btnCopy2Clip.Name = "btnCopy2Clip";
             this.btnCopy2Clip.Size = new System.Drawing.Size(110, 23);
             this.btnCopy2Clip.TabIndex = 4;
             this.btnCopy2Clip.Text = "クリップボードにコピー";
-            this.btnCopy2Clip.UseVisualStyleBackColor = true;
+            this.btnCopy2Clip.UseVisualStyleBackColor = false;
             this.btnCopy2Clip.Click += new System.EventHandler(this.btnCopy2Clip_Click);
             // 
             // chkSubDir
@@ -280,12 +282,13 @@
             // 
             // btnFind
             // 
+            this.btnFind.BackColor = System.Drawing.Color.Gold;
             this.btnFind.Location = new System.Drawing.Point(5, 36);
             this.btnFind.Name = "btnFind";
             this.btnFind.Size = new System.Drawing.Size(75, 23);
             this.btnFind.TabIndex = 11;
             this.btnFind.Text = "探索開始";
-            this.btnFind.UseVisualStyleBackColor = true;
+            this.btnFind.UseVisualStyleBackColor = false;
             this.btnFind.Click += new System.EventHandler(this.btnFind_Click);
             // 
             // btnOut2File
@@ -355,7 +358,7 @@
             // 
             // txtComment
             // 
-            this.txtComment.Location = new System.Drawing.Point(5, 307);
+            this.txtComment.Location = new System.Drawing.Point(10, 307);
             this.txtComment.Multiline = true;
             this.txtComment.Name = "txtComment";
             this.txtComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -392,12 +395,14 @@
             // 
             // btnSetExif
             // 
+            this.btnSetExif.BackColor = System.Drawing.Color.Gold;
             this.btnSetExif.Location = new System.Drawing.Point(12, 213);
             this.btnSetExif.Name = "btnSetExif";
             this.btnSetExif.Size = new System.Drawing.Size(104, 25);
             this.btnSetExif.TabIndex = 8;
             this.btnSetExif.Text = "Exif項目の選択";
-            this.btnSetExif.UseVisualStyleBackColor = true;
+            this.btnSetExif.UseVisualStyleBackColor = false;
+            this.btnSetExif.Click += new System.EventHandler(this.btnSetExif_Click);
             // 
             // chkExif
             // 
