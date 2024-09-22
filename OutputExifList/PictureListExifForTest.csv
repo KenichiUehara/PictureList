@@ -1,0 +1,9 @@
+プロパティ,タグ名称,型,可否,表示順
+Org1,テスト1行目,string,TRUE,
+Org2,テスト2行目,string,TRUE,
+Org3,テスト3行目,string,TRUE,1
+Org4,4テスト行目,string,TRUE,
+Org5,テスト5行目,string,TRUE,2
+Org6,テスト6行目,string,TRUE,
+Org7,テスト1行目,string,TRUE,3
+Org8,テスト1行目,string,TRUE,

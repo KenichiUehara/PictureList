@@ -7,17 +7,27 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using System.Runtime.Remoting.Messaging;
+//using System.Runtime.Remoting.Messaging;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
+using System.Drawing.Imaging;
+using System.Runtime.Versioning;
+using System.Diagnostics;
+
+#pragma warning disable CA1416      //  #pragma warning restore CA1416 が出るまで CA1416 の警告が抑制される
+//[assembly: SupportedOSPlatform("windows")]　
+//CA1416はプラットフォームの互換性を警告するが、この文はこの位置が示すクラスや関数がWindowsのみをサポートすることを示し同じ結果を得る
+
+#pragma warning disable IDE0066
 
 namespace PictureList {
     // パスを受けて写真ならExif情報を得る
 
     public class ExifPicture {
 
+       
         private const int BYTE = 1, ASCII = 2, SHORT = 3, LONG = 4, RATIONAL = 5, UNDEFINED = 7, SLONG = 9, SRATIONAL = 10, UTF8 = 129;
         //ファイルとしての普通の属性
         public string FullPath { get; private set; }
@@ -29,7 +39,7 @@ namespace PictureList {
         public long ImgWidth { get; private set; }
         public long ImgHeight { get; private set; }
         public bool IsExifDate { get; private set; }
-        public bool IsImage { get;private set; }
+        public bool IsImage { get; private set; }
 
 
         //以下のExif情報はNetFrameWorkで取得対象タグでないものは XXXX で示す
@@ -92,7 +102,7 @@ namespace PictureList {
         public string OffsetTimeDigitized { get; private set; } //0X9012 DateTimeDigitizedの時差データ Exif2.31で追加 oooo
         public string ComponentsConfiguration { get; private set; } //0x9101 各コンポーネントの意味
         public string CompressedBitsPerPixel { get; private set; } //0x9102 画像圧縮モード
-        public string ShutterSpeedValue { get; private set; } //0x9201 シャッタースピード
+        public string ShutterSpeedValue { get; private set; } //0x9201 APEX(EV)値のシャッタースピード
         public string ApertureValue { get; private set; } //0x9202 絞り値
         public string BrightnessValue { get; private set; } //0x9203 輝度値
         public string ExposureBiasValue { get; private set; } //0x9204 露光補正値
@@ -205,7 +215,7 @@ namespace PictureList {
         public string WidthHeight { get; private set; } //幅ｘ高さ(Pixel)
         public string ShutterSpeed { get; private set; } //1/n 秒　または n 秒表示
 
-
+       
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -218,7 +228,7 @@ namespace PictureList {
             fullPath = Path.Combine(folderPath, fileName);
             this._exifPciture(fullPath);
         }
-
+       
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -226,9 +236,10 @@ namespace PictureList {
         public ExifPicture(string fullPath) {
             this._exifPciture(fullPath);
         }
-
+       
         private void _exifPciture(string fullPath) {
-            FileInfo file = new FileInfo(fullPath);
+            //FileInfo file = new FileInfo(fullPath);
+            FileInfo file = new(fullPath);
             FullPath = fullPath;
             NameWithoutExt = Path.GetFileNameWithoutExtension(fullPath);
             Name = file.Name;
@@ -236,17 +247,29 @@ namespace PictureList {
             Size = file.Length;
             MDate = file.LastWriteTime;
 
-
+            // デバッグ用
+            System.Diagnostics.Debug.Print(fullPath);
+            //
 
             IsExifDate = false;
             IsImage = false;
+            //
+            // ためしにBitmapからImageに変更
             System.Drawing.Bitmap bmp = null;
+            //System.Drawing.Image bmp = null;
             try {
                 bmp = new System.Drawing.Bitmap(fullPath);
-            } catch (Exception /*exception*/) {
-                //string error = FP + exception.Message;
+                //bmp = new System.Drawing.Bitmap(fullPath);
+                //bmp= Image.FromFile(fullPath);
+            } catch (Exception exception) {
+                string error = fullPath + " : " + exception.Message;
+                // Console.WriteLine(error);
+                System.Diagnostics.Debug.Print(error);
                 //System.Windows.Forms.MessageBox.Show(error);
+                DateTimeOriginal = ""; //以前はなぜか error;
             }
+
+
             if (bmp != null) {
                 IsImage = true;
                 ImgWidth = bmp.Width;
@@ -262,7 +285,7 @@ namespace PictureList {
                         case 0x0106: PhotometricInterpretation = GetPhotometricInterpretation(item); break;
                         case 0x010E: ImageDescription = GetExifAsci(item); break;
                         case 0x010F: Make = GetExifAsci(item); break;
-                        case 0x0110: Model = GetExifAsci(item);IsExifDate = true; break;
+                        case 0x0110: Model = GetExifAsci(item); IsExifDate = true; break;
                         case 0x0111: StripOffsets = AnyTypeAndCount(item, ","); break;
                         case 0x0112: Orientation = GetOrientation(item); break;
                         case 0x0115: SamplesPerPixel = AnyTypeAndCount(item); break;
@@ -282,7 +305,7 @@ namespace PictureList {
                         case 0x0202: JPEGInterchangeFormatLength = AnyTypeAndCount(item); break;
                         case 0x0211: YCbCrCoefficients = GetMultiRationalToString(item, " "); break;
                         case 0x0212: YCbCrSubSampling = GetYCbCrSubSampling(item); break;
-                        case 0x0213: YCbCrPositioning = GetYCbPositioning(item); break;
+                        case 0x0213: YCbCrPositioning = GetYCbCrPositioning(item); break;
                         case 0x0214: ReferenceBlackWhite = GetMultiRationalToString(item, ","); break;
                         case 0x8298: Copyright = GetExifAsci(item); break;
                         case 0x829A: ExposureTime = AnyTypeAndCount(item); break;
@@ -299,7 +322,7 @@ namespace PictureList {
                         case 0x8833: ISOSpeed = AnyTypeAndCount(item); break; // XXXX
                         case 0x8834: ISOSpeedLatitudeyyy = AnyTypeAndCount(item); break; // XXXX
                         case 0x8835: ISOSpeedLatitudezzz = AnyTypeAndCount(item); break; // XXXX
-                        case 0x9000: ExifVersion = GetUndefinedMultiByteToString(item, ".");IsExifDate = true; break;
+                        case 0x9000: ExifVersion = GetUndefinedMultiByteToString(item, "."); IsExifDate = true; break;
                         case 0x9003: DateTimeOriginal = GetExifAsci(item); break;
                         case 0x9004: DateTimeDigitized = GetExifAsci(item); break;
                         case 0X9010: OffsetTime = GetExifAsci(item); break; // oooo
@@ -412,7 +435,8 @@ namespace PictureList {
                     }
                 }
                 GPSLocation = GetGPSLocation();
-                ShutterSpeed = GetShutterSpeed(ExposureTime);
+                if (ExposureTime != null)
+                    ShutterSpeed = GetShutterSpeed(ExposureTime);
                 GPSHeight = GetGPSHeight();
                 Resolution = GetResolution();
                 WidthHeight = GetWidthHeight();
@@ -426,7 +450,7 @@ namespace PictureList {
         //
         //各プロパティ計算用メソッド
         //
-        private string GetCommpression(System.Drawing.Imaging.PropertyItem Pitem) { //0x0103
+        static private string GetCommpression(System.Drawing.Imaging.PropertyItem Pitem) { //0x0103
             long n = GetExifShort(Pitem);
             string str;
             switch (n) {
@@ -436,7 +460,7 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetPhotometricInterpretation(System.Drawing.Imaging.PropertyItem Pitem) { //0x0106
+        static private string GetPhotometricInterpretation(System.Drawing.Imaging.PropertyItem Pitem) { //0x0106
             long n = GetExifShort(Pitem);
             string str;
             switch (n) {
@@ -446,7 +470,7 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetOrientation(System.Drawing.Imaging.PropertyItem Pitem) { //0x0112
+        static private string GetOrientation(System.Drawing.Imaging.PropertyItem Pitem) { //0x0112
             long n;
             n = GetExifShort(Pitem);
             string str;
@@ -463,7 +487,7 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetPlanarConfiguration(System.Drawing.Imaging.PropertyItem Pitem) { //0x011C
+        static private string GetPlanarConfiguration(System.Drawing.Imaging.PropertyItem Pitem) { //0x011C
             long n = GetExifShort(Pitem);
             string str;
             switch (n) {
@@ -473,7 +497,7 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetResolutionUnit(System.Drawing.Imaging.PropertyItem Pitem) { //0x0128
+        static private string GetResolutionUnit(System.Drawing.Imaging.PropertyItem Pitem) { //0x0128
             long n = GetExifShort(Pitem);
             string str;
             switch (n) {
@@ -489,7 +513,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetYCbCrSubSampling(System.Drawing.Imaging.PropertyItem Pitem) { //0x0212
+       
+        static private string GetYCbCrSubSampling(System.Drawing.Imaging.PropertyItem Pitem) { //0x0212
             string str = "予約(未実装)";
             if (Pitem.Type != SHORT && LenToCount(Pitem) != 2) str = "異常値";
             else {
@@ -502,7 +527,7 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetYCbPositioning(System.Drawing.Imaging.PropertyItem Pitem) { //0x0213
+        static private string GetYCbCrPositioning(System.Drawing.Imaging.PropertyItem Pitem) { //0x0213
             long n = GetExifShort(Pitem);
             string str;
             switch (n) {
@@ -512,7 +537,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetLensSpecificatGet(System.Drawing.Imaging.PropertyItem Pitem) {
+       
+        static private string GetLensSpecificatGet(System.Drawing.Imaging.PropertyItem Pitem) {
             string str;
             if (Pitem.Type != BYTE && LenToCount(Pitem) != 4) {
                 str = "異常値"; return str;
@@ -521,7 +547,9 @@ namespace PictureList {
             str += "mm F" + AnyValueToString(Pitem, 2) + "-" + AnyValueToString(Pitem, 3);
             return str;
         }
-        private string GetExposureProgram(System.Drawing.Imaging.PropertyItem Pitem) { //0x8822
+
+       
+        static private string GetExposureProgram(System.Drawing.Imaging.PropertyItem Pitem) { //0x8822
             string str;
             if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
             else {
@@ -541,7 +569,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetOECF(System.Drawing.Imaging.PropertyItem Pitem) { //0x0x8828
+       
+        static private string GetOECF(System.Drawing.Imaging.PropertyItem Pitem) { //0x0x8828
             int type = Pitem.Type;
             string str;
             if (type == UNDEFINED)
@@ -550,7 +579,8 @@ namespace PictureList {
                 str = "MakerNote 異常値";
             return str;
         }
-        private string GetSensitivityType(System.Drawing.Imaging.PropertyItem Pitem) { //0x8830
+       
+        static private string GetSensitivityType(System.Drawing.Imaging.PropertyItem Pitem) { //0x8830
             string str;
             if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
             else {
@@ -569,7 +599,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetComponentsConfiguration(System.Drawing.Imaging.PropertyItem Pitem) { //0x9101
+       
+        static private string GetComponentsConfiguration(System.Drawing.Imaging.PropertyItem Pitem) { //0x9101
             string str = "";
             for (int i = 0; i < 4; i++) {
                 switch (Pitem.Value[i]) {
@@ -585,7 +616,7 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetMeteringMode(System.Drawing.Imaging.PropertyItem Pitem) { //0x9207
+        static private string GetMeteringMode(System.Drawing.Imaging.PropertyItem Pitem) { //0x9207
             long n = GetExifShort(Pitem);
             string str;
             switch (n) {
@@ -610,7 +641,7 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetLightSource(System.Drawing.Imaging.PropertyItem Pitem) { //0x9208
+        static private string GetLightSource(System.Drawing.Imaging.PropertyItem Pitem) { //0x9208
             long n = GetExifShort(Pitem);
             string str;
             switch (n) {
@@ -640,7 +671,7 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetFlash(System.Drawing.Imaging.PropertyItem Pitem) { //0x9209
+        static private string GetFlash(System.Drawing.Imaging.PropertyItem Pitem) { //0x9209
             long n = GetExifShort(Pitem);
             string str;
             switch (n) {
@@ -676,7 +707,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetSubjectArea(System.Drawing.Imaging.PropertyItem Pitem) { //0x9214
+       
+        static private string GetSubjectArea(System.Drawing.Imaging.PropertyItem Pitem) { //0x9214
             int cnt = LenToCount(Pitem);
             string str;
             switch (cnt) {
@@ -696,7 +728,8 @@ namespace PictureList {
         /// </summary>
         /// <param name="Pitem"></param>
         /// <returns></returns>        
-        private string GetMakerNote(System.Drawing.Imaging.PropertyItem Pitem) { //0x0x927C
+       
+        static private string GetMakerNote(System.Drawing.Imaging.PropertyItem Pitem) { //0x0x927C
             int type = Pitem.Type;
             string str;
             if (type == UNDEFINED)
@@ -705,7 +738,9 @@ namespace PictureList {
                 str = "MakerNote 異常値";
             return str;
         }
-        private string GetFlashpixVersion(System.Drawing.Imaging.PropertyItem Pitem) { //0xA000
+
+       
+        static private string GetFlashpixVersion(System.Drawing.Imaging.PropertyItem Pitem) { //0xA000
             string str;
             if (Pitem.Type == UNDEFINED && LenToCount(Pitem) == 4 && Encoding.ASCII.GetString(Pitem.Value) == "0100")
                 str = "Flashpix Format Version 1.0";
@@ -713,7 +748,7 @@ namespace PictureList {
                 str = "未定義";
             return str;
         }
-        private string GetColorSpace(System.Drawing.Imaging.PropertyItem PItem) { //0xA001
+        static private string GetColorSpace(System.Drawing.Imaging.PropertyItem PItem) { //0xA001
             long n = GetExifShort(PItem);
             string str;
             if (n == 1)
@@ -724,6 +759,8 @@ namespace PictureList {
                 str = "未定義";
             return str;
         }
+
+        /*
         private string GetPixelXDimension(System.Drawing.Imaging.PropertyItem Pitem) { //0xA002
             string str;
             if (Pitem.Type == SHORT)
@@ -734,13 +771,16 @@ namespace PictureList {
                 str = "未定義";
             return str;
         }
-        private string GetFocalPlaneResolutionUnit(System.Drawing.Imaging.PropertyItem Pitem) { //0xA210
+        */
+       
+        static private string GetFocalPlaneResolutionUnit(System.Drawing.Imaging.PropertyItem Pitem) { //0xA210
             if (Pitem.Type == SHORT && LenToCount(Pitem) == 1 && GetExifShort(Pitem) == 2)
                 return "inch";
             else
                 return "未定義";
         }
-        private string GetSubjectLocation(System.Drawing.Imaging.PropertyItem Pitem) { //0xA214
+       
+        static private string GetSubjectLocation(System.Drawing.Imaging.PropertyItem Pitem) { //0xA214
             string str;
             if (Pitem.Type == SHORT && LenToCount(Pitem) == 2)
                 str = "X,Y = " + BitConverter.ToInt16(Pitem.Value, 0) + " , " + BitConverter.ToInt16(Pitem.Value, 2);
@@ -749,7 +789,7 @@ namespace PictureList {
 
             return str;
         }
-        private string GetSensingMethod(System.Drawing.Imaging.PropertyItem Pitem) { //0xA217
+        static private string GetSensingMethod(System.Drawing.Imaging.PropertyItem Pitem) { //0xA217
             long n = GetExifShort(Pitem);
             string str;
             switch (n) {
@@ -764,7 +804,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetFileSource(System.Drawing.Imaging.PropertyItem Pitem) { //0xA300
+       
+        static private string GetFileSource(System.Drawing.Imaging.PropertyItem Pitem) { //0xA300
             int type = Pitem.Type;
             byte val = Pitem.Value[0];
             string str;
@@ -779,7 +820,8 @@ namespace PictureList {
             if (type != UNDEFINED && LenToCount(Pitem) != 1) str = "異常値";
             return str;
         }
-        private string GetSceneType(System.Drawing.Imaging.PropertyItem Pitem) { //0xA301
+       
+        static private string GetSceneType(System.Drawing.Imaging.PropertyItem Pitem) { //0xA301
             string str;
             if (Pitem.Type != UNDEFINED && LenToCount(Pitem) != 1) str = "異常値";
             else {
@@ -791,13 +833,33 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetCFAPattern(System.Drawing.Imaging.PropertyItem Pitem) { //0xA302
+       
+        static private string GetCFAPattern(System.Drawing.Imaging.PropertyItem Pitem) { //0xA302
             string str;
             if (Pitem.Type != UNDEFINED) str = "異常値";
             else {
                 short xn, yn;
-                xn = BitConverter.ToInt16(Pitem.Value, 0);
-                yn = BitConverter.ToInt16(Pitem.Value, 2);
+                //CFAパターン（イメージセンサーのRGB画素などの配置を示すルーティンだが 横のパターン数 xn と　縦の yn　に値の各2バイト
+                //を使って計算しているが多分デジカメ側がリトル（ビッグ）エンディアン
+
+                // xn = BitConverter.ToInt16(Pitem.Value, 0);
+                // yn = BitConverter.ToInt16(Pitem.Value, 2);
+
+                Byte x1, x2, y1, y2;
+                x1= Pitem.Value[0];
+                x2= Pitem.Value[1];
+                y1= Pitem.Value[2];
+                y2= Pitem.Value[3];
+                xn = (short)(x2 * 256); xn += x1;
+                yn = (short)(y2 * 256); yn += y1;
+                if (xn + yn > Pitem.Len - 4) {
+                    xn = (short)(x1 * 256); xn += x2;
+                    yn = (short)(y1 * 256); yn += y2;
+                }
+                if (xn + yn > Pitem.Len - 4) {
+                    str = "未解決" + AnyTypeAndCount(Pitem, ",");
+                    return str;
+                }
                 str = "X = " + xn.ToString() + ",Y = " + yn.ToString() + " : ";
                 for (int i = 0; i < xn; i++) {
                     str += GetFilterColor(Pitem.Value[i]);
@@ -811,7 +873,7 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetFilterColor(byte bt) { //0xA302 GetCFAPattern()のサブ
+        static private string GetFilterColor(byte bt) { //0xA302 GetCFAPattern()のサブ
             switch (bt) {
                 case 0x00: return "Red";
                 case 0x01: return "Green";
@@ -823,7 +885,8 @@ namespace PictureList {
                 default: return "未定義";
             }
         }
-        private string GetCustomRendered(System.Drawing.Imaging.PropertyItem Pitem) { //0xA401
+       
+        static private string GetCustomRendered(System.Drawing.Imaging.PropertyItem Pitem) { //0xA401
             string str;
             if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
             else {
@@ -836,7 +899,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetExposureMode(System.Drawing.Imaging.PropertyItem Pitem) { //0xA402
+       
+        static private string GetExposureMode(System.Drawing.Imaging.PropertyItem Pitem) { //0xA402
             string str;
             if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
             else {
@@ -850,7 +914,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetWhiteBalance(System.Drawing.Imaging.PropertyItem Pitem) { //0xA403
+       
+        static private string GetWhiteBalance(System.Drawing.Imaging.PropertyItem Pitem) { //0xA403
             string str;
             if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
             else {
@@ -863,7 +928,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetDigitalZoomRatio(System.Drawing.Imaging.PropertyItem Pitem) { //0xA404
+       
+        static private string GetDigitalZoomRatio(System.Drawing.Imaging.PropertyItem Pitem) { //0xA404
             double rtn = GetExifRational(Pitem);
             if (Double.IsNaN(rtn)) {
                 //if (GetSRational(Pitem.Value) == 0) {
@@ -873,7 +939,8 @@ namespace PictureList {
             }
             return rtn.ToString();
         }
-        private string GetFocalLengthIn35mmFilm(System.Drawing.Imaging.PropertyItem Pitem) { //0xA405
+       
+        static private string GetFocalLengthIn35mmFilm(System.Drawing.Imaging.PropertyItem Pitem) { //0xA405
             string str;
             if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
             else {
@@ -883,7 +950,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetSceneCaptureType(System.Drawing.Imaging.PropertyItem Pitem) { //0xA406
+       
+        static private string GetSceneCaptureType(System.Drawing.Imaging.PropertyItem Pitem) { //0xA406
             string str;
             if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
             else {
@@ -898,7 +966,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetGainControl(System.Drawing.Imaging.PropertyItem Pitem) { //0xA407
+       
+        static private string GetGainControl(System.Drawing.Imaging.PropertyItem Pitem) { //0xA407
             string str;
             if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
             else {
@@ -914,7 +983,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetContrast(System.Drawing.Imaging.PropertyItem Pitem) { //0xA408
+       
+        static private string GetContrast(System.Drawing.Imaging.PropertyItem Pitem) { //0xA408
             string str;
             if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
             else {
@@ -928,7 +998,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetSaturation(System.Drawing.Imaging.PropertyItem Pitem) { //0xA409
+       
+        static private string GetSaturation(System.Drawing.Imaging.PropertyItem Pitem) { //0xA409
             string str;
             if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
             else {
@@ -942,7 +1013,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetSharpness(System.Drawing.Imaging.PropertyItem Pitem) { //0xA40A
+        [SupportedOSPlatform("linux")]
+        static private string GetSharpness(System.Drawing.Imaging.PropertyItem Pitem) { //0xA40A
             string str;
             if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
             else {
@@ -956,7 +1028,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetSubjectDistanceRange(System.Drawing.Imaging.PropertyItem Pitem) { //0xA40C
+       
+        static private string GetSubjectDistanceRange(System.Drawing.Imaging.PropertyItem Pitem) { //0xA40C
             string str;
             if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
             else {
@@ -971,7 +1044,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetGPSVersionID(System.Drawing.Imaging.PropertyItem Pitem) { //0x0000
+       
+        static private string GetGPSVersionID(System.Drawing.Imaging.PropertyItem Pitem) { //0x0000
             string str;
             if (Pitem.Type != BYTE && LenToCount(Pitem) != 4) str = "異常値";
             else {
@@ -979,7 +1053,8 @@ namespace PictureList {
             }
             return str;
         }
-        private double GetGPSValue(System.Drawing.Imaging.PropertyItem Pitem) { //0x0002,0x0004,0x0014,0x0016用
+       
+        static private double GetGPSValue(System.Drawing.Imaging.PropertyItem Pitem) { //0x0002,0x0004,0x0014,0x0016用
             UInt32 deg_numerator = BitConverter.ToUInt32(Pitem.Value, 0);
             UInt32 deg_denominator = BitConverter.ToUInt32(Pitem.Value, 4);
             double deg = (double)deg_numerator / (double)deg_denominator;
@@ -999,7 +1074,8 @@ namespace PictureList {
             double Val = deg + min / 60.0 + sec / 3600.0;
             return Val;
         }
-        private string GetGPSAltitudeRef(System.Drawing.Imaging.PropertyItem Pitem) { //0x0005
+       
+        static private string GetGPSAltitudeRef(System.Drawing.Imaging.PropertyItem Pitem) { //0x0005
             string str;
             if (Pitem.Type != BYTE && LenToCount(Pitem) != 1) str = "異常値";
             else {
@@ -1012,7 +1088,8 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetGPSTimeStamp(System.Drawing.Imaging.PropertyItem Pitem) { //0x0007
+       
+        static private string GetGPSTimeStamp(System.Drawing.Imaging.PropertyItem Pitem) { //0x0007
             string str = "";
             for (int i = 0; i < LenToCount(Pitem); i++) {
                 str += GetRational(Pitem.Value, i * 8).ToString();
@@ -1033,11 +1110,17 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetShutterSpeed(string speedStr) {
-            double sSpeed;
+
+        /// <summary>
+        /// sppedStrの数値を表す文字列から "1/n 秒" または "n 秒" というシャッター速度を返す。桁数が地裁場合は勇往桁数が3桁になるようにする
+        /// </summary>
+        /// <param name="speedStr"></param>
+        /// <returns></returns>
+        static private string GetShutterSpeed(string speedStr) {
+            //double sSpeed;
             bool lessThan1 = false;
             string str;
-            if (!double.TryParse(speedStr, out sSpeed)) {
+            if (!double.TryParse(speedStr, out double sSpeed)) {
                 return "不正なシャッター速度値";
             }
             if (sSpeed <= 1) {
@@ -1087,8 +1170,7 @@ namespace PictureList {
         //
         // Typeによって値を得る
         //
-
-        private string GetExifAsci(System.Drawing.Imaging.PropertyItem PItem) {
+        static private string GetExifAsci(System.Drawing.Imaging.PropertyItem PItem) {
             string val;
             switch (PItem.Type) {
                 case ASCII: val = System.Text.Encoding.ASCII.GetString(PItem.Value); break;
@@ -1098,7 +1180,7 @@ namespace PictureList {
             return val.Replace("\0", ""); //ValueにはNuullが含まれるとあるので削除する
         }
         // Byte[]の文字をCharとし、 COUNT数 区切子 spr でつなぐ
-        private string GetUndefinedMultiByteToString(System.Drawing.Imaging.PropertyItem Pitem, string spr) {
+        static private string GetUndefinedMultiByteToString(System.Drawing.Imaging.PropertyItem Pitem, string spr) {
             string str = "";
             int cnt = LenToCount(Pitem);
             for (int i = 0; i < cnt; i++) {
@@ -1109,52 +1191,58 @@ namespace PictureList {
             return str.Trim();
         }
         // Undefinedを一つのAscii文字列として返す
-        private string GetUndefinedUniStringValue(System.Drawing.Imaging.PropertyItem Pitem) {
+        static private string GetUndefinedUniStringValue(System.Drawing.Imaging.PropertyItem Pitem) {
             string val = System.Text.Encoding.ASCII.GetString(Pitem.Value);
             return val.Replace("\0", "");
         }
-        private int GetExifByte(System.Drawing.Imaging.PropertyItem Pitem) {
+        static private int GetExifByte(System.Drawing.Imaging.PropertyItem Pitem) {
 
             //return BitConverter.ToChar(Pitem.Value, 0);
             return (int)Pitem.Value[0];
         }
 
-        private long GetExifShort(System.Drawing.Imaging.PropertyItem Pitem) {
+        static private long GetExifShort(System.Drawing.Imaging.PropertyItem Pitem) {
             return BitConverter.ToUInt16(Pitem.Value, 0);
         }
 
+        /*
         private long GetExifLong(System.Drawing.Imaging.PropertyItem Pitem) {
             return BitConverter.ToUInt32(Pitem.Value, 0);
         }
         private long GetExifSLong(System.Drawing.Imaging.PropertyItem Pitem) {
             return BitConverter.ToInt32(Pitem.Value, 0);
         }
-        private double GetExifRational(System.Drawing.Imaging.PropertyItem Pitem) {
+        */
+        static private double GetExifRational(System.Drawing.Imaging.PropertyItem Pitem) {
             switch (Pitem.Type) {
                 case RATIONAL: return GetRational(Pitem.Value);
                 case SRATIONAL: return GetSRational(Pitem.Value);
                 default: return 0.0;
             }
         }
-        private double GetRational(byte[] vl) {
+
+        static private double GetRational(byte[] vl) {
             return GetRational(vl, 0);
         }
-        private double GetRational(byte[] vl, int strt) {
+        
+        static private double GetRational(byte[] vl, int strt) {
             long numerator = BitConverter.ToUInt32(vl, strt);
             long nominator = BitConverter.ToUInt32(vl, strt + 4);
             double dbl = (double)numerator / (double)nominator;
             return dbl;
         }
-        private double GetSRational(byte[] vl) {
+        
+         static private double GetSRational(byte[] vl) {
             return GetSRational(vl, 0);
         }
-        private double GetSRational(byte[] vl, int strt) {
+        
+        static private double GetSRational(byte[] vl, int strt) {
             int numerator = BitConverter.ToInt32(vl, strt);
             int nominator = BitConverter.ToInt32(vl, strt + 4);
             double dbl = (double)numerator / (double)nominator;
             return dbl;
         }
-        private string GetMultiShortToString(System.Drawing.Imaging.PropertyItem Pitem, int cnt) {
+        static private string GetMultiShortToString(System.Drawing.Imaging.PropertyItem Pitem, int cnt) {
             string str = "";
             for (int i = 0; i < cnt; i++) {
                 str += BitConverter.ToUInt16(Pitem.Value, i * 2).ToString() + " ";
@@ -1167,7 +1255,7 @@ namespace PictureList {
         /// <param name="Pitem"></param>
         /// <param name="spr">複数のRATIONALを区切る区切子</param>
         /// <returns></returns>
-        private string GetMultiRationalToString(System.Drawing.Imaging.PropertyItem Pitem, string spr) {
+        static private string GetMultiRationalToString(System.Drawing.Imaging.PropertyItem Pitem, string spr) {
             string str = "";
             int cnt = LenToCount(Pitem);
             for (int i = 0; i < cnt; i++) {
@@ -1180,8 +1268,8 @@ namespace PictureList {
         //TypeとCOUNTが変動しても順に spr（セパレーター）でつないで文字列にする
         //ASCIIとUNDEFINEDはサポートしない。ASCIIはCOUNTが文字列の全体の文字数。
         //UNDEFINEDはこの文字列の数などにも使われるため個々のケースで対応する
-        private string AnyTypeAndCount(System.Drawing.Imaging.PropertyItem Pitem, string spr) {
-            if (Pitem.Type == ASCII || Pitem.Type == UTF8) return "文字列で無いものを余のを呼ぶ誤りがありました";
+        static private string AnyTypeAndCount(System.Drawing.Imaging.PropertyItem Pitem, string spr) {
+            if (Pitem.Type == ASCII || Pitem.Type == UTF8) return "文字列で無いものを呼ぶ誤りがありました";
             string str = "";
             int len = LenToCount(Pitem);
             string st;
@@ -1193,26 +1281,26 @@ namespace PictureList {
             return str;
         }
         //オーバーロード
-        private string AnyTypeAndCount(System.Drawing.Imaging.PropertyItem Pitem) {
+        static private string AnyTypeAndCount(System.Drawing.Imaging.PropertyItem Pitem) {
             return AnyTypeAndCount(Pitem, "");
         }
-        private string AnyValueToString(System.Drawing.Imaging.PropertyItem Pitem, int i) {
+        static private string AnyValueToString(System.Drawing.Imaging.PropertyItem Pitem, int i) {
             string st = "";
             switch (Pitem.Type) {
                 case BYTE: st = Pitem.Value[i].ToString(); break;
                 case SHORT: st = BitConverter.ToUInt16(Pitem.Value, i * 2).ToString(); break;
                 case LONG: st = BitConverter.ToUInt32(Pitem.Value, i * 4).ToString(); break;
                 case RATIONAL: st = GetRational(Pitem.Value, i * 8).ToString(); break;
-                case SLONG: st = BitConverter.ToInt32(Pitem.Value, i * 8).ToString(); break;
+                case SLONG: st = BitConverter.ToInt32(Pitem.Value, i * 4).ToString(); break; //2024/04/14 i * 8 を i * 4 に修正
                 case SRATIONAL: st = GetSRational(Pitem.Value, i * 8).ToString(); break;
                 default: break;
             }
             return st;
         }
-        private int LenToCount(System.Drawing.Imaging.PropertyItem Pitem) {
+        static private int LenToCount(System.Drawing.Imaging.PropertyItem Pitem) {
             return LenToCount(Pitem.Len, Pitem.Type);
         }
-        private int LenToCount(int len, short type) {
+        static private int LenToCount(int len, short type) {
             int rtn = 0;
             switch (type) {
                 case BYTE:

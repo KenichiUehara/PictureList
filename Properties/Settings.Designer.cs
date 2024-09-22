@@ -12,7 +12,7 @@ namespace PictureList.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.6.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.10.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -176,6 +176,78 @@ namespace PictureList.Properties {
             }
             set {
                 this["IsExif"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ExifExtAllExt {
+            get {
+                return ((bool)(this["ExifExtAllExt"]));
+            }
+            set {
+                this["ExifExtAllExt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsChkExifMainExt {
+            get {
+                return ((bool)(this["IsChkExifMainExt"]));
+            }
+            set {
+                this["IsChkExifMainExt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsChkExifSubExt {
+            get {
+                return ((bool)(this["IsChkExifSubExt"]));
+            }
+            set {
+                this["IsChkExifSubExt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsChkExifTextExt {
+            get {
+                return ((bool)(this["IsChkExifTextExt"]));
+            }
+            set {
+                this["IsChkExifTextExt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("CR3,MFW,X3F,SRW,RWL,SR2,SRF")]
+        public string ExifTextExt {
+            get {
+                return ((string)(this["ExifTextExt"]));
+            }
+            set {
+                this["ExifTextExt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ExifToolUse {
+            get {
+                return ((int)(this["ExifToolUse"]));
+            }
+            set {
+                this["ExifToolUse"] = value;
             }
         }
     }

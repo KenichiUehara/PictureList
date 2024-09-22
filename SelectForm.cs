@@ -13,6 +13,7 @@ using System.Windows.Forms;
 namespace PictureList {
     public partial class SelectForm : Form {
         private List<Form1.Exiflist> allLists;
+        private List<Form1.Exiflist> iniLists;
         public string exifListTitle; //呼出し元のForm1でセットする
 
         private int LastUnSelectIdx = -1;
@@ -37,6 +38,8 @@ namespace PictureList {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void SelectForm_Load(object sender, EventArgs e) {
+            iniLists = new List<Form1.Exiflist>(allLists);
+
             listViewUnSelect.View = View.Details;
             listViewSelect.View = View.Details;
             listViewUnSelect.BackColor = unSelectedBackColor;
@@ -155,7 +158,7 @@ namespace PictureList {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnAddUpper_Click(object sender, EventArgs e) {
-            Disp("Move Above");
+            //Disp("Move Above");
             MoveToSelect(true);
         }
         /// <summary>
@@ -164,7 +167,11 @@ namespace PictureList {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnAddLower_Click(object sender, EventArgs e) {
-            Disp("ModeDown");
+            //Disp("ModeDown");
+            //何も選択されていないときは最後の出力項目を選択する 2024/09/06
+            if (LastSelectIdx < 0) {
+                LastSelectIdx = listViewSelect.Items.Count - 1;
+            }
             MoveToSelect(false);
         }
         /// <summary>
@@ -173,7 +180,7 @@ namespace PictureList {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnDelete_Click(object sender, EventArgs e) {
-            Disp("Dele");
+            //Disp("Dele");
             if (LastSelectIdx < 0) { //削除項目が選ばれていないときは警告を表示して終了
                 MessageBox.Show("移動元を選んでください", "注意",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -208,7 +215,7 @@ namespace PictureList {
                 allLists[UnSelectIdx].Order = 1;
                 ReWriteViews();
                 return;
-            } 
+            }
             //通常の処理
             //非選択も選択も選ばれていない場合は注意を表示して戻る
             if (LastUnSelectIdx < 0 || LastSelectIdx < 0) {
@@ -246,6 +253,7 @@ namespace PictureList {
 
         private void btnNoSave_Click(object sender, EventArgs e) {
             IsChangeOk = false;
+            allLists = iniLists;
             this.Close();
         }
 
@@ -280,8 +288,8 @@ namespace PictureList {
             string RName = "-";
             if (LastSelectIdx >= 0)
                 RName = listViewSelect.Items[LastSelectIdx].Text;
-            Console.WriteLine("{0,10} 候補 {1,3} = {2,-5} / 出力 {3,3} = {4,-5}",
-                str, LastUnSelectIdx, LName, LastSelectIdx, RName);
+            //Console.WriteLine("{0,10} 候補 {1,3} = {2,-5} / 出力 {3,3} = {4,-5}",
+            //    str, LastUnSelectIdx, LName, LastSelectIdx, RName);
         }
 
         private void listViewUnSelect_ItemCheck(object sender, ItemCheckEventArgs e) {
@@ -289,7 +297,7 @@ namespace PictureList {
         }
 
         private void listViewUnSelect_ItemChecked(object sender, ItemCheckedEventArgs e) {
-            Console.WriteLine("候補_ItemChecked {0}", LastUnSelectIdx);
+            //Console.WriteLine("候補_ItemChecked {0}", LastUnSelectIdx);
             if (LastUnSelectIdx < 0 && listViewUnSelect.CheckedItems.Count > 0) {
                 foreach (ListViewItem item in listViewUnSelect.CheckedItems) {
                     item.Checked = false;
@@ -310,7 +318,29 @@ namespace PictureList {
             }
         }
 
+        private void ReaDEfaoultCSV_Click(object sender, EventArgs e) {
+            Form1.ReadExifListFromContent(Form1.SettingDefaultCSVPah);
+            ReWriteViews();
+        }
 
+        /// <summary>
+        /// 項目をすべて追加 2024/09/06に追加
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnAllAdd_Click(object sender, EventArgs e) {
+            DialogResult result = MessageBox.Show("出力をそのまま全追加しますが良いですか?", "確認", MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Warning);
+            if (result == DialogResult.Cancel) {
+                return;
+            }
+            int i = 1;
+
+            foreach (Form1.Exiflist item in allLists) {
+                item.Order = i++;              
+            }
+            ReWriteViews();
+        }
     }
 }
 

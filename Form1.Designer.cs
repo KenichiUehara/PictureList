@@ -23,563 +23,732 @@
         /// コード エディターで変更しないでください。
         /// </summary>
         private void InitializeComponent() {
-            this.button1 = new System.Windows.Forms.Button();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.btnFolderSelect = new System.Windows.Forms.Button();
-            this.lblSearchPath = new System.Windows.Forms.Label();
-            this.btnCopy2Clip = new System.Windows.Forms.Button();
-            this.chkSubDir = new System.Windows.Forms.CheckBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.rbtnOnlyExif = new System.Windows.Forms.RadioButton();
-            this.rbtnOnlyImage = new System.Windows.Forms.RadioButton();
-            this.rbtnIncldDir = new System.Windows.Forms.RadioButton();
-            this.rbtnOnlyFiles = new System.Windows.Forms.RadioButton();
-            this.rbtnOnlyDir = new System.Windows.Forms.RadioButton();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtMask = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.lblRows = new System.Windows.Forms.Label();
-            this.btnFind = new System.Windows.Forms.Button();
-            this.btnOut2File = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.rbtnTab = new System.Windows.Forms.RadioButton();
-            this.rbtnCSV = new System.Windows.Forms.RadioButton();
-            this.chkDirMask = new System.Windows.Forms.CheckBox();
-            this.lblOutFile = new System.Windows.Forms.Label();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.txtComment = new System.Windows.Forms.TextBox();
-            this.btnExit = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.btnSetExif = new System.Windows.Forms.Button();
-            this.chkExif = new System.Windows.Forms.CheckBox();
-            this.chkAttribute = new System.Windows.Forms.CheckBox();
-            this.chkSize = new System.Windows.Forms.CheckBox();
-            this.chkLastAccessTime = new System.Windows.Forms.CheckBox();
-            this.chkCreationTime = new System.Windows.Forms.CheckBox();
-            this.chkLastWriteTime = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.lblQty = new System.Windows.Forms.Label();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.SuspendLayout();
+            button1 = new System.Windows.Forms.Button();
+            openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            btnFolderSelect = new System.Windows.Forms.Button();
+            lblSearchPath = new System.Windows.Forms.Label();
+            btnCopy2Clip = new System.Windows.Forms.Button();
+            chkSubDir = new System.Windows.Forms.CheckBox();
+            groupBox1 = new System.Windows.Forms.GroupBox();
+            label5 = new System.Windows.Forms.Label();
+            rbtnOnlyExif = new System.Windows.Forms.RadioButton();
+            rbtnOnlyImage = new System.Windows.Forms.RadioButton();
+            rbtnIncldDir = new System.Windows.Forms.RadioButton();
+            rbtnOnlyFiles = new System.Windows.Forms.RadioButton();
+            rbtnOnlyDir = new System.Windows.Forms.RadioButton();
+            label2 = new System.Windows.Forms.Label();
+            txtMask = new System.Windows.Forms.TextBox();
+            label3 = new System.Windows.Forms.Label();
+            lblRows = new System.Windows.Forms.Label();
+            btnFind = new System.Windows.Forms.Button();
+            btnOut2File = new System.Windows.Forms.Button();
+            groupBox2 = new System.Windows.Forms.GroupBox();
+            rbtnTab = new System.Windows.Forms.RadioButton();
+            rbtnCSV = new System.Windows.Forms.RadioButton();
+            chkDirMask = new System.Windows.Forms.CheckBox();
+            lblOutFile = new System.Windows.Forms.Label();
+            saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            txtComment = new System.Windows.Forms.TextBox();
+            btnExit = new System.Windows.Forms.Button();
+            groupBox3 = new System.Windows.Forms.GroupBox();
+            btnSetExif = new System.Windows.Forms.Button();
+            chkExif = new System.Windows.Forms.CheckBox();
+            chkAttribute = new System.Windows.Forms.CheckBox();
+            chkSize = new System.Windows.Forms.CheckBox();
+            chkLastAccessTime = new System.Windows.Forms.CheckBox();
+            chkCreationTime = new System.Windows.Forms.CheckBox();
+            chkLastWriteTime = new System.Windows.Forms.CheckBox();
+            label6 = new System.Windows.Forms.Label();
+            label7 = new System.Windows.Forms.Label();
+            progressBar1 = new System.Windows.Forms.ProgressBar();
+            lblQty = new System.Windows.Forms.Label();
+            groupBoxExifExt = new System.Windows.Forms.GroupBox();
+            txtAdditionalExifExtLists = new System.Windows.Forms.TextBox();
+            chkExifTextExt = new System.Windows.Forms.CheckBox();
+            chkSubExifExt = new System.Windows.Forms.CheckBox();
+            rbtnExtSelect = new System.Windows.Forms.RadioButton();
+            label4 = new System.Windows.Forms.Label();
+            chkMainExifExt = new System.Windows.Forms.CheckBox();
+            label1 = new System.Windows.Forms.Label();
+            rbtnAllExt = new System.Windows.Forms.RadioButton();
+            groupBox4 = new System.Windows.Forms.GroupBox();
+            rbExifToolAllways = new System.Windows.Forms.RadioButton();
+            rbExiToolIfNeed = new System.Windows.Forms.RadioButton();
+            rbExifToolDonotUse = new System.Windows.Forms.RadioButton();
+            button2 = new System.Windows.Forms.Button();
+            groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
+            groupBox3.SuspendLayout();
+            groupBoxExifExt.SuspendLayout();
+            groupBox4.SuspendLayout();
+            SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(445, 506);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(99, 45);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            button1.Location = new System.Drawing.Point(219, 547);
+            button1.Margin = new System.Windows.Forms.Padding(4);
+            button1.Name = "button1";
+            button1.Size = new System.Drawing.Size(61, 20);
+            button1.TabIndex = 0;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(14, 474);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(322, 19);
-            this.textBox1.TabIndex = 1;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(12, 499);
-            this.textBox2.Multiline = true;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(242, 52);
-            this.textBox2.TabIndex = 2;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(259, 521);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(92, 30);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(357, 517);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(82, 28);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            openFileDialog1.FileName = "openFileDialog1";
             // 
             // btnFolderSelect
             // 
-            this.btnFolderSelect.BackColor = System.Drawing.Color.Gold;
-            this.btnFolderSelect.Location = new System.Drawing.Point(5, 1);
-            this.btnFolderSelect.Name = "btnFolderSelect";
-            this.btnFolderSelect.Size = new System.Drawing.Size(94, 24);
-            this.btnFolderSelect.TabIndex = 0;
-            this.btnFolderSelect.Text = "フォルダーの選択";
-            this.btnFolderSelect.UseVisualStyleBackColor = false;
-            this.btnFolderSelect.Click += new System.EventHandler(this.btnFolderSelect_Click);
+            btnFolderSelect.BackColor = System.Drawing.SystemColors.Control;
+            btnFolderSelect.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            btnFolderSelect.Location = new System.Drawing.Point(6, 1);
+            btnFolderSelect.Margin = new System.Windows.Forms.Padding(4);
+            btnFolderSelect.Name = "btnFolderSelect";
+            btnFolderSelect.Size = new System.Drawing.Size(124, 38);
+            btnFolderSelect.TabIndex = 0;
+            btnFolderSelect.Text = "フォルダーの選択";
+            btnFolderSelect.UseVisualStyleBackColor = false;
+            btnFolderSelect.Click += btnFolderSelect_Click;
             // 
             // lblSearchPath
             // 
-            this.lblSearchPath.AutoSize = true;
-            this.lblSearchPath.Location = new System.Drawing.Point(105, 7);
-            this.lblSearchPath.Name = "lblSearchPath";
-            this.lblSearchPath.Size = new System.Drawing.Size(126, 12);
-            this.lblSearchPath.TabIndex = 1;
-            this.lblSearchPath.Text = "フォルダ名を選んでください";
+            lblSearchPath.AutoEllipsis = true;
+            lblSearchPath.BackColor = System.Drawing.SystemColors.Control;
+            lblSearchPath.Location = new System.Drawing.Point(136, 4);
+            lblSearchPath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            lblSearchPath.Name = "lblSearchPath";
+            lblSearchPath.Size = new System.Drawing.Size(374, 46);
+            lblSearchPath.TabIndex = 1;
+            lblSearchPath.Text = "フォルダ名を選んでください";
             // 
             // btnCopy2Clip
             // 
-            this.btnCopy2Clip.BackColor = System.Drawing.Color.Gold;
-            this.btnCopy2Clip.Location = new System.Drawing.Point(5, 103);
-            this.btnCopy2Clip.Name = "btnCopy2Clip";
-            this.btnCopy2Clip.Size = new System.Drawing.Size(110, 23);
-            this.btnCopy2Clip.TabIndex = 4;
-            this.btnCopy2Clip.Text = "クリップボードにコピー";
-            this.btnCopy2Clip.UseVisualStyleBackColor = false;
-            this.btnCopy2Clip.Click += new System.EventHandler(this.btnCopy2Clip_Click);
+            btnCopy2Clip.BackColor = System.Drawing.SystemColors.Control;
+            btnCopy2Clip.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            btnCopy2Clip.Location = new System.Drawing.Point(9, 132);
+            btnCopy2Clip.Margin = new System.Windows.Forms.Padding(4);
+            btnCopy2Clip.Name = "btnCopy2Clip";
+            btnCopy2Clip.Size = new System.Drawing.Size(147, 42);
+            btnCopy2Clip.TabIndex = 4;
+            btnCopy2Clip.Text = "クリップボードにコピー";
+            btnCopy2Clip.UseVisualStyleBackColor = false;
+            btnCopy2Clip.Click += btnCopy2Clip_Click;
             // 
             // chkSubDir
             // 
-            this.chkSubDir.AutoSize = true;
-            this.chkSubDir.Checked = true;
-            this.chkSubDir.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSubDir.Location = new System.Drawing.Point(102, 30);
-            this.chkSubDir.Name = "chkSubDir";
-            this.chkSubDir.Size = new System.Drawing.Size(133, 16);
-            this.chkSubDir.TabIndex = 5;
-            this.chkSubDir.Text = "サブディレクトリーを含む";
-            this.chkSubDir.UseVisualStyleBackColor = true;
+            chkSubDir.AutoSize = true;
+            chkSubDir.Checked = true;
+            chkSubDir.CheckState = System.Windows.Forms.CheckState.Checked;
+            chkSubDir.Location = new System.Drawing.Point(139, 48);
+            chkSubDir.Margin = new System.Windows.Forms.Padding(4);
+            chkSubDir.Name = "chkSubDir";
+            chkSubDir.Size = new System.Drawing.Size(133, 19);
+            chkSubDir.TabIndex = 5;
+            chkSubDir.Text = "サブディレクトリーを含む";
+            chkSubDir.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
-            this.groupBox1.BackColor = System.Drawing.SystemColors.Control;
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.rbtnOnlyExif);
-            this.groupBox1.Controls.Add(this.rbtnOnlyImage);
-            this.groupBox1.Controls.Add(this.rbtnIncldDir);
-            this.groupBox1.Controls.Add(this.rbtnOnlyFiles);
-            this.groupBox1.Controls.Add(this.rbtnOnlyDir);
-            this.groupBox1.Location = new System.Drawing.Point(276, 25);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(152, 119);
-            this.groupBox1.TabIndex = 6;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "出力対象";
+            groupBox1.BackColor = System.Drawing.SystemColors.Control;
+            groupBox1.Controls.Add(label5);
+            groupBox1.Controls.Add(rbtnOnlyExif);
+            groupBox1.Controls.Add(rbtnOnlyImage);
+            groupBox1.Controls.Add(rbtnIncldDir);
+            groupBox1.Controls.Add(rbtnOnlyFiles);
+            groupBox1.Controls.Add(rbtnOnlyDir);
+            groupBox1.Location = new System.Drawing.Point(321, 45);
+            groupBox1.Margin = new System.Windows.Forms.Padding(4);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Padding = new System.Windows.Forms.Padding(4);
+            groupBox1.Size = new System.Drawing.Size(177, 135);
+            groupBox1.TabIndex = 6;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "出力対象";
             // 
             // label5
             // 
-            this.label5.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.label5.Location = new System.Drawing.Point(12, 75);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(133, 3);
-            this.label5.TabIndex = 5;
+            label5.BackColor = System.Drawing.SystemColors.ScrollBar;
+            label5.Location = new System.Drawing.Point(14, 81);
+            label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(155, 4);
+            label5.TabIndex = 5;
             // 
             // rbtnOnlyExif
             // 
-            this.rbtnOnlyExif.AutoSize = true;
-            this.rbtnOnlyExif.Location = new System.Drawing.Point(18, 100);
-            this.rbtnOnlyExif.Name = "rbtnOnlyExif";
-            this.rbtnOnlyExif.Size = new System.Drawing.Size(128, 16);
-            this.rbtnOnlyExif.TabIndex = 4;
-            this.rbtnOnlyExif.TabStop = true;
-            this.rbtnOnlyExif.Text = "Exifを持つファイルのみ";
-            this.rbtnOnlyExif.UseVisualStyleBackColor = true;
+            rbtnOnlyExif.AutoSize = true;
+            rbtnOnlyExif.Location = new System.Drawing.Point(21, 109);
+            rbtnOnlyExif.Margin = new System.Windows.Forms.Padding(4);
+            rbtnOnlyExif.Name = "rbtnOnlyExif";
+            rbtnOnlyExif.Size = new System.Drawing.Size(129, 19);
+            rbtnOnlyExif.TabIndex = 4;
+            rbtnOnlyExif.TabStop = true;
+            rbtnOnlyExif.Text = "Exifを持つファイルのみ";
+            rbtnOnlyExif.UseVisualStyleBackColor = true;
             // 
             // rbtnOnlyImage
             // 
-            this.rbtnOnlyImage.AutoSize = true;
-            this.rbtnOnlyImage.Location = new System.Drawing.Point(8, 80);
-            this.rbtnOnlyImage.Name = "rbtnOnlyImage";
-            this.rbtnOnlyImage.Size = new System.Drawing.Size(102, 16);
-            this.rbtnOnlyImage.TabIndex = 3;
-            this.rbtnOnlyImage.TabStop = true;
-            this.rbtnOnlyImage.Text = "画像ファイルのみ";
-            this.rbtnOnlyImage.UseVisualStyleBackColor = true;
+            rbtnOnlyImage.AutoSize = true;
+            rbtnOnlyImage.Location = new System.Drawing.Point(9, 88);
+            rbtnOnlyImage.Margin = new System.Windows.Forms.Padding(4);
+            rbtnOnlyImage.Name = "rbtnOnlyImage";
+            rbtnOnlyImage.Size = new System.Drawing.Size(104, 19);
+            rbtnOnlyImage.TabIndex = 3;
+            rbtnOnlyImage.TabStop = true;
+            rbtnOnlyImage.Text = "画像ファイルのみ";
+            rbtnOnlyImage.UseVisualStyleBackColor = true;
             // 
             // rbtnIncldDir
             // 
-            this.rbtnIncldDir.AutoSize = true;
-            this.rbtnIncldDir.Checked = true;
-            this.rbtnIncldDir.Location = new System.Drawing.Point(8, 14);
-            this.rbtnIncldDir.Name = "rbtnIncldDir";
-            this.rbtnIncldDir.Size = new System.Drawing.Size(118, 16);
-            this.rbtnIncldDir.TabIndex = 0;
-            this.rbtnIncldDir.TabStop = true;
-            this.rbtnIncldDir.Text = "ディレクトリ＋ファイル";
-            this.rbtnIncldDir.UseVisualStyleBackColor = true;
+            rbtnIncldDir.AutoSize = true;
+            rbtnIncldDir.Checked = true;
+            rbtnIncldDir.Location = new System.Drawing.Point(9, 18);
+            rbtnIncldDir.Margin = new System.Windows.Forms.Padding(4);
+            rbtnIncldDir.Name = "rbtnIncldDir";
+            rbtnIncldDir.Size = new System.Drawing.Size(121, 19);
+            rbtnIncldDir.TabIndex = 0;
+            rbtnIncldDir.TabStop = true;
+            rbtnIncldDir.Text = "ディレクトリ＋ファイル";
+            rbtnIncldDir.UseVisualStyleBackColor = true;
             // 
             // rbtnOnlyFiles
             // 
-            this.rbtnOnlyFiles.AutoSize = true;
-            this.rbtnOnlyFiles.Location = new System.Drawing.Point(8, 34);
-            this.rbtnOnlyFiles.Name = "rbtnOnlyFiles";
-            this.rbtnOnlyFiles.Size = new System.Drawing.Size(78, 16);
-            this.rbtnOnlyFiles.TabIndex = 1;
-            this.rbtnOnlyFiles.Text = "ファイルのみ";
-            this.rbtnOnlyFiles.UseVisualStyleBackColor = true;
+            rbtnOnlyFiles.AutoSize = true;
+            rbtnOnlyFiles.Location = new System.Drawing.Point(9, 39);
+            rbtnOnlyFiles.Margin = new System.Windows.Forms.Padding(4);
+            rbtnOnlyFiles.Name = "rbtnOnlyFiles";
+            rbtnOnlyFiles.Size = new System.Drawing.Size(80, 19);
+            rbtnOnlyFiles.TabIndex = 1;
+            rbtnOnlyFiles.Text = "ファイルのみ";
+            rbtnOnlyFiles.UseVisualStyleBackColor = true;
             // 
             // rbtnOnlyDir
             // 
-            this.rbtnOnlyDir.AutoSize = true;
-            this.rbtnOnlyDir.Location = new System.Drawing.Point(8, 54);
-            this.rbtnOnlyDir.Name = "rbtnOnlyDir";
-            this.rbtnOnlyDir.Size = new System.Drawing.Size(93, 16);
-            this.rbtnOnlyDir.TabIndex = 2;
-            this.rbtnOnlyDir.Text = "ディレクトリのみ";
-            this.rbtnOnlyDir.UseVisualStyleBackColor = true;
+            rbtnOnlyDir.AutoSize = true;
+            rbtnOnlyDir.Location = new System.Drawing.Point(9, 60);
+            rbtnOnlyDir.Margin = new System.Windows.Forms.Padding(4);
+            rbtnOnlyDir.Name = "rbtnOnlyDir";
+            rbtnOnlyDir.Size = new System.Drawing.Size(96, 19);
+            rbtnOnlyDir.TabIndex = 2;
+            rbtnOnlyDir.Text = "ディレクトリのみ";
+            rbtnOnlyDir.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(104, 50);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 12);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "ファイルマスク";
+            label2.AutoSize = true;
+            label2.Location = new System.Drawing.Point(136, 79);
+            label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(68, 15);
+            label2.TabIndex = 7;
+            label2.Text = "ファイルマスク";
             // 
             // txtMask
             // 
-            this.txtMask.Location = new System.Drawing.Point(175, 47);
-            this.txtMask.Name = "txtMask";
-            this.txtMask.Size = new System.Drawing.Size(93, 19);
-            this.txtMask.TabIndex = 8;
-            this.txtMask.Text = "*.*";
-            this.txtMask.TextChanged += new System.EventHandler(this.txtMask_TextChanged);
+            txtMask.Location = new System.Drawing.Point(219, 75);
+            txtMask.Margin = new System.Windows.Forms.Padding(4);
+            txtMask.Name = "txtMask";
+            txtMask.Size = new System.Drawing.Size(93, 23);
+            txtMask.TabIndex = 8;
+            txtMask.Text = "*.*";
+            txtMask.TextChanged += txtMask_TextChanged;
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 73);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(41, 12);
-            this.label3.TabIndex = 9;
-            this.label3.Text = "探索数";
+            label3.AutoSize = true;
+            label3.Location = new System.Drawing.Point(14, 111);
+            label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(43, 15);
+            label3.TabIndex = 9;
+            label3.Text = "探索数";
             // 
             // lblRows
             // 
-            this.lblRows.AutoSize = true;
-            this.lblRows.Location = new System.Drawing.Point(69, 72);
-            this.lblRows.Name = "lblRows";
-            this.lblRows.Size = new System.Drawing.Size(11, 12);
-            this.lblRows.TabIndex = 10;
-            this.lblRows.Text = "0";
+            lblRows.AutoSize = true;
+            lblRows.Location = new System.Drawing.Point(80, 110);
+            lblRows.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            lblRows.Name = "lblRows";
+            lblRows.Size = new System.Drawing.Size(13, 15);
+            lblRows.TabIndex = 10;
+            lblRows.Text = "0";
             // 
             // btnFind
             // 
-            this.btnFind.BackColor = System.Drawing.Color.Gold;
-            this.btnFind.Location = new System.Drawing.Point(5, 36);
-            this.btnFind.Name = "btnFind";
-            this.btnFind.Size = new System.Drawing.Size(75, 23);
-            this.btnFind.TabIndex = 11;
-            this.btnFind.Text = "探索開始";
-            this.btnFind.UseVisualStyleBackColor = false;
-            this.btnFind.Click += new System.EventHandler(this.btnFind_Click);
+            btnFind.BackColor = System.Drawing.SystemColors.Control;
+            btnFind.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            btnFind.Location = new System.Drawing.Point(6, 44);
+            btnFind.Margin = new System.Windows.Forms.Padding(4);
+            btnFind.Name = "btnFind";
+            btnFind.Size = new System.Drawing.Size(124, 55);
+            btnFind.TabIndex = 11;
+            btnFind.Text = "探索開始";
+            btnFind.UseVisualStyleBackColor = false;
+            btnFind.Click += btnFind_Click;
             // 
             // btnOut2File
             // 
-            this.btnOut2File.Location = new System.Drawing.Point(5, 132);
-            this.btnOut2File.Name = "btnOut2File";
-            this.btnOut2File.Size = new System.Drawing.Size(131, 23);
-            this.btnOut2File.TabIndex = 12;
-            this.btnOut2File.Text = "結果をファイルに出力";
-            this.btnOut2File.UseVisualStyleBackColor = true;
-            this.btnOut2File.Click += new System.EventHandler(this.btnOut2File_Click);
+            btnOut2File.BackColor = System.Drawing.SystemColors.Control;
+            btnOut2File.Location = new System.Drawing.Point(164, 145);
+            btnOut2File.Margin = new System.Windows.Forms.Padding(4);
+            btnOut2File.Name = "btnOut2File";
+            btnOut2File.Size = new System.Drawing.Size(153, 29);
+            btnOut2File.TabIndex = 12;
+            btnOut2File.Text = "結果をファイルに出力";
+            btnOut2File.UseVisualStyleBackColor = false;
+            btnOut2File.Click += btnOut2File_Click;
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.rbtnTab);
-            this.groupBox2.Controls.Add(this.rbtnCSV);
-            this.groupBox2.Location = new System.Drawing.Point(276, 150);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(152, 56);
-            this.groupBox2.TabIndex = 13;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "出力テキスト形式";
+            groupBox2.Controls.Add(rbtnTab);
+            groupBox2.Controls.Add(rbtnCSV);
+            groupBox2.Location = new System.Drawing.Point(322, 188);
+            groupBox2.Margin = new System.Windows.Forms.Padding(4);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Padding = new System.Windows.Forms.Padding(4);
+            groupBox2.Size = new System.Drawing.Size(177, 70);
+            groupBox2.TabIndex = 13;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "出力テキスト形式";
             // 
             // rbtnTab
             // 
-            this.rbtnTab.AutoSize = true;
-            this.rbtnTab.Checked = true;
-            this.rbtnTab.Location = new System.Drawing.Point(11, 15);
-            this.rbtnTab.Name = "rbtnTab";
-            this.rbtnTab.Size = new System.Drawing.Size(72, 16);
-            this.rbtnTab.TabIndex = 1;
-            this.rbtnTab.TabStop = true;
-            this.rbtnTab.Text = "タブ区切り";
-            this.rbtnTab.UseVisualStyleBackColor = true;
-            this.rbtnTab.CheckedChanged += new System.EventHandler(this.rbtnTab_CheckedChanged);
+            rbtnTab.AutoSize = true;
+            rbtnTab.Checked = true;
+            rbtnTab.Location = new System.Drawing.Point(13, 19);
+            rbtnTab.Margin = new System.Windows.Forms.Padding(4);
+            rbtnTab.Name = "rbtnTab";
+            rbtnTab.Size = new System.Drawing.Size(75, 19);
+            rbtnTab.TabIndex = 1;
+            rbtnTab.TabStop = true;
+            rbtnTab.Text = "タブ区切り";
+            rbtnTab.UseVisualStyleBackColor = true;
+            rbtnTab.CheckedChanged += rbtnTab_CheckedChanged;
             // 
             // rbtnCSV
             // 
-            this.rbtnCSV.AutoSize = true;
-            this.rbtnCSV.Location = new System.Drawing.Point(11, 37);
-            this.rbtnCSV.Name = "rbtnCSV";
-            this.rbtnCSV.Size = new System.Drawing.Size(139, 16);
-            this.rbtnCSV.TabIndex = 0;
-            this.rbtnCSV.Text = "CSV形式(カンマ区切り）";
-            this.rbtnCSV.UseVisualStyleBackColor = true;
-            this.rbtnCSV.CheckedChanged += new System.EventHandler(this.rbtnCSV_CheckedChanged);
+            rbtnCSV.AutoSize = true;
+            rbtnCSV.Location = new System.Drawing.Point(13, 46);
+            rbtnCSV.Margin = new System.Windows.Forms.Padding(4);
+            rbtnCSV.Name = "rbtnCSV";
+            rbtnCSV.Size = new System.Drawing.Size(144, 19);
+            rbtnCSV.TabIndex = 0;
+            rbtnCSV.Text = "CSV形式(カンマ区切り）";
+            rbtnCSV.UseVisualStyleBackColor = true;
+            rbtnCSV.CheckedChanged += rbtnCSV_CheckedChanged;
             // 
             // chkDirMask
             // 
-            this.chkDirMask.AutoSize = true;
-            this.chkDirMask.Location = new System.Drawing.Point(142, 72);
-            this.chkDirMask.Name = "chkDirMask";
-            this.chkDirMask.Size = new System.Drawing.Size(127, 16);
-            this.chkDirMask.TabIndex = 14;
-            this.chkDirMask.Text = "ディレクトリもマスクする";
-            this.chkDirMask.UseVisualStyleBackColor = true;
-            this.chkDirMask.CheckedChanged += new System.EventHandler(this.chkDirMask_CheckedChanged);
+            chkDirMask.AutoSize = true;
+            chkDirMask.Location = new System.Drawing.Point(164, 106);
+            chkDirMask.Margin = new System.Windows.Forms.Padding(4);
+            chkDirMask.Name = "chkDirMask";
+            chkDirMask.Size = new System.Drawing.Size(131, 19);
+            chkDirMask.TabIndex = 14;
+            chkDirMask.Text = "ディレクトリもマスクする";
+            chkDirMask.UseVisualStyleBackColor = true;
+            chkDirMask.CheckedChanged += chkDirMask_CheckedChanged;
             // 
             // lblOutFile
             // 
-            this.lblOutFile.AutoSize = true;
-            this.lblOutFile.Location = new System.Drawing.Point(142, 136);
-            this.lblOutFile.Name = "lblOutFile";
-            this.lblOutFile.Size = new System.Drawing.Size(75, 12);
-            this.lblOutFile.TabIndex = 15;
-            this.lblOutFile.Text = "出力ファイル名";
+            lblOutFile.AutoEllipsis = true;
+            lblOutFile.Location = new System.Drawing.Point(14, 181);
+            lblOutFile.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            lblOutFile.Name = "lblOutFile";
+            lblOutFile.Size = new System.Drawing.Size(301, 39);
+            lblOutFile.TabIndex = 15;
+            lblOutFile.Text = "出力ファイル名";
             // 
             // txtComment
             // 
-            this.txtComment.Location = new System.Drawing.Point(10, 307);
-            this.txtComment.Multiline = true;
-            this.txtComment.Name = "txtComment";
-            this.txtComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtComment.Size = new System.Drawing.Size(411, 149);
-            this.txtComment.TabIndex = 16;
+            txtComment.Location = new System.Drawing.Point(244, 282);
+            txtComment.Margin = new System.Windows.Forms.Padding(4);
+            txtComment.Multiline = true;
+            txtComment.Name = "txtComment";
+            txtComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txtComment.Size = new System.Drawing.Size(423, 255);
+            txtComment.TabIndex = 16;
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(452, 299);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(115, 34);
-            this.btnExit.TabIndex = 17;
-            this.btnExit.Text = "設定を保存して終了";
-            this.btnExit.UseVisualStyleBackColor = true;
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            btnExit.Location = new System.Drawing.Point(518, 598);
+            btnExit.Margin = new System.Windows.Forms.Padding(4);
+            btnExit.Name = "btnExit";
+            btnExit.Size = new System.Drawing.Size(142, 44);
+            btnExit.TabIndex = 17;
+            btnExit.Text = "設定を保存して終了";
+            btnExit.UseVisualStyleBackColor = true;
+            btnExit.Click += btnExit_Click;
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.btnSetExif);
-            this.groupBox3.Controls.Add(this.chkExif);
-            this.groupBox3.Controls.Add(this.chkAttribute);
-            this.groupBox3.Controls.Add(this.chkSize);
-            this.groupBox3.Controls.Add(this.chkLastAccessTime);
-            this.groupBox3.Controls.Add(this.chkCreationTime);
-            this.groupBox3.Controls.Add(this.chkLastWriteTime);
-            this.groupBox3.Controls.Add(this.label4);
-            this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Location = new System.Drawing.Point(444, 28);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(128, 251);
-            this.groupBox3.TabIndex = 18;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "出力項目の選択";
+            groupBox3.Controls.Add(btnSetExif);
+            groupBox3.Controls.Add(chkExif);
+            groupBox3.Controls.Add(chkAttribute);
+            groupBox3.Controls.Add(chkSize);
+            groupBox3.Controls.Add(chkLastAccessTime);
+            groupBox3.Controls.Add(chkCreationTime);
+            groupBox3.Controls.Add(chkLastWriteTime);
+            groupBox3.Location = new System.Drawing.Point(518, 10);
+            groupBox3.Margin = new System.Windows.Forms.Padding(4);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Padding = new System.Windows.Forms.Padding(4);
+            groupBox3.Size = new System.Drawing.Size(149, 248);
+            groupBox3.TabIndex = 18;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "出力項目の選択";
             // 
             // btnSetExif
             // 
-            this.btnSetExif.BackColor = System.Drawing.Color.Gold;
-            this.btnSetExif.Location = new System.Drawing.Point(12, 213);
-            this.btnSetExif.Name = "btnSetExif";
-            this.btnSetExif.Size = new System.Drawing.Size(104, 25);
-            this.btnSetExif.TabIndex = 8;
-            this.btnSetExif.Text = "Exif項目の選択";
-            this.btnSetExif.UseVisualStyleBackColor = false;
-            this.btnSetExif.Click += new System.EventHandler(this.btnSetExif_Click);
+            btnSetExif.BackColor = System.Drawing.SystemColors.Control;
+            btnSetExif.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            btnSetExif.Location = new System.Drawing.Point(7, 199);
+            btnSetExif.Margin = new System.Windows.Forms.Padding(4);
+            btnSetExif.Name = "btnSetExif";
+            btnSetExif.Size = new System.Drawing.Size(135, 40);
+            btnSetExif.TabIndex = 8;
+            btnSetExif.Text = "Exif項目の選択";
+            btnSetExif.UseVisualStyleBackColor = false;
+            btnSetExif.Click += btnSetExif_Click;
             // 
             // chkExif
             // 
-            this.chkExif.AutoSize = true;
-            this.chkExif.Checked = true;
-            this.chkExif.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkExif.Location = new System.Drawing.Point(6, 191);
-            this.chkExif.Name = "chkExif";
-            this.chkExif.Size = new System.Drawing.Size(106, 16);
-            this.chkExif.TabIndex = 7;
-            this.chkExif.Text = "Exifデータの表示";
-            this.chkExif.UseVisualStyleBackColor = true;
+            chkExif.AutoSize = true;
+            chkExif.Checked = true;
+            chkExif.CheckState = System.Windows.Forms.CheckState.Checked;
+            chkExif.Location = new System.Drawing.Point(7, 171);
+            chkExif.Margin = new System.Windows.Forms.Padding(4);
+            chkExif.Name = "chkExif";
+            chkExif.Size = new System.Drawing.Size(105, 19);
+            chkExif.TabIndex = 7;
+            chkExif.Text = "Exifデータの表示";
+            chkExif.UseVisualStyleBackColor = true;
+            chkExif.CheckedChanged += chkExif_CheckedChanged;
             // 
             // chkAttribute
             // 
-            this.chkAttribute.AutoSize = true;
-            this.chkAttribute.Checked = true;
-            this.chkAttribute.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAttribute.Location = new System.Drawing.Point(6, 146);
-            this.chkAttribute.Name = "chkAttribute";
-            this.chkAttribute.Size = new System.Drawing.Size(82, 16);
-            this.chkAttribute.TabIndex = 6;
-            this.chkAttribute.Text = "ファイル属性";
-            this.chkAttribute.UseVisualStyleBackColor = true;
+            chkAttribute.AutoSize = true;
+            chkAttribute.Checked = true;
+            chkAttribute.CheckState = System.Windows.Forms.CheckState.Checked;
+            chkAttribute.Location = new System.Drawing.Point(7, 124);
+            chkAttribute.Margin = new System.Windows.Forms.Padding(4);
+            chkAttribute.Name = "chkAttribute";
+            chkAttribute.Size = new System.Drawing.Size(84, 19);
+            chkAttribute.TabIndex = 6;
+            chkAttribute.Text = "ファイル属性";
+            chkAttribute.UseVisualStyleBackColor = true;
             // 
             // chkSize
             // 
-            this.chkSize.AutoSize = true;
-            this.chkSize.Checked = true;
-            this.chkSize.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSize.Location = new System.Drawing.Point(6, 124);
-            this.chkSize.Name = "chkSize";
-            this.chkSize.Size = new System.Drawing.Size(87, 16);
-            this.chkSize.TabIndex = 5;
-            this.chkSize.Text = "ファイルサイズ";
-            this.chkSize.UseVisualStyleBackColor = true;
+            chkSize.AutoSize = true;
+            chkSize.Checked = true;
+            chkSize.CheckState = System.Windows.Forms.CheckState.Checked;
+            chkSize.Location = new System.Drawing.Point(7, 99);
+            chkSize.Margin = new System.Windows.Forms.Padding(4);
+            chkSize.Name = "chkSize";
+            chkSize.Size = new System.Drawing.Size(88, 19);
+            chkSize.TabIndex = 5;
+            chkSize.Text = "ファイルサイズ";
+            chkSize.UseVisualStyleBackColor = true;
             // 
             // chkLastAccessTime
             // 
-            this.chkLastAccessTime.AutoSize = true;
-            this.chkLastAccessTime.Location = new System.Drawing.Point(6, 102);
-            this.chkLastAccessTime.Name = "chkLastAccessTime";
-            this.chkLastAccessTime.Size = new System.Drawing.Size(108, 16);
-            this.chkLastAccessTime.TabIndex = 4;
-            this.chkLastAccessTime.Text = "最終アクセス日時";
-            this.chkLastAccessTime.UseVisualStyleBackColor = true;
+            chkLastAccessTime.AutoSize = true;
+            chkLastAccessTime.Location = new System.Drawing.Point(7, 74);
+            chkLastAccessTime.Margin = new System.Windows.Forms.Padding(4);
+            chkLastAccessTime.Name = "chkLastAccessTime";
+            chkLastAccessTime.Size = new System.Drawing.Size(111, 19);
+            chkLastAccessTime.TabIndex = 4;
+            chkLastAccessTime.Text = "最終アクセス日時";
+            chkLastAccessTime.UseVisualStyleBackColor = true;
             // 
             // chkCreationTime
             // 
-            this.chkCreationTime.AutoSize = true;
-            this.chkCreationTime.Checked = true;
-            this.chkCreationTime.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCreationTime.Location = new System.Drawing.Point(6, 80);
-            this.chkCreationTime.Name = "chkCreationTime";
-            this.chkCreationTime.Size = new System.Drawing.Size(72, 16);
-            this.chkCreationTime.TabIndex = 3;
-            this.chkCreationTime.Text = "作成日時";
-            this.chkCreationTime.UseVisualStyleBackColor = true;
+            chkCreationTime.AutoSize = true;
+            chkCreationTime.Checked = true;
+            chkCreationTime.CheckState = System.Windows.Forms.CheckState.Checked;
+            chkCreationTime.Location = new System.Drawing.Point(7, 49);
+            chkCreationTime.Margin = new System.Windows.Forms.Padding(4);
+            chkCreationTime.Name = "chkCreationTime";
+            chkCreationTime.Size = new System.Drawing.Size(74, 19);
+            chkCreationTime.TabIndex = 3;
+            chkCreationTime.Text = "作成日時";
+            chkCreationTime.UseVisualStyleBackColor = true;
             // 
             // chkLastWriteTime
             // 
-            this.chkLastWriteTime.AutoSize = true;
-            this.chkLastWriteTime.Checked = true;
-            this.chkLastWriteTime.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkLastWriteTime.Location = new System.Drawing.Point(6, 58);
-            this.chkLastWriteTime.Name = "chkLastWriteTime";
-            this.chkLastWriteTime.Size = new System.Drawing.Size(72, 16);
-            this.chkLastWriteTime.TabIndex = 2;
-            this.chkLastWriteTime.Text = "更新日時";
-            this.chkLastWriteTime.UseVisualStyleBackColor = true;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 40);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(64, 12);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "レ ファイル名";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 12);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "レ フォルダ名";
+            chkLastWriteTime.AutoSize = true;
+            chkLastWriteTime.Checked = true;
+            chkLastWriteTime.CheckState = System.Windows.Forms.CheckState.Checked;
+            chkLastWriteTime.Location = new System.Drawing.Point(7, 24);
+            chkLastWriteTime.Margin = new System.Windows.Forms.Padding(4);
+            chkLastWriteTime.Name = "chkLastWriteTime";
+            chkLastWriteTime.Size = new System.Drawing.Size(74, 19);
+            chkLastWriteTime.TabIndex = 2;
+            chkLastWriteTime.Text = "更新日時";
+            chkLastWriteTime.UseVisualStyleBackColor = true;
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 283);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(85, 12);
-            this.label6.TabIndex = 19;
-            this.label6.Text = "記事、出力項目";
+            label6.AutoSize = true;
+            label6.Location = new System.Drawing.Point(241, 264);
+            label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label6.Name = "label6";
+            label6.Size = new System.Drawing.Size(87, 15);
+            label6.TabIndex = 19;
+            label6.Text = "記事、出力項目";
             // 
             // label7
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 194);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(75, 12);
-            this.label7.TabIndex = 20;
-            this.label7.Text = "出力ファイル数";
+            label7.AutoSize = true;
+            label7.Location = new System.Drawing.Point(16, 559);
+            label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label7.Name = "label7";
+            label7.Size = new System.Drawing.Size(77, 15);
+            label7.TabIndex = 20;
+            label7.Text = "出力ファイル数";
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 230);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(389, 35);
-            this.progressBar1.TabIndex = 21;
+            progressBar1.Location = new System.Drawing.Point(16, 598);
+            progressBar1.Margin = new System.Windows.Forms.Padding(4);
+            progressBar1.Minimum = 100;
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new System.Drawing.Size(454, 44);
+            progressBar1.TabIndex = 21;
+            progressBar1.Value = 100;
             // 
             // lblQty
             // 
-            this.lblQty.AutoSize = true;
-            this.lblQty.Location = new System.Drawing.Point(97, 195);
-            this.lblQty.Name = "lblQty";
-            this.lblQty.Size = new System.Drawing.Size(11, 12);
-            this.lblQty.TabIndex = 22;
-            this.lblQty.Text = "0";
+            lblQty.AutoSize = true;
+            lblQty.Location = new System.Drawing.Point(118, 559);
+            lblQty.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            lblQty.Name = "lblQty";
+            lblQty.Size = new System.Drawing.Size(13, 15);
+            lblQty.TabIndex = 22;
+            lblQty.Text = "0";
+            // 
+            // groupBoxExifExt
+            // 
+            groupBoxExifExt.Controls.Add(txtAdditionalExifExtLists);
+            groupBoxExifExt.Controls.Add(chkExifTextExt);
+            groupBoxExifExt.Controls.Add(chkSubExifExt);
+            groupBoxExifExt.Controls.Add(rbtnExtSelect);
+            groupBoxExifExt.Controls.Add(label4);
+            groupBoxExifExt.Controls.Add(chkMainExifExt);
+            groupBoxExifExt.Controls.Add(label1);
+            groupBoxExifExt.Controls.Add(rbtnAllExt);
+            groupBoxExifExt.Location = new System.Drawing.Point(14, 224);
+            groupBoxExifExt.Margin = new System.Windows.Forms.Padding(4);
+            groupBoxExifExt.Name = "groupBoxExifExt";
+            groupBoxExifExt.Padding = new System.Windows.Forms.Padding(4);
+            groupBoxExifExt.Size = new System.Drawing.Size(220, 315);
+            groupBoxExifExt.TabIndex = 23;
+            groupBoxExifExt.TabStop = false;
+            groupBoxExifExt.Text = "Exifファイルの拡張子";
+            // 
+            // txtAdditionalExifExtLists
+            // 
+            txtAdditionalExifExtLists.Location = new System.Drawing.Point(38, 236);
+            txtAdditionalExifExtLists.Margin = new System.Windows.Forms.Padding(4);
+            txtAdditionalExifExtLists.Multiline = true;
+            txtAdditionalExifExtLists.Name = "txtAdditionalExifExtLists";
+            txtAdditionalExifExtLists.Size = new System.Drawing.Size(174, 70);
+            txtAdditionalExifExtLists.TabIndex = 4;
+            txtAdditionalExifExtLists.Text = "CR3,MFW,X3F,SRW,RWL,SR2,SRF";
+            txtAdditionalExifExtLists.TextChanged += txtAdditionalExifExtLists_TextChanged;
+            // 
+            // chkExifTextExt
+            // 
+            chkExifTextExt.AutoSize = true;
+            chkExifTextExt.Location = new System.Drawing.Point(21, 209);
+            chkExifTextExt.Margin = new System.Windows.Forms.Padding(4);
+            chkExifTextExt.Name = "chkExifTextExt";
+            chkExifTextExt.Size = new System.Drawing.Size(144, 19);
+            chkExifTextExt.TabIndex = 3;
+            chkExifTextExt.Text = "指定（カンマで区切る）";
+            chkExifTextExt.UseVisualStyleBackColor = true;
+            // 
+            // chkSubExifExt
+            // 
+            chkSubExifExt.AutoSize = true;
+            chkSubExifExt.Location = new System.Drawing.Point(21, 181);
+            chkSubExifExt.Margin = new System.Windows.Forms.Padding(4);
+            chkSubExifExt.Name = "chkSubExifExt";
+            chkSubExifExt.Size = new System.Drawing.Size(143, 19);
+            chkSubExifExt.TabIndex = 2;
+            chkSubExifExt.Text = "RAF,MEF,MRW,RW2,J6I";
+            chkSubExifExt.UseVisualStyleBackColor = true;
+            // 
+            // rbtnExtSelect
+            // 
+            rbtnExtSelect.AutoSize = true;
+            rbtnExtSelect.Location = new System.Drawing.Point(2, 104);
+            rbtnExtSelect.Margin = new System.Windows.Forms.Padding(4);
+            rbtnExtSelect.Name = "rbtnExtSelect";
+            rbtnExtSelect.Size = new System.Drawing.Size(85, 19);
+            rbtnExtSelect.TabIndex = 2;
+            rbtnExtSelect.TabStop = true;
+            rbtnExtSelect.Text = "拡張子選択";
+            rbtnExtSelect.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new System.Drawing.Point(20, 128);
+            label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(96, 15);
+            label4.TabIndex = 0;
+            label4.Text = "既定 JPG, TIFF,TIF";
+            // 
+            // chkMainExifExt
+            // 
+            chkMainExifExt.AutoSize = true;
+            chkMainExifExt.Location = new System.Drawing.Point(21, 146);
+            chkMainExifExt.Margin = new System.Windows.Forms.Padding(4);
+            chkMainExifExt.Name = "chkMainExifExt";
+            chkMainExifExt.Size = new System.Drawing.Size(150, 34);
+            chkMainExifExt.TabIndex = 1;
+            chkMainExifExt.Text = "JPEG,CR2,DNG,NEF,ORF,\r\nPEF,ARW";
+            chkMainExifExt.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(7, 28);
+            label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(151, 45);
+            label1.TabIndex = 1;
+            label1.Text = "EXIF探索はファイルを読み込む\r\nのでEXIFを持たないファイるは\r\n入れない方が良い";
+            // 
+            // rbtnAllExt
+            // 
+            rbtnAllExt.AutoSize = true;
+            rbtnAllExt.Location = new System.Drawing.Point(4, 76);
+            rbtnAllExt.Margin = new System.Windows.Forms.Padding(4);
+            rbtnAllExt.Name = "rbtnAllExt";
+            rbtnAllExt.Size = new System.Drawing.Size(133, 19);
+            rbtnAllExt.TabIndex = 0;
+            rbtnAllExt.TabStop = true;
+            rbtnAllExt.Text = "全拡張子（非推奨）";
+            rbtnAllExt.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(rbExifToolAllways);
+            groupBox4.Controls.Add(rbExiToolIfNeed);
+            groupBox4.Controls.Add(rbExifToolDonotUse);
+            groupBox4.Location = new System.Drawing.Point(291, 544);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new System.Drawing.Size(376, 48);
+            groupBox4.TabIndex = 1;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "ExfiToolの使用";
+            // 
+            // rbExifToolAllways
+            // 
+            rbExifToolAllways.AutoSize = true;
+            rbExifToolAllways.Location = new System.Drawing.Point(314, 17);
+            rbExifToolAllways.Name = "rbExifToolAllways";
+            rbExifToolAllways.Size = new System.Drawing.Size(49, 19);
+            rbExifToolAllways.TabIndex = 2;
+            rbExifToolAllways.TabStop = true;
+            rbExifToolAllways.Text = "常時";
+            rbExifToolAllways.UseVisualStyleBackColor = true;
+            rbExifToolAllways.CheckedChanged += rbExifToolAllways_CheckedChanged;
+            // 
+            // rbExiToolIfNeed
+            // 
+            rbExiToolIfNeed.AutoSize = true;
+            rbExiToolIfNeed.Location = new System.Drawing.Point(104, 17);
+            rbExiToolIfNeed.Name = "rbExiToolIfNeed";
+            rbExiToolIfNeed.Size = new System.Drawing.Size(204, 19);
+            rbExiToolIfNeed.TabIndex = 1;
+            rbExiToolIfNeed.TabStop = true;
+            rbExiToolIfNeed.Text = "WindowsAPIで取得できないときのみ";
+            rbExiToolIfNeed.UseVisualStyleBackColor = true;
+            rbExiToolIfNeed.CheckedChanged += rbExiToolIfNeed_CheckedChanged;
+            // 
+            // rbExifToolDonotUse
+            // 
+            rbExifToolDonotUse.AutoSize = true;
+            rbExifToolDonotUse.Location = new System.Drawing.Point(8, 17);
+            rbExifToolDonotUse.Name = "rbExifToolDonotUse";
+            rbExifToolDonotUse.Size = new System.Drawing.Size(77, 19);
+            rbExifToolDonotUse.TabIndex = 0;
+            rbExifToolDonotUse.TabStop = true;
+            rbExifToolDonotUse.Text = "使用しない";
+            rbExifToolDonotUse.UseVisualStyleBackColor = true;
+            rbExifToolDonotUse.CheckedChanged += rbExifToolDonotUse_CheckedChanged;
+            // 
+            // button2
+            // 
+            button2.Location = new System.Drawing.Point(219, 570);
+            button2.Name = "button2";
+            button2.Size = new System.Drawing.Size(66, 21);
+            button2.TabIndex = 24;
+            button2.Text = "button2";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 557);
-            this.Controls.Add(this.lblQty);
-            this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.btnExit);
-            this.Controls.Add(this.txtComment);
-            this.Controls.Add(this.lblOutFile);
-            this.Controls.Add(this.chkDirMask);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.btnOut2File);
-            this.Controls.Add(this.btnFind);
-            this.Controls.Add(this.lblRows);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.txtMask);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.chkSubDir);
-            this.Controls.Add(this.btnCopy2Clip);
-            this.Controls.Add(this.lblSearchPath);
-            this.Controls.Add(this.btnFolderSelect);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.button1);
-            this.MinimumSize = new System.Drawing.Size(504, 472);
-            this.Name = "Form1";
-            this.Text = "FileList(Exif)";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            BackColor = System.Drawing.SystemColors.Control;
+            ClientSize = new System.Drawing.Size(681, 655);
+            Controls.Add(button2);
+            Controls.Add(groupBox4);
+            Controls.Add(groupBoxExifExt);
+            Controls.Add(lblQty);
+            Controls.Add(progressBar1);
+            Controls.Add(label7);
+            Controls.Add(label6);
+            Controls.Add(groupBox3);
+            Controls.Add(btnExit);
+            Controls.Add(txtComment);
+            Controls.Add(lblOutFile);
+            Controls.Add(chkDirMask);
+            Controls.Add(groupBox2);
+            Controls.Add(btnOut2File);
+            Controls.Add(btnFind);
+            Controls.Add(lblRows);
+            Controls.Add(label3);
+            Controls.Add(txtMask);
+            Controls.Add(label2);
+            Controls.Add(groupBox1);
+            Controls.Add(chkSubDir);
+            Controls.Add(btnCopy2Clip);
+            Controls.Add(lblSearchPath);
+            Controls.Add(btnFolderSelect);
+            Controls.Add(button1);
+            Margin = new System.Windows.Forms.Padding(4);
+            MinimumSize = new System.Drawing.Size(585, 580);
+            Name = "Form1";
+            Text = "FileList(Exif)";
+            Load += Form1_Load;
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
+            groupBoxExifExt.ResumeLayout(false);
+            groupBoxExifExt.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button btnFolderSelect;
         private System.Windows.Forms.Label lblSearchPath;
@@ -601,8 +770,6 @@
         private System.Windows.Forms.TextBox txtComment;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox chkLastAccessTime;
         private System.Windows.Forms.CheckBox chkCreationTime;
         private System.Windows.Forms.CheckBox chkLastWriteTime;
@@ -620,6 +787,20 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label lblQty;
+        private System.Windows.Forms.GroupBox groupBoxExifExt;
+        private System.Windows.Forms.RadioButton rbtnAllExt;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.RadioButton rbtnExtSelect;
+        private System.Windows.Forms.CheckBox chkExifTextExt;
+        private System.Windows.Forms.CheckBox chkSubExifExt;
+        private System.Windows.Forms.CheckBox chkMainExifExt;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtAdditionalExifExtLists;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.RadioButton rbExifToolDonotUse;
+        private System.Windows.Forms.RadioButton rbExifToolAllways;
+        private System.Windows.Forms.RadioButton rbExiToolIfNeed;
+        private System.Windows.Forms.Button button2;
     }
 }
 
