@@ -278,6 +278,7 @@ namespace PictureList {
                 //ここからがExifデータの取得
                 foreach (System.Drawing.Imaging.PropertyItem item in bmp.PropertyItems) {
                     switch (item.Id) {
+                        // TIFF IFD
                         case 0x0100: ImageWidth = AnyTypeAndCount(item); break;
                         case 0x0101: ImageLength = AnyTypeAndCount(item); break;
                         case 0x0102: BitsPerSample = GetMultiShortToString(item, 3); break;
@@ -294,8 +295,8 @@ namespace PictureList {
                         case 0x011A: XResolution = AnyTypeAndCount(item); break;
                         case 0x011B: YResolution = AnyTypeAndCount(item); break;
                         case 0x011C: PlanarConfiguration = GetPlanarConfiguration(item); break;
-                        case 0x012D: TransferFunction = "未実装"; break;
                         case 0x0128: ResolutionUnit = GetResolutionUnit(item); break;
+                        case 0x012D: TransferFunction = "未実装"; break;
                         case 0x0131: Software = GetExifAsci(item); break;
                         case 0x0132: DateTimeE = GetExifAsci(item); break;
                         case 0x013B: Artist = GetExifAsci(item); break;
@@ -396,7 +397,7 @@ namespace PictureList {
                         case 0xA43B: ImageEditingSoftware = GetExifAsci(item); break; // XXXX
                         case 0xA43C: MetadataEditingSoftware = GetExifAsci(item); break; // XXXX
                         case 0xA460: CompositeImage = AnyTypeAndCount(item); break; // XXXX
-                        case 0xA461: SourceImageNumberOfCompositeImage = AnyTypeAndCount(item); break; // XXXX
+                        case 0xA461: SourceImageNumberOfCompositeImage = AnyTypeAndCount(item,","); break; // XXXX
                         case 0xA462: SourceExposureTimesOfCompositeImage = "未実装"; break; // XXXX
                         case 0xA500: Gamma = AnyTypeAndCount(item); break; // XXXX
                         // GPS
@@ -1112,7 +1113,7 @@ namespace PictureList {
         }
 
         /// <summary>
-        /// sppedStrの数値を表す文字列から "1/n 秒" または "n 秒" というシャッター速度を返す。桁数が地裁場合は勇往桁数が3桁になるようにする
+        /// sppedStrの数値を表す文字列から "1/n 秒" または "n 秒" というシャッター速度を返す。小数点以下が長い場合は有効桁数が3桁になるようにする
         /// </summary>
         /// <param name="speedStr"></param>
         /// <returns></returns>
@@ -1265,11 +1266,11 @@ namespace PictureList {
             }
             return str.Trim();
         }
-        //TypeとCOUNTが変動しても順に spr（セパレーター）でつないで文字列にする
+        //TypeとCOUNTが変動しても順に spr（セパレーター）でつないで数値を文字列にする
         //ASCIIとUNDEFINEDはサポートしない。ASCIIはCOUNTが文字列の全体の文字数。
         //UNDEFINEDはこの文字列の数などにも使われるため個々のケースで対応する
         static private string AnyTypeAndCount(System.Drawing.Imaging.PropertyItem Pitem, string spr) {
-            if (Pitem.Type == ASCII || Pitem.Type == UTF8) return "文字列で無いものを呼ぶ誤りがありました";
+            if (Pitem.Type == ASCII || Pitem.Type == UTF8) return "数値でない文字列を呼ぶ誤りがありました";
             string str = "";
             int len = LenToCount(Pitem);
             string st;

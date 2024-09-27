@@ -31,7 +31,7 @@ namespace PictureList {
         StringBuilder OutText = new();                    //出力テキスト
         StringBuilder OutTitleList = new();               //出力用のタイトル文字列
         public const string SettingCSVPath = "./OutputExifList/PictureListExif.csv"; //Exif CSVへのパス
-        public const string SettingDefaultCSVPah = "./OutputExifList/DefaultPictureListExif.csv"; //同上デフォルト
+        public const string SettingDefaultCSVPath = "./OutputExifList/DefaultPictureListExif.csv"; //同上デフォルト
         public const string SettingExifToolCSVPath = "./OutputExifList/ExifToolConv.csv"; //ExifToolConv.csvVへのパス
         public static bool IsReadCSV = false;                           //Exif CSVファイルを読み込んだかのフラグ
         List<string> ExifExtLists = new();                 //Exif調査用拡張子のリスト
@@ -279,6 +279,12 @@ namespace PictureList {
         /// </summary>
         /// <param name="Dir">探索の基準になるディレクトリ</param>
         private void GetDirsFilesList(string Dir) {
+
+            // 実行時間の計測
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            //
+
             InSaerching(true);
             //Exif項目を読む必要がある場合はExif項目を読み込む Imageの場合はその判定に必要
             if ((chkExif.Checked || rbtnOnlyImage.Checked || rbtnOnlyExif.Checked) && !IsReadCSV) {
@@ -394,6 +400,12 @@ namespace PictureList {
                 }
             }
             InSaerching(false);
+
+            // 実行時間の表示
+            stopwatch.Stop();
+            Debug.Print($"処理数: { FileDone + DirDone}  時間: { stopwatch.ElapsedMilliseconds/1000.0}Sec");
+            //
+
         }
 
 

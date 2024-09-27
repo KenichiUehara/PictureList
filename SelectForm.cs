@@ -319,7 +319,7 @@ namespace PictureList {
         }
 
         private void ReaDEfaoultCSV_Click(object sender, EventArgs e) {
-            Form1.ReadExifListFromContent(Form1.SettingDefaultCSVPah);
+            Form1.ReadExifListFromContent(Form1.SettingDefaultCSVPath);
             ReWriteViews();
         }
 
