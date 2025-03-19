@@ -1,4 +1,4 @@
-﻿namespace PictureList {
+﻿namespace ZDR055Record {
     partial class SelectForm {
         /// <summary>
         /// Required designer variable.

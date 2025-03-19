@@ -22,6 +22,10 @@ using System.Diagnostics.Eventing.Reader;
 using System.ComponentModel.Design;
 using System.Runtime.Versioning;
 
+
+//using System.Drawing;
+//using System.Drawing.Imaging;
+
 //#pragma warning disable CA1416
 namespace PictureList {
     public partial class Form1 : Form {
@@ -812,10 +816,37 @@ namespace PictureList {
 
         //Test用
         private void button2_Click(object sender, EventArgs e) {
-            if (IsMadeExifToolConv == false) {
-                ReadExifToolConv(SettingExifToolCSVPath);
-                IsMadeExifToolConv = true;
+            //if (IsMadeExifToolConv == false) {
+            //    ReadExifToolConv(SettingExifToolCSVPath);
+            //    IsMadeExifToolConv = true;
+            //}
+            string fullPath = @"D:\Temp\Test\JPG\20240623_193051723.JPG";
+            Image newImage = Image.FromFile(fullPath);
+
+            foreach (PropertyItem propertyItem in newImage.PropertyItems) {
+                //Console.WriteLine($"ID: {propertyItem.Id}, Type: {propertyItem.Type}, Length: {propertyItem.Len}");
+                Debug.Print($"ID: {propertyItem.Id}, Type: {propertyItem.Type}, Length: {propertyItem.Len}");
             }
+            //// System.Drawing.Bitmap bmp = null;
+            //System.Drawing.Image bmp = null;
+            //try {
+            //    //bmp = new System.Drawing.Bitmap(fullPath);
+            //    Image newImage = Image.FromFile(fullPath);
+            //    bmp = Image.FromFile(fullPath);
+
+            //    //bmp = new System.Drawing.Image.FromFile         //(fullPath);
+            //    //bmp= Image.FromFile(fullPath);
+            //} catch (Exception exception) {
+            //    string error = fullPath + " : " + exception.Message;
+            //    // Console.WriteLine(error);
+            //    System.Diagnostics.Debug.Print(error);
+            //    //System.Windows.Forms.MessageBox.Show(error);                
+            //}
+            //Debug.Print( bmp.PropertyItems.ToString());
+
+
+
+
         }
     }
 }
