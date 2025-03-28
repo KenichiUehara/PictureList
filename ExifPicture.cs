@@ -30,6 +30,7 @@ namespace PictureList {
 
     public class ExifPicture {
 
+        private static List<string> BMPExit = new() { ".BMP", ".GIF", ".JPG", ".JPEG", ".PNG", ".TIFF",".TIF" };
 
         private const int BYTE = 1, ASCII = 2, SHORT = 3, LONG = 4, RATIONAL = 5, UNDEFINED = 7, SLONG = 9, SRATIONAL = 10, UTF8 = 129;
         //ファイルとしての普通の属性
@@ -256,20 +257,20 @@ namespace PictureList {
 
             IsExifDate = false;
             IsImage = false;
-            //
-            // ためしにBitmapからImageに変更
+            
             System.Drawing.Bitmap bmp = null;
-            //System.Drawing.Image bmp = null;
-            try {
-                bmp = new System.Drawing.Bitmap(fullPath);
-                //bmp = new System.Drawing.Bitmap(fullPath);
-                //bmp= Image.FromFile(fullPath);
-            } catch (Exception exception) {
-                string error = fullPath + " : " + exception.Message;
-                // Console.WriteLine(error);
-                System.Diagnostics.Debug.Print(error);
-                //System.Windows.Forms.MessageBox.Show(error);
-                DateTimeOriginal = ""; //以前はなぜか error;
+            if (BMPExit.Contains(file.Extension.ToUpper())) {
+                try {
+                    bmp = new System.Drawing.Bitmap(fullPath);
+                    //bmp = new System.Drawing.Bitmap(fullPath);
+                    //bmp= Image.FromFile(fullPath);
+                } catch (Exception exception) {
+                    string error = fullPath + " : " + exception.Message;
+                    // Console.WriteLine(error);
+                    System.Diagnostics.Debug.Print(error);
+                    //System.Windows.Forms.MessageBox.Show(error);
+                    DateTimeOriginal = ""; //以前はなぜか error;
+                }
             }
 
 
@@ -446,6 +447,12 @@ namespace PictureList {
                 GPSHeight = GetGPSHeight();
                 Resolution = GetResolution();
                 WidthHeight = GetWidthHeight();
+
+                if (ImageWidth == null)
+                    ImageWidth = bmp.Width.ToString();
+                if(ImageLength == null)
+                    ImageLength=bmp.Height.ToString();
+
 
                 bmp.Dispose();
             }

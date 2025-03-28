@@ -23,10 +23,10 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702,1416</NoWarn>
+    <NoWarn>1701,1702,CA1416</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>1701;1702,1416</NoWarn>
+    <NoWarn>1701,1702,CA1416</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="exiftool.exe" />

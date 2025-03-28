@@ -33,7 +33,11 @@ namespace PictureList {
         }
 
 
-
+        /// <summary>
+        /// コマンドラインで exiftoolを実行した結果と同じものを取り込む
+        /// </summary>
+        /// <param name="fPath">調べるファイルのパス</param>
+        /// <returns>標準出力</returns>
         static string GetRawExif(string fPath) {
             ProcessStartInfo processStartInfo = new("exiftool", fPath);
             //ウィンドーを表示しない
@@ -42,13 +46,14 @@ namespace PictureList {
             //標準主力、標準エラー出力を取得できるようにする
             processStartInfo.RedirectStandardOutput = true;
             processStartInfo.RedirectStandardError = true;
-
+            //プロセスとして実行
             Process process = Process.Start(processStartInfo);
-
+            //標準出力、標準エラー出力、終了コードを取得
             string standardOutput = process.StandardOutput.ReadToEnd();
             string standardError = process.StandardError.ReadToEnd();
-
             int exitCode = process.ExitCode;
+            //標準エラー出力、終了コードを利用する場合は。これ以降に記す
+            //必ずプロセスを終了させる
             process.Close();
             return standardOutput;
         }
