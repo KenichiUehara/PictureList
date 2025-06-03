@@ -39,6 +39,7 @@ namespace PictureList {
         /// <param name="fPath">調べるファイルのパス</param>
         /// <returns>標準出力</returns>
         static string GetRawExif(string fPath) {
+            // 実行するExifToolのコマンドは、引数にパス名を取る、項目名と値がコロンで区切られただけの形式
             ProcessStartInfo processStartInfo = new("exiftool", fPath);
             //ウィンドーを表示しない
             processStartInfo.CreateNoWindow = true;

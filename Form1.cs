@@ -353,7 +353,7 @@ namespace PictureList {
                 //ファイルの情報を出力する場合はファイル情報を出力する
                 if (!rbtnOnlyDir.Checked) {
                     System.IO.FileInfo[] fInfoList = dirInfo.GetFiles(mask);
-                    if (chkExif.Checked)
+                    if (chkExif.Checked)    //Exifを出力する場合は対象の拡張子リストを得る
                         GetExifExt();
                     //出力に項目を追加する。
                     foreach (System.IO.FileInfo finfo in fInfoList) {
@@ -376,7 +376,10 @@ namespace PictureList {
                         if (chkExif.Checked && (rbtnAllExt.Checked || ExifExtLists.Contains(finfo.Extension.ToUpper().Replace(".", "")))) {
                             //ExifPictureクラスでExif情報を取得
                             ExifPicture exifData = new(finfo.FullName);
-                            GetExifList(exifData);  //出力するExifのリスト ExifOutListsを得る
+                            // 一時的にExifPictureをチェックボックスをオフにすることで無効にする
+                            if(chkUseExifPicture.Checked)
+                                GetExifList(exifData);  //出力するExifのリスト ExifOutListsを得る
+
                             //ExixToolを調べる必要のある時だけExifToolで調べる
                             if (!IsExifAllSet && exifToolUse != 0) {
                                 var exifToolData = new ExifToolMy(finfo.FullName);  //ExifToolのExifの読込
@@ -745,13 +748,13 @@ namespace PictureList {
             OutTitleList.Clear();
             OutTitleList.Append(sepaHead + "フォルダ名" + sepa + "ファイル名");
             if (chkLastWriteTime.Checked)
-                OutTitleList.Append(sepa + "最終更新日");
+                OutTitleList.Append(sepa + "更新日時");
             if (chkCreationTime.Checked)
-                OutTitleList.Append(sepa + "作成日");
+                OutTitleList.Append(sepa + "作成日時");
             if (chkLastAccessTime.Checked)
-                OutTitleList.Append(sepa + "最終アクセス日");
+                OutTitleList.Append(sepa + "アクセス日時");
             if (chkSize.Checked)
-                OutTitleList.Append(sepa + "ファイルサイズ");
+                OutTitleList.Append(sepa + "サイズ");
             if (chkAttribute.Checked)
                 OutTitleList.Append(sepa + "属性");
             if (chkExif.Checked) {

@@ -51,7 +51,7 @@ OffsetTimeOriginal,DateTimeOriginalの時差データ,string,TRUE,
 OffsetTimeDigitized,DateTimeDigitizedの時差データ,string,TRUE,
 ComponentsConfiguration,各コンポーネントの意味,string,TRUE,
 CompressedBitsPerPixel,画像圧縮モード,string,TRUE,
-ShutterSpeedValue,シャッタースピード,string,TRUE,
+ShutterSpeedValue,シャッタースピード(APEX EV値),string,TRUE,
 ApertureValue,絞り値,string,TRUE,
 BrightnessValue,輝度値,string,TRUE,
 ExposureBiasValue,露光補正値,string,TRUE,11
@@ -105,7 +105,7 @@ SubjectDistanceRange,被写体距離レンジ,string,TRUE,
 ImageUniqueID,画像ユニークID,string,FALSE,
 CameraOwnerName,カメラ所有者名,string,FALSE,
 BodySerialNumber,カメラシリアル番号,string,FALSE,
-LensSpecification,ズームレンズ仕様等,string,FALSE,7
+LensSpecification,レンズの仕様情報,string,FALSE,7
 LensMake,レンズのメーカ名,string,FALSE,
 LensModel,レンズのモデル名,string,FALSE,
 LensSerialNumber,レンズシリアル番号,string,FALSE,

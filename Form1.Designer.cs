@@ -77,6 +77,7 @@
             rbExiToolIfNeed = new System.Windows.Forms.RadioButton();
             rbExifToolDonotUse = new System.Windows.Forms.RadioButton();
             button2 = new System.Windows.Forms.Button();
+            chkUseExifPicture = new System.Windows.Forms.CheckBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -86,7 +87,7 @@
             // 
             // button1
             // 
-            button1.Location = new System.Drawing.Point(219, 547);
+            button1.Location = new System.Drawing.Point(224, 544);
             button1.Margin = new System.Windows.Forms.Padding(4);
             button1.Name = "button1";
             button1.Size = new System.Drawing.Size(61, 20);
@@ -102,7 +103,7 @@
             // btnFolderSelect
             // 
             btnFolderSelect.BackColor = System.Drawing.SystemColors.Control;
-            btnFolderSelect.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            btnFolderSelect.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
             btnFolderSelect.Location = new System.Drawing.Point(6, 1);
             btnFolderSelect.Margin = new System.Windows.Forms.Padding(4);
             btnFolderSelect.Name = "btnFolderSelect";
@@ -126,7 +127,7 @@
             // btnCopy2Clip
             // 
             btnCopy2Clip.BackColor = System.Drawing.SystemColors.Control;
-            btnCopy2Clip.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            btnCopy2Clip.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
             btnCopy2Clip.Location = new System.Drawing.Point(9, 132);
             btnCopy2Clip.Margin = new System.Windows.Forms.Padding(4);
             btnCopy2Clip.Name = "btnCopy2Clip";
@@ -278,7 +279,7 @@
             // btnFind
             // 
             btnFind.BackColor = System.Drawing.SystemColors.Control;
-            btnFind.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            btnFind.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
             btnFind.Location = new System.Drawing.Point(6, 44);
             btnFind.Margin = new System.Windows.Forms.Padding(4);
             btnFind.Name = "btnFind";
@@ -403,7 +404,7 @@
             // btnSetExif
             // 
             btnSetExif.BackColor = System.Drawing.SystemColors.Control;
-            btnSetExif.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            btnSetExif.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
             btnSetExif.Location = new System.Drawing.Point(7, 199);
             btnSetExif.Margin = new System.Windows.Forms.Padding(4);
             btnSetExif.Name = "btnSetExif";
@@ -687,20 +688,33 @@
             // 
             // button2
             // 
-            button2.Location = new System.Drawing.Point(219, 570);
+            button2.Location = new System.Drawing.Point(231, 570);
             button2.Name = "button2";
-            button2.Size = new System.Drawing.Size(66, 21);
+            button2.Size = new System.Drawing.Size(54, 21);
             button2.TabIndex = 24;
             button2.Text = "button2";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
+            // 
+            // chkUseExifPicture
+            // 
+            chkUseExifPicture.AutoSize = true;
+            chkUseExifPicture.Checked = true;
+            chkUseExifPicture.CheckState = System.Windows.Forms.CheckState.Checked;
+            chkUseExifPicture.Location = new System.Drawing.Point(61, 655);
+            chkUseExifPicture.Name = "chkUseExifPicture";
+            chkUseExifPicture.Size = new System.Drawing.Size(116, 19);
+            chkUseExifPicture.TabIndex = 25;
+            chkUseExifPicture.Text = "ExifPivtureの使用";
+            chkUseExifPicture.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.SystemColors.Control;
-            ClientSize = new System.Drawing.Size(681, 655);
+            ClientSize = new System.Drawing.Size(681, 693);
+            Controls.Add(chkUseExifPicture);
             Controls.Add(button2);
             Controls.Add(groupBox4);
             Controls.Add(groupBoxExifExt);
@@ -801,6 +815,7 @@
         private System.Windows.Forms.RadioButton rbExifToolAllways;
         private System.Windows.Forms.RadioButton rbExiToolIfNeed;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox chkUseExifPicture;
     }
 }
 

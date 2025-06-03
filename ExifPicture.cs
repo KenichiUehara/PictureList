@@ -15,6 +15,7 @@ using System.Windows.Forms.VisualStyles;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 using System.Diagnostics;
+using System.Windows.Documents;
 
 #pragma warning disable CA1416      //  #pragma warning restore CA1416 が出るまで CA1416 の警告が抑制される
 //[assembly: SupportedOSPlatform("windows")]　
@@ -30,7 +31,7 @@ namespace PictureList {
 
     public class ExifPicture {
 
-        private static List<string> BMPExit = new() { ".BMP", ".GIF", ".JPG", ".JPEG", ".PNG", ".TIFF",".TIF" };
+        private static List<string> BMPExit = new() { ".BMP", ".GIF", ".JPG", ".JPEG", ".PNG", ".TIFF", ".TIF" };
 
         private const int BYTE = 1, ASCII = 2, SHORT = 3, LONG = 4, RATIONAL = 5, UNDEFINED = 7, SLONG = 9, SRATIONAL = 10, UTF8 = 129;
         //ファイルとしての普通の属性
@@ -40,9 +41,9 @@ namespace PictureList {
         public string NameWithoutExt { get; private set; }
         public long Size { get; private set; }
         public DateTime MDate { get; private set; }
-        public long ImgWidth { get; private set; }
-        public long ImgHeight { get; private set; }
-        public bool IsExifDate { get; private set; }
+        //public long ImgWidth { get; private set; }
+        //public long ImgHeight { get; private set; }
+        public bool IsExifData { get; private set; }
         public bool IsImage { get; private set; }
 
 
@@ -140,7 +141,7 @@ namespace PictureList {
         public string FocalPlaneYResolution { get; private set; } //0xA20F 焦点面の高さの解像度
         public string FocalPlaneResolutionUnit { get; private set; } //0xA210 焦点面解像度単位
         public string SubjectLocation { get; private set; } //0xA214 被写体位置
-        public double ExposureIndex { get; private set; } //0xA215 露出インデックス
+        public string ExposureIndex { get; private set; } //0xA215 露出インデックス
         public string SensingMethod { get; private set; } //0xA217 センサ方式
         public string FileSource { get; private set; } //0xA300 ファイルソース
         public string SceneType { get; private set; } //0xA301 シーンタイプ
@@ -180,9 +181,9 @@ namespace PictureList {
         //
         public string GPSVersionID { get; private set; } //0x0000 GPSタグのバージョン
         public string GPSLatitudeRef { get; private set; } //0x0001 北緯(N) or 南緯(S)
-        public double GPSLatitude { get; private set; } //0x0002 緯度(数値)
+        public string GPSLatitude { get; private set; } //0x0002 緯度(数値)
         public string GPSLongitudeRef { get; private set; } //0x0003 東経(E) or 西経(W)
-        public double GPSLongitude { get; private set; } //0x0004 経度(数値)
+        public string GPSLongitude { get; private set; } //0x0004 経度(数値)
         public string GPSAltitudeRef { get; private set; } //0x0005 高度の基準
         public string GPSAltitude { get; private set; } //0x0006 高度(数値)
         public string GPSTimeStamp { get; private set; } //0x0007 GPS時間(原子時計の時間)
@@ -195,12 +196,12 @@ namespace PictureList {
         public string GPSTrackRef { get; private set; } //0x000E 進行方向の単位
         public string GPSTrack { get; private set; } //0x000F 進行方向(数値)
         public string GPSImgDirectionRef { get; private set; } //0x0010 撮影した画像の方向の単位
-        public double GPSImgDirection { get; private set; } //0x0011 撮影した画像の方向(数値)
+        public string GPSImgDirection { get; private set; } //0x0011 撮影した画像の方向(数値)
         public string GPSMapDatum { get; private set; } //0x0012 測位に用いた地図データ
         public string GPSDestLatitudeRef { get; private set; } //0x0013 目的地の北緯(N) or 南緯(S)
-        public double GPSDestLatitude { get; private set; } //0x0014 目的地の緯度(数値)
+        public string GPSDestLatitude { get; private set; } //0x0014 目的地の緯度(数値)
         public string GPSDestLongitudeRef { get; private set; } //0x0015 目的地の東経(E) or 西経(W)
-        public double GPSDestLongitude { get; private set; } //0x0016 目的地の経度(数値)
+        public string GPSDestLongitude { get; private set; } //0x0016 目的地の経度(数値)
         public string GPSDestBearingRef { get; private set; } //0x0017 目的地の方角の単位
         public string GPSDestBearing { get; private set; } //0x0018 目的の方角(数値)
         public string GPSDestDistanceRef { get; private set; } //0x0019 目的地までの距離の単位
@@ -255,9 +256,9 @@ namespace PictureList {
             System.Diagnostics.Debug.Print(fullPath);
             //
 
-            IsExifDate = false;
+            IsExifData = false;
             IsImage = false;
-            
+
             System.Drawing.Bitmap bmp = null;
             if (BMPExit.Contains(file.Extension.ToUpper())) {
                 try {
@@ -275,11 +276,11 @@ namespace PictureList {
 
 
             if (bmp != null) {
-                IsImage = true;
-                ImgWidth = bmp.Width;
-                ImgHeight = bmp.Height;
+                //IsImage = true;
+                //ImgWidth = bmp.Width;
+                //ImgHeight = bmp.Height;
 
-                //ここからがExifデータの取得
+                //ここからがPropertyItemsEータの取得
                 foreach (System.Drawing.Imaging.PropertyItem item in bmp.PropertyItems) {
                     switch (item.Id) {
                         // TIFF IFD
@@ -291,12 +292,12 @@ namespace PictureList {
                         case 0x0106: PhotometricInterpretation = GetPhotometricInterpretation(item); break;
                         case 0x010E: ImageDescription = GetExifAsci(item); break;
                         case 0x010F: Make = GetExifAsci(item); break;
-                        case 0x0110: Model = GetExifAsci(item); IsExifDate = true; break;
-                        case 0x0111: StripOffsets = AnyTypeAndCount(item, ","); break;
+                        case 0x0110: Model = GetExifAsci(item); IsExifData = true; break;
+                        case 0x0111: StripOffsets = AnyTypeAndCount(item, ":"); break;
                         case 0x0112: Orientation = GetOrientation(item); break;
                         case 0x0115: SamplesPerPixel = AnyTypeAndCount(item); break;
                         case 0x0116: RowsPerStrip = AnyTypeAndCount(item); break;
-                        case 0x0117: StripByteCounts = AnyTypeAndCount(item, ","); break;
+                        case 0x0117: StripByteCounts = AnyTypeAndCount(item, ":"); break;
                         case 0x011A: XResolution = AnyTypeAndCount(item); break;
                         case 0x011B: YResolution = AnyTypeAndCount(item); break;
                         case 0x011C: PlanarConfiguration = GetPlanarConfiguration(item); break;
@@ -328,7 +329,7 @@ namespace PictureList {
                         case 0x8833: ISOSpeed = AnyTypeAndCount(item); break; // XXXX
                         case 0x8834: ISOSpeedLatitudeyyy = AnyTypeAndCount(item); break; // XXXX
                         case 0x8835: ISOSpeedLatitudezzz = AnyTypeAndCount(item); break; // XXXX
-                        case 0x9000: ExifVersion = GetUndefinedMultiByteToString(item, "."); IsExifDate = true; break;
+                        case 0x9000: ExifVersion = GetUndefinedMultiByteToString(item, ""); IsExifData = true; break;
                         case 0x9003: DateTimeOriginal = GetExifAsci(item); break;
                         case 0x9004: DateTimeDigitized = GetExifAsci(item); break;
                         case 0X9010: OffsetTime = GetExifAsci(item); break; // oooo
@@ -371,7 +372,7 @@ namespace PictureList {
                         //case 0xA210: FocalPlaneResolutionUnit = GetFocalPlaneResolutionUnit(item); break;
                         case 0xA210: FocalPlaneResolutionUnit = GetResolutionUnit(item); break;
                         case 0xA214: SubjectLocation = GetSubjectLocation(item); break;
-                        case 0xA215: ExposureIndex = GetExifRational(item); break;
+                        case 0xA215: ExposureIndex = GetExifRational(item).ToString(); break;
                         case 0xA217: SensingMethod = GetSensingMethod(item); break;
                         case 0xA300: FileSource = GetFileSource(item); break;
                         case 0xA301: SceneType = GetSceneType(item); break;
@@ -402,42 +403,46 @@ namespace PictureList {
                         case 0xA43A: RAWDevelopingSoftware = GetExifAsci(item); break; // XXXX
                         case 0xA43B: ImageEditingSoftware = GetExifAsci(item); break; // XXXX
                         case 0xA43C: MetadataEditingSoftware = GetExifAsci(item); break; // XXXX
-                        case 0xA460: CompositeImage = AnyTypeAndCount(item); break; // XXXX
+                        case 0xA460: CompositeImage = GetCompositeImage(item); break; // XXXX
                         case 0xA461: SourceImageNumberOfCompositeImage = AnyTypeAndCount(item, ","); break; // XXXX
                         case 0xA462: SourceExposureTimesOfCompositeImage = "未実装"; break; // XXXX
                         case 0xA500: Gamma = AnyTypeAndCount(item); break; // XXXX
                         // GPS
                         case 0x0000: GPSVersionID = GetGPSVersionID(item); break;
-                        case 0x0001: GPSLatitudeRef = GetExifAsci(item); break;
-                        case 0x0002: GPSLatitude = GetGPSValue(item); break;
-                        case 0x0003: GPSLongitudeRef = GetExifAsci(item); break;
-                        case 0x0004: GPSLongitude = GetGPSValue(item); break;
+                        case 0x0001: GPSLatitudeRef = GetGPSLatitudeRef(GetExifAsci(item)); break;
+                        case 0x0002: GPSLatitude = $"{GetGPSValue(item):#.########}"; break;
+                        case 0x0003: GPSLongitudeRef = GetGPSLongitudeRef(GetExifAsci(item)); break;
+                        case 0x0004: GPSLongitude = $"{GetGPSValue(item):#.########}"; break;
                         case 0x0005: GPSAltitudeRef = GetGPSAltitudeRef(item); break;
                         case 0x0006: GPSAltitude = AnyTypeAndCount(item); break;
                         case 0x0007: GPSTimeStamp = GetGPSTimeStamp(item); break;
                         case 0x0008: GPSSatellites = GetExifAsci(item); break;
-                        case 0x0009: GPSStatus = GetExifAsci(item); break;
-                        case 0x000A: GPSMeasureMode = GetExifAsci(item); break;
+                        case 0x0009: GPSStatus = GetGPSStatus(GetExifAsci(item)); break;
+                        case 0x000A: GPSMeasureMode = GetGPSMeasureMode(GetExifAsci(item)); break;
                         case 0x000B: GPSDOP = AnyTypeAndCount(item); break;
-                        case 0x000C: GPSSpeedRef = GetExifAsci(item); break;
+                        case 0x000C: GPSSpeedRef = GetGPSSpeedRef(GetExifAsci(item)); break;
                         case 0x000D: GPSSpeed = AnyTypeAndCount(item); break;
-                        case 0x000E: GPSTrackRef = GetExifAsci(item); break;
+                        case 0x000E: GPSTrackRef = GetGPSTrackRef(GetExifAsci(item)); break;
                         case 0x000F: GPSTrack = AnyTypeAndCount(item); break;
-                        case 0x0010: GPSImgDirectionRef = GetExifAsci(item); break;
-                        case 0x0011: GPSImgDirection = GetExifRational(item); break;
+                        case 0x0010: GPSImgDirectionRef = GetGPSTrackRef(GetExifAsci(item)); break;
+                        case 0x0011: GPSImgDirection = GetExifRational(item).ToString(); break;
                         case 0x0012: GPSMapDatum = GetExifAsci(item); break;
-                        case 0x0013: GPSDestLatitudeRef = GetExifAsci(item); break;
-                        case 0x0014: GPSDestLatitude = GetGPSValue(item); break;
-                        case 0x0015: GPSDestLongitudeRef = GetExifAsci(item); break;
-                        case 0x0016: GPSDestLongitude = GetGPSValue(item); break;
-                        case 0x0017: GPSDestBearingRef = GetExifAsci(item); break;
+
+                        // 0x0001 GPSLatitudeRef と同じ
+                        case 0x0013: GPSDestLatitudeRef = GetGPSLatitudeRef(GetExifAsci(item)); break;
+                        case 0x0014: GPSDestLatitude = $"{GetGPSValue(item):#.########}"; break;
+
+                        // 0x0003 GPSLongitudeRef と同じ
+                        case 0x0015: GPSDestLongitudeRef = GetGPSLongitudeRef(GetExifAsci(item)); break;
+                        case 0x0016: GPSDestLongitude = $"{GetGPSValue(item):#.########}"; break;
+                        case 0x0017: GPSDestBearingRef = GetGPSTrackRef(GetExifAsci(item)); break;
                         case 0x0018: GPSDestBearing = AnyTypeAndCount(item); break;
-                        case 0x0019: GPSDestDistanceRef = GetExifAsci(item); break;
+                        case 0x0019: GPSDestDistanceRef = GetGPSDestDistanceRef(GetExifAsci(item)); break;
                         case 0x001A: GPSDestDistance = AnyTypeAndCount(item); break;
                         case 0x001B: GPSProcessingMethod = GetUndefinedUniStringValue(item); break; // oooo
                         case 0x001C: GPSAreaInformation = GetUndefinedUniStringValue(item); break; // oooo
                         case 0x001D: GPSDateStamp = GetExifAsci(item); break; // XXXX
-                        case 0x001E: GPSDifferential = AnyTypeAndCount(item); break; // XXXX
+                        case 0x001E: GPSDifferential = GetGPSDifferential(item); break; // XXXX
                         case 0x001F: GPSHPositioningError = AnyTypeAndCount(item); break; // XXXX
                     }
                 }
@@ -450,8 +455,8 @@ namespace PictureList {
 
                 if (ImageWidth == null)
                     ImageWidth = bmp.Width.ToString();
-                if(ImageLength == null)
-                    ImageLength=bmp.Height.ToString();
+                if (ImageLength == null)
+                    ImageLength = bmp.Height.ToString();
 
 
                 bmp.Dispose();
@@ -469,7 +474,7 @@ namespace PictureList {
             switch (n) {
                 case 1: str = "非圧縮"; break;
                 case 6: str = "サムネイルもJPEG圧縮"; break;
-                default: str = "予約(未定義)"; break;
+                default: str = "予約"; break;
             }
             return str;
         }
@@ -496,7 +501,7 @@ namespace PictureList {
                 case 51177: str = "Depth Map"; break;
                 case 52527: str = "Semantic Mask"; break;
                 // ここまで
-                default: str = "予約(未定義)"; break;
+                default: str = "予約"; break;
             }
             return str;
         }
@@ -523,7 +528,7 @@ namespace PictureList {
             switch (n) {
                 case 1: str = "点順次フォーマット"; break;
                 case 2: str = "面順次フォーマット"; break;
-                default: str = "予約(未定義)"; break;
+                default: str = "予約"; break;
             }
             return str;
         }
@@ -545,8 +550,8 @@ namespace PictureList {
         }
 
         static private string GetYCbCrSubSampling(System.Drawing.Imaging.PropertyItem Pitem) { //0x0212
-            string str = "予約(未実装)";
-            if (Pitem.Type != SHORT && LenToCount(Pitem) != 2) str = "異常値";
+            string str = "予約";
+            if (Pitem.Type != SHORT || LenToCount(Pitem) != 2) str = "異常値";
             else {
                 long vl1 = BitConverter.ToUInt32(Pitem.Value, 0);
                 long vl2 = BitConverter.ToUInt32(Pitem.Value, 4);
@@ -570,7 +575,7 @@ namespace PictureList {
 
         static private string GetLensSpecificatGet(System.Drawing.Imaging.PropertyItem Pitem) {
             string str;
-            if (Pitem.Type != BYTE && LenToCount(Pitem) != 4) {
+            if (Pitem.Type != BYTE || LenToCount(Pitem) != 4) {
                 str = "異常値"; return str;
             }
             str = AnyValueToString(Pitem, 0) + "-" + AnyValueToString(Pitem, 1);
@@ -581,7 +586,7 @@ namespace PictureList {
 
         static private string GetExposureProgram(System.Drawing.Imaging.PropertyItem Pitem) { //0x8822
             string str;
-            if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
+            if (Pitem.Type != SHORT || LenToCount(Pitem) != 1) str = "異常値";
             else {
                 int vl = GetExifByte(Pitem);
                 switch (vl) {
@@ -630,11 +635,12 @@ namespace PictureList {
             return str;
         }
 
+        //2025/04/12 ExifToolの表記に合わせ"-"を追加し、各値をカンマで区切るように変更
         static private string GetComponentsConfiguration(System.Drawing.Imaging.PropertyItem Pitem) { //0x9101
             string str = "";
             for (int i = 0; i < 4; i++) {
                 switch (Pitem.Value[i]) {
-                    case 0x00: break;
+                    case 0x00: str += "-"; break;
                     case 0x01: str += "Y"; break;
                     case 0x02: str += "Cb"; break;
                     case 0x03: str += "Cr"; break;
@@ -643,6 +649,7 @@ namespace PictureList {
                     case 0x06: str += "B"; break;
                     default: str = "不明な予約値"; break;
                 }
+                if (i < 3) str += ",";
             }
             return str;
         }
@@ -667,7 +674,7 @@ namespace PictureList {
                 case 255:
                     str = "その他の測光方式"; break;
                 default:
-                    str = "不明"; break;
+                    str = "予約"; break;
             }
             return str;
         }
@@ -697,7 +704,7 @@ namespace PictureList {
                 case 23: str = "D50"; break;
                 case 24: str = "ISO studio tungsten"; break;
                 case 255: str = "その他の光源"; break;
-                default: str = "不明"; break;
+                default: str = "予約"; break;
             }
             return str;
         }
@@ -732,7 +739,7 @@ namespace PictureList {
                 case 0x59: str = "自動, 発光, 赤目軽減"; break;
                 case 0x5d: str = "自動, 発射済, 赤目軽減, 戻りを検出せず"; break;
                 case 0x5f: str = "自動, 発光, 赤目軽減, 戻り検出済み"; break;
-                default: str = "不明"; break;
+                default: str = "予約"; break;
 
             }
             return str;
@@ -752,13 +759,10 @@ namespace PictureList {
             }
             return str;
         }
-        /// <summary>
-        /// MakerNoteは各社独自で一貫性がないので長さのみ返す
-        /// https://exiftool.org/TagNames/EXIF.html　に詳しい説明がある
-        /// </summary>
-        /// <param name="Pitem"></param>
-        /// <returns></returns>        
 
+
+        // MakerNoteは各社独自で一貫性がないので長さのみ返す
+        // https://exiftool.org/TagNames/EXIF.html　に詳しい説明がある
         static private string GetMakerNote(System.Drawing.Imaging.PropertyItem Pitem) { //0x0x927C
             int type = Pitem.Type;
             string str;
@@ -772,7 +776,7 @@ namespace PictureList {
 
         static private string GetFlashpixVersion(System.Drawing.Imaging.PropertyItem Pitem) { //0xA000
             string str;
-            if (Pitem.Type == UNDEFINED && LenToCount(Pitem) == 4 && Encoding.ASCII.GetString(Pitem.Value) == "0100")
+            if (Pitem.Type == UNDEFINED || LenToCount(Pitem) == 4 || Encoding.ASCII.GetString(Pitem.Value) == "0100")
                 str = "Flashpix Format Version 1.0";
             else
                 str = "未定義";
@@ -813,7 +817,7 @@ namespace PictureList {
 
         static private string GetSubjectLocation(System.Drawing.Imaging.PropertyItem Pitem) { //0xA214
             string str;
-            if (Pitem.Type == SHORT && LenToCount(Pitem) == 2)
+            if (Pitem.Type == SHORT || LenToCount(Pitem) == 2)
                 str = "X,Y = " + BitConverter.ToInt16(Pitem.Value, 0) + " , " + BitConverter.ToInt16(Pitem.Value, 2);
             else
                 str = "未定義";
@@ -825,7 +829,7 @@ namespace PictureList {
             string str;
             switch (n) {
                 case 1: str = "未定義"; break;
-                case 2: str = "単盤カラーセンサー"; break;
+                case 2: str = "単板カラーセンサー"; break;
                 case 3: str = "2板カラーセンサー"; break;
                 case 4: str = "3板カラーセンサー"; break;
                 case 5: str = "色順次カラーセンサー"; break;
@@ -846,7 +850,7 @@ namespace PictureList {
                 case 0x02: str = "反射型スキャナ"; break;
                 case 0x03: str = "DSC"; break;
                 default:
-                    str = "予約（未定義)"; break;
+                    str = "予約"; break;
             }
             if (type != UNDEFINED && LenToCount(Pitem) != 1) str = "異常値";
             return str;
@@ -854,12 +858,12 @@ namespace PictureList {
 
         static private string GetSceneType(System.Drawing.Imaging.PropertyItem Pitem) { //0xA301
             string str;
-            if (Pitem.Type != UNDEFINED && LenToCount(Pitem) != 1) str = "異常値";
+            if (Pitem.Type != UNDEFINED || LenToCount(Pitem) != 1) str = "異常値";
             else {
                 byte val = Pitem.Value[0];
                 switch (val) {
                     case 0x01: str = "直接撮影された画像"; break;
-                    default: str = "予約（未定義)"; break;
+                    default: str = "予約"; break;
                 }
             }
             return str;
@@ -873,7 +877,7 @@ namespace PictureList {
                 //CFAパターン（イメージセンサーのRGB画素などの配置を示すルーティンだが 横のパターン数 xn と　縦の yn　に値の各2バイト
                 //を使って計算しているが多分デジカメ側がリトル（ビッグ）エンディアン
 
-                // xn = BitConverter.ToInt16(Pitem.Value, 0);
+                // 2025/04/05 CFAパターンの計算方法に間違いがあり修正
                 // yn = BitConverter.ToInt16(Pitem.Value, 2);
 
                 Byte x1, x2, y1, y2;
@@ -883,24 +887,34 @@ namespace PictureList {
                 y2 = Pitem.Value[3];
                 xn = (short)(x2 * 256); xn += x1;
                 yn = (short)(y2 * 256); yn += y1;
-                if (xn + yn > Pitem.Len - 4) {
+                if (xn + yn > Pitem.Len - 4) {  //ビッグエンディアンのときの処理
                     xn = (short)(x1 * 256); xn += x2;
                     yn = (short)(y1 * 256); yn += y2;
                 }
-                if (xn + yn > Pitem.Len - 4) {
-                    str = "未解決" + AnyTypeAndCount(Pitem, ",");
-                    return str;
-                }
-                str = "X = " + xn.ToString() + ",Y = " + yn.ToString() + " : ";
-                for (int i = 0; i < xn; i++) {
-                    str += GetFilterColor(Pitem.Value[i]);
-                    if (i != xn - 1) str += ",";
-                }
-                str += " : ";
+                int ptr = 4; str = "";
                 for (int i = 0; i < yn; i++) {
-                    str += GetFilterColor(Pitem.Value[i + xn]);
-                    if (i != yn - 1) str += ",";
+                    str += "[";
+                    for (int j = 0; j < xn; j++) {
+                        str += GetFilterColor(Pitem.Value[ptr++]);
+                        if (j < xn - 1) str += ",";
+                        else str += "]";
+                    }
                 }
+
+                //if (xn + yn > Pitem.Len - 4) {
+                //    str = "未解決" + AnyTypeAndCount(Pitem, ",");
+                //    return str;
+                //}
+                //str = "X = " + xn.ToString() + ",Y = " + yn.ToString() + " : ";
+                //for (int i = 0; i < xn; i++) {
+                //    str += GetFilterColor(Pitem.Value[i]);
+                //    if (i != xn - 1) str += ",";
+                //}
+                //str += " : ";
+                //for (int i = 0; i < yn; i++) {
+                //    str += GetFilterColor(Pitem.Value[i + xn]);
+                //    if (i != yn - 1) str += ",";
+                //}
             }
             return str;
         }
@@ -919,13 +933,13 @@ namespace PictureList {
 
         static private string GetCustomRendered(System.Drawing.Imaging.PropertyItem Pitem) { //0xA401
             string str;
-            if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
+            if (Pitem.Type != SHORT || LenToCount(Pitem) != 1) str = "異常値";
             else {
                 long n = GetExifShort(Pitem);
                 switch (n) {
                     case 0: str = "通常処理"; break;
                     case 1: str = "特殊処理"; break;
-                    default: str = "予約(未定義)"; break;
+                    default: str = "予約"; break;
                 }
             }
             return str;
@@ -933,14 +947,14 @@ namespace PictureList {
 
         static private string GetExposureMode(System.Drawing.Imaging.PropertyItem Pitem) { //0xA402
             string str;
-            if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
+            if (Pitem.Type != SHORT || LenToCount(Pitem) != 1) str = "異常値";
             else {
                 long n = GetExifShort(Pitem);
                 switch (n) {
-                    case 0: str = "自動露出"; break;
+                    case 0: str = "露出自動"; break;
                     case 1: str = "露出マニュアル"; break;
                     case 2: str = "オートブラケット"; break;
-                    default: str = "予約(未定義)"; break;
+                    default: str = "予約"; break;
                 }
             }
             return str;
@@ -948,13 +962,13 @@ namespace PictureList {
 
         static private string GetWhiteBalance(System.Drawing.Imaging.PropertyItem Pitem) { //0xA403
             string str;
-            if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
+            if (Pitem.Type != SHORT || LenToCount(Pitem) != 1) str = "異常値";
             else {
                 long n = GetExifShort(Pitem);
                 switch (n) {
                     case 0: str = "ホワイトバランス自動"; break;
                     case 1: str = "ホワイトバランスマニュアル"; break;
-                    default: str = "予約(未定義)"; break;
+                    default: str = "予約"; break;
                 }
             }
             return str;
@@ -973,7 +987,7 @@ namespace PictureList {
 
         static private string GetFocalLengthIn35mmFilm(System.Drawing.Imaging.PropertyItem Pitem) { //0xA405
             string str;
-            if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
+            if (Pitem.Type != SHORT || LenToCount(Pitem) != 1) str = "異常値";
             else {
                 long n = GetExifShort(Pitem);
                 if (n == 0) str = "不明";
@@ -984,7 +998,7 @@ namespace PictureList {
 
         static private string GetSceneCaptureType(System.Drawing.Imaging.PropertyItem Pitem) { //0xA406
             string str;
-            if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
+            if (Pitem.Type != SHORT || LenToCount(Pitem) != 1) str = "異常値";
             else {
                 long n = GetExifShort(Pitem);
                 switch (n) {
@@ -992,7 +1006,7 @@ namespace PictureList {
                     case 1: str = "風景"; break;
                     case 2: str = "人物"; break;
                     case 3: str = "夜景"; break;
-                    default: str = "予約(未定義)"; break;
+                    default: str = "予約"; break;
                 }
             }
             return str;
@@ -1000,7 +1014,7 @@ namespace PictureList {
 
         static private string GetGainControl(System.Drawing.Imaging.PropertyItem Pitem) { //0xA407
             string str;
-            if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
+            if (Pitem.Type != SHORT || LenToCount(Pitem) != 1) str = "異常値";
             else {
                 long n = GetExifShort(Pitem);
                 switch (n) {
@@ -1009,7 +1023,7 @@ namespace PictureList {
                     case 2: str = "強い増感"; break;
                     case 3: str = "弱い減感"; break;
                     case 4: str = "強い減感"; break;
-                    default: str = "予約(未定義)"; break;
+                    default: str = "予約"; break;
                 }
             }
             return str;
@@ -1017,14 +1031,14 @@ namespace PictureList {
 
         static private string GetContrast(System.Drawing.Imaging.PropertyItem Pitem) { //0xA408
             string str;
-            if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
+            if (Pitem.Type != SHORT || LenToCount(Pitem) != 1) str = "異常値";
             else {
                 long n = GetExifShort(Pitem);
                 switch (n) {
                     case 0: str = "標準"; break;
                     case 1: str = "軟調"; break;
                     case 2: str = "硬調"; break;
-                    default: str = "予約(未定義)"; break;
+                    default: str = "予約"; break;
                 }
             }
             return str;
@@ -1032,14 +1046,14 @@ namespace PictureList {
 
         static private string GetSaturation(System.Drawing.Imaging.PropertyItem Pitem) { //0xA409
             string str;
-            if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
+            if (Pitem.Type != SHORT || LenToCount(Pitem) != 1) str = "異常値";
             else {
                 long n = GetExifShort(Pitem);
                 switch (n) {
                     case 0: str = "標準"; break;
                     case 1: str = "低彩度"; break;
                     case 2: str = "高彩度"; break;
-                    default: str = "予約(未定義)"; break;
+                    default: str = "予約"; break;
                 }
             }
             return str;
@@ -1047,14 +1061,14 @@ namespace PictureList {
         [SupportedOSPlatform("linux")]
         static private string GetSharpness(System.Drawing.Imaging.PropertyItem Pitem) { //0xA40A
             string str;
-            if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
+            if (Pitem.Type != SHORT || LenToCount(Pitem) != 1) str = "異常値";
             else {
                 long n = GetExifShort(Pitem);
                 switch (n) {
                     case 0: str = "標準"; break;
                     case 1: str = "弱い"; break;
                     case 2: str = "強い"; break;
-                    default: str = "予約(未定義)"; break;
+                    default: str = "予約"; break;
                 }
             }
             return str;
@@ -1062,7 +1076,7 @@ namespace PictureList {
 
         static private string GetSubjectDistanceRange(System.Drawing.Imaging.PropertyItem Pitem) { //0xA40C
             string str;
-            if (Pitem.Type != SHORT && LenToCount(Pitem) != 1) str = "異常値";
+            if (Pitem.Type != SHORT || LenToCount(Pitem) != 1) str = "異常値";
             else {
                 long n = GetExifShort(Pitem);
                 switch (n) {
@@ -1070,7 +1084,23 @@ namespace PictureList {
                     case 1: str = "マクロ"; break;
                     case 2: str = "近景"; break;
                     case 3: str = "遠景"; break;
-                    default: str = "予約(未定義)"; break;
+                    default: str = "予約"; break;
+                }
+            }
+            return str;
+        }
+
+        static private string GetCompositeImage(System.Drawing.Imaging.PropertyItem Pitem) { //0xA460
+            string str;
+            if (Pitem.Type != SHORT || LenToCount(Pitem) != 1) str = "異常値";
+            else {
+                long n = GetExifShort(Pitem);
+                switch (n) {
+                    case 0: str = "不明"; break;
+                    case 1: str = "非合成画像"; break;
+                    case 2: str = "一般合成画像"; break;
+                    case 3: str = "撮影時取得合成画像"; break;
+                    default: str = "予約"; break;
                 }
             }
             return str;
@@ -1078,9 +1108,29 @@ namespace PictureList {
 
         static private string GetGPSVersionID(System.Drawing.Imaging.PropertyItem Pitem) { //0x0000
             string str;
-            if (Pitem.Type != BYTE && LenToCount(Pitem) != 4) str = "異常値";
+            if (Pitem.Type != BYTE || LenToCount(Pitem) != 4) str = "異常値";
             else {
-                str = $"{Pitem.Value[0]:X} {Pitem.Value[1]:X} {Pitem.Value[2]:X} {Pitem.Value[3]:X}";
+                str = $"{Pitem.Value[0]:X}.{Pitem.Value[1]:X}.{Pitem.Value[2]:X}.{Pitem.Value[3]:X}";
+            }
+            return str;
+        }
+
+        static private string GetGPSLatitudeRef(string instr) { //0x0001
+            string str;
+            switch (instr) {
+                case "N": str = "北緯"; break;
+                case "S": str = "南緯"; break;
+                default: str = "予約"; break;
+            }
+            return str;
+        }
+
+        static private string GetGPSLongitudeRef(string instr) { //0x0003
+            string str;
+            switch (instr) {
+                case "E": str = "東経"; break;
+                case "W": str = "西経"; break;
+                default: str = "予約"; break;
             }
             return str;
         }
@@ -1112,9 +1162,9 @@ namespace PictureList {
             else {
                 int vl = GetExifByte(Pitem);
                 switch (vl) {
-                    case 0: str = "海抜+"; break;
-                    case 1: str = "海抜-"; break;
-                    default: str = "予約(未実装)"; break;
+                    case 0: str = "高度+(楕円体基準)"; break;
+                    case 1: str = "高度-(楕円体基準)"; break;
+                    default: str = "予約"; break;
                 }
             }
             return str;
@@ -1133,14 +1183,112 @@ namespace PictureList {
             }
             return str;
         }
-        private string GetGPSLocation() {
+
+        static private string GetGPSStatus(string instr) { //0x0009
             string str;
-            if (string.IsNullOrEmpty(GPSVersionID)) str = "";
-            else {
-                str = $"{GPSLatitudeRef} {GPSLatitude:#.########} , {GPSLongitudeRef} {GPSLongitude:#.##########}";
+            switch (instr) {
+                case "A": str = "測位中"; break;
+                case "V": str = "未測位（中断中)"; break;
+                default: str = "予約"; break;
             }
             return str;
         }
+
+        static private string GetGPSMeasureMode(string instr) { //0x000A
+            string str;
+            switch (instr) {
+                case "2": str = "2次元測位中"; break;
+                case "3": str = "3次元測位中)"; break;
+                default: str = "予約"; break;
+            }
+            return str;
+        }
+
+        static private string GetGPSSpeedRef(string instr) { //0x000C
+            string str;
+            switch (instr) {
+                case "K": str = "km/h"; break;
+                case "M": str = "mph"; break;
+                case "N": str = "knots"; break;
+                default: str = "予約"; break;
+            }
+            return str;
+        }
+
+        static private string GetGPSTrackRef(string instr) { //0x000E,10,17
+            string str;
+            switch (instr) {
+                case "M": str = "磁気方位"; break;
+                case "T": str = "真方位"; break;
+                default: str = "予約"; break;
+            }
+            return str;
+        }
+
+        static private string GetGPSDestDistanceRef(string instr) { //0x0019
+            string str;
+            switch (instr) {
+                case "K": str = "km"; break;
+                case "M": str = "マイル"; break;
+                case "N": str = "海里"; break;
+                default: str = "予約"; break;
+            }
+            return str;
+        }
+
+        static private string GetGPSDifferential(System.Drawing.Imaging.PropertyItem Pitem) { //0x001E
+            long n = GetExifShort(Pitem);
+            string str;
+            switch (n) {
+                case 0: str = "単独測位"; break;
+                case 1: str = "Differential補正測位"; break;
+                default: str = "予約"; break;
+            }
+            return str;
+        }
+
+        private string GetGPSLocation() {
+            string str, LatiStr, LongStr;
+            if (string.IsNullOrEmpty(GPSVersionID)) str = "";
+            else {
+                switch (GPSLatitudeRef) {
+                    case "北緯":
+                    case "N":
+                        LatiStr = "N";
+                        break;
+                    case "南緯":
+                    case "S":
+                        LatiStr = "S";
+                        break;
+                    default:
+                        LatiStr = "異常値";
+                        break;
+                }
+                switch (GPSLongitudeRef) {
+                    case "東経":
+                    case "E":
+                        LongStr = "E";
+                        break;
+                    case "西経":
+                    case "W":
+                        LongStr = "W";
+                        break;
+                    default:
+                        LongStr = "異常値";
+                        break;
+                }
+
+                str = $"{LatiStr} {GPSLatitude:#.########} , {LongStr} {GPSLongitude:#.##########}";
+            }
+            return str;
+            //string str;
+            //if (string.IsNullOrEmpty(GPSVersionID)) str = "";
+            //else {
+            //    str = $"{GPSLatitudeRef} {GPSLatitude:#.########} , {GPSLongitudeRef} {GPSLongitude:#.##########}";
+            //}
+            //return str;
+        }
+
 
         /// <summary>
         /// sppedStrの数値を表す文字列から "1/n 秒" または "n 秒" というシャッター速度を返す。小数点以下が長い場合は有効桁数が3桁になるようにする
@@ -1187,7 +1335,7 @@ namespace PictureList {
 
         private string GetResolution() {
             if (!string.IsNullOrEmpty(XResolution) && !string.IsNullOrEmpty(YResolution))
-                return XResolution + " x " + YResolution + ResolutionUnit;
+                return XResolution + " x " + YResolution + " /" + ResolutionUnit;
             return "";
         }
 
