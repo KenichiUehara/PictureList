@@ -57,20 +57,21 @@ namespace PictureList {
             listViewUnSelect.Clear();
             //Titlesの値は{プロパティ,タグ名称,型,可否,表示順}
             listViewUnSelect.Columns.Add(Titles[0], 140);
-            listViewUnSelect.Columns.Add(Titles[1], 140);
+            listViewUnSelect.Columns.Add(Titles[1], 165);
             //Titles[2]=型は使用しない
-            listViewUnSelect.Columns.Add(Titles[3], 48);
+            listViewUnSelect.Columns.Add(Titles[5], 80);
 
             for (int i = 0; i < allLists.Count; i++) {
                 if (allLists[i].Order == 0) {
                     ListViewItem UnSelctViewItem = new ListViewItem();
                     UnSelctViewItem.Text = allLists[i].Property;
                     UnSelctViewItem.SubItems.Add(allLists[i].TagName);
-                    if (allLists[i].Availeble == true) {
-                        UnSelctViewItem.SubItems.Add("有効");
-                    } else {
-                        UnSelctViewItem.SubItems.Add("未実装");
-                    }
+                    //if (allLists[i].Availeble == true) {  Availebleは使用しなくなったのでコメントアウト
+                    //    UnSelctViewItem.SubItems.Add("有効");
+                    //} else {
+                    //    UnSelctViewItem.SubItems.Add("未実装");
+                    //}
+                    UnSelctViewItem.SubItems.Add(allLists[i].TagID);
                     listViewUnSelect.Items.Add(UnSelctViewItem);
                 }
             }
@@ -101,24 +102,25 @@ namespace PictureList {
                 selectLists.Add(allLists[item.Idx]);
             }
             //ヘッダ行の作成　プロパティ,タグ名称,型,可否,表示順
-            Form1.Exiflist Title = new Form1.Exiflist();
+            //Form1.Exiflist Title = new Form1.Exiflist();
             listViewSelect.Clear();
-            Title = allLists[0];
-            listViewSelect.Columns.Add(Titles[0], 120);
-            listViewSelect.Columns.Add(Titles[1], 140);
+            //Title = allLists[0];
+            listViewSelect.Columns.Add(Titles[0], 136);
+            listViewSelect.Columns.Add(Titles[1], 150);
             //listViewSelect.Columns.Add(Titles[2], 64);　型は表示しない
-            listViewSelect.Columns.Add(Titles[3], 48);
+            listViewSelect.Columns.Add(Titles[5], 85);
             listViewSelect.Columns.Add(Titles[4], 48);
 
             for (int i = 0; i < selectLists.Count; i++) {
                 ListViewItem SelectViewItem = new ListViewItem();
                 SelectViewItem.Text = selectLists[i].Property;
                 SelectViewItem.SubItems.Add(selectLists[i].TagName);
-                if (selectLists[i].Availeble == true) {
-                    SelectViewItem.SubItems.Add("有効");
-                } else {
-                    SelectViewItem.SubItems.Add("未実装");
-                }
+                //if (selectLists[i].Availeble == true) {
+                //    SelectViewItem.SubItems.Add("有効");
+                //} else {
+                //    SelectViewItem.SubItems.Add("未実装");
+                //}
+                SelectViewItem.SubItems.Add(selectLists[i].TagID);
                 SelectViewItem.SubItems.Add(selectLists[i].Order.ToString());
                 listViewSelect.Items.Add(SelectViewItem);
             }

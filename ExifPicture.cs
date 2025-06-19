@@ -31,22 +31,23 @@ namespace PictureList {
 
     public class ExifPicture {
 
-        private static List<string> BMPExit = new() { ".BMP", ".GIF", ".JPG", ".JPEG", ".PNG", ".TIFF", ".TIF" };
+        private static readonly List<string> BMPExit = new() { ".BMP", ".GIF", ".JPG", ".JPEG", ".PNG", ".TIFF", ".TIF" };
 
         private const int BYTE = 1, ASCII = 2, SHORT = 3, LONG = 4, RATIONAL = 5, UNDEFINED = 7, SLONG = 9, SRATIONAL = 10, UTF8 = 129;
         //ファイルとしての普通の属性
-        public string FullPath { get; private set; }
-        public string Name { get; private set; }
-        public string Extension { get; private set; }
-        public string NameWithoutExt { get; private set; }
-        public long Size { get; private set; }
-        public DateTime MDate { get; private set; }
+        //public string FullPath { get; private set; }
+        //public string Name { get; private set; }
+        //public string Extension { get; private set; }
+        //public string NameWithoutExt { get; private set; }
+        //public long Size { get; private set; }
+        //public DateTime MDate { get; private set; }
         //public long ImgWidth { get; private set; }
         //public long ImgHeight { get; private set; }
         public bool IsExifData { get; private set; }
         public bool IsImage { get; private set; }
 
-
+        // 一部のExifタグを除いてそのプロパティは不要になるのでパフォーマンスを上げるために
+        // 不要なプロパティはコメントにした方が良いかも
         //以下のExif情報はNetFrameWorkで取得対象タグでないものは XXXX で示す
         //NetFrameWorkで取得対象タグでなくとも値が取得でき保夫は oooo で示す
         //Exif情報
@@ -243,14 +244,14 @@ namespace PictureList {
         }
 
         private void _exifPciture(string fullPath) {
-            //FileInfo file = new FileInfo(fullPath);
-            FileInfo file = new(fullPath);
-            FullPath = fullPath;
-            NameWithoutExt = Path.GetFileNameWithoutExtension(fullPath);
-            Name = file.Name;
-            Extension = file.Extension;
-            Size = file.Length;
-            MDate = file.LastWriteTime;
+            FileInfo file = new FileInfo(fullPath);
+            //FileInfo file = new(fullPath);
+            //FullPath = fullPath;
+            //NameWithoutExt = Path.GetFileNameWithoutExtension(fullPath);
+            //Name = file.Name;
+            //Extension = file.Extension;
+            //Size = file.Length;
+            //MDate = file.LastWriteTime;
 
             // デバッグ用
             System.Diagnostics.Debug.Print(fullPath);
@@ -553,8 +554,8 @@ namespace PictureList {
             string str = "予約";
             if (Pitem.Type != SHORT || LenToCount(Pitem) != 2) str = "異常値";
             else {
-                long vl1 = BitConverter.ToUInt32(Pitem.Value, 0);
-                long vl2 = BitConverter.ToUInt32(Pitem.Value, 4);
+                ushort vl1 = BitConverter.ToUInt16(Pitem.Value, 0);
+                ushort vl2 = BitConverter.ToUInt16(Pitem.Value, 2);
                 if (vl1 == 2) {
                     if (vl2 == 1) str = "YCbCr4:2:2";
                     else if (vl2 == 2) str = "YCbCr4:2:0";
@@ -1172,12 +1173,13 @@ namespace PictureList {
 
         static private string GetGPSTimeStamp(System.Drawing.Imaging.PropertyItem Pitem) { //0x0007
             string str = "";
+            if (Pitem.Type != RATIONAL || LenToCount(Pitem) != 3) return "異常値";
             for (int i = 0; i < LenToCount(Pitem); i++) {
                 str += GetRational(Pitem.Value, i * 8).ToString();
                 switch (i) {
-                    case 0: str += "時"; break;
-                    case 1: str += "分"; break;
-                    case 2: str += "秒"; break;
+                    case 0: str += ":"; break;
+                    case 1: str += ":"; break;
+                    case 2: str += ":"; break;
                     default: str += "異常値"; break;
                 }
             }
