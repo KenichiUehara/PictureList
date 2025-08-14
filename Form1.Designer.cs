@@ -72,12 +72,11 @@
             label1 = new System.Windows.Forms.Label();
             rbtnAllExt = new System.Windows.Forms.RadioButton();
             groupBox4 = new System.Windows.Forms.GroupBox();
+            label8 = new System.Windows.Forms.Label();
             rbExifToolAllways = new System.Windows.Forms.RadioButton();
             rbExiToolIfNeed = new System.Windows.Forms.RadioButton();
             rbExifToolDonotUse = new System.Windows.Forms.RadioButton();
             button2 = new System.Windows.Forms.Button();
-            chkUseExifPicture = new System.Windows.Forms.CheckBox();
-            label8 = new System.Windows.Forms.Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -540,14 +539,14 @@
             groupBoxExifExt.Controls.Add(chkMainExifExt);
             groupBoxExifExt.Controls.Add(label1);
             groupBoxExifExt.Controls.Add(rbtnAllExt);
-            groupBoxExifExt.Location = new System.Drawing.Point(360, 379);
+            groupBoxExifExt.Location = new System.Drawing.Point(359, 396);
             groupBoxExifExt.Margin = new System.Windows.Forms.Padding(4);
             groupBoxExifExt.Name = "groupBoxExifExt";
             groupBoxExifExt.Padding = new System.Windows.Forms.Padding(4);
             groupBoxExifExt.Size = new System.Drawing.Size(307, 194);
             groupBoxExifExt.TabIndex = 23;
             groupBoxExifExt.TabStop = false;
-            groupBoxExifExt.Text = "Exifファイルの拡張子";
+            groupBoxExifExt.Text = "ExifToolで調べる拡張子";
             // 
             // txtAdditionalExifExtLists
             // 
@@ -609,9 +608,9 @@
             label1.Location = new System.Drawing.Point(7, 20);
             label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(245, 34);
+            label1.Size = new System.Drawing.Size(292, 34);
             label1.TabIndex = 1;
-            label1.Text = "EXIF探索はファイルを読み込むので時間がかかるのでEXIFを持たないファイルは入れない方が良い";
+            label1.Text = "EXIF探索はファイルを読み込むので時間がかかるので指定すると無駄な読込時間が減る";
             // 
             // rbtnAllExt
             // 
@@ -619,10 +618,10 @@
             rbtnAllExt.Location = new System.Drawing.Point(7, 58);
             rbtnAllExt.Margin = new System.Windows.Forms.Padding(4);
             rbtnAllExt.Name = "rbtnAllExt";
-            rbtnAllExt.Size = new System.Drawing.Size(133, 19);
+            rbtnAllExt.Size = new System.Drawing.Size(247, 19);
             rbtnAllExt.TabIndex = 0;
             rbtnAllExt.TabStop = true;
-            rbtnAllExt.Text = "全拡張子（非推奨）";
+            rbtnAllExt.Text = "全拡張子（Exifを持たないものでも調べる））";
             rbtnAllExt.UseVisualStyleBackColor = true;
             // 
             // groupBox4
@@ -633,44 +632,52 @@
             groupBox4.Controls.Add(rbExifToolDonotUse);
             groupBox4.Location = new System.Drawing.Point(321, 271);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new System.Drawing.Size(346, 101);
+            groupBox4.Size = new System.Drawing.Size(346, 118);
             groupBox4.TabIndex = 1;
             groupBox4.TabStop = false;
-            groupBox4.Text = "ExifToolの使用";
+            groupBox4.Text = "Exif調査方法";
+            // 
+            // label8
+            // 
+            label8.Location = new System.Drawing.Point(8, 19);
+            label8.Name = "label8";
+            label8.Size = new System.Drawing.Size(331, 71);
+            label8.TabIndex = 3;
+            label8.Text = "ExifはWindowsAPIが比較的早いがJpegのほぼすべてとTIFF形式の一部にしか対応していない\r\nExifToolはRAW形式をはじめ多くのファイル形式に対応しているが処理に時間がかかる";
             // 
             // rbExifToolAllways
             // 
             rbExifToolAllways.AutoSize = true;
-            rbExifToolAllways.Location = new System.Drawing.Point(260, 70);
+            rbExifToolAllways.Location = new System.Drawing.Point(257, 93);
             rbExifToolAllways.Name = "rbExifToolAllways";
-            rbExifToolAllways.Size = new System.Drawing.Size(89, 19);
+            rbExifToolAllways.Size = new System.Drawing.Size(87, 19);
             rbExifToolAllways.TabIndex = 2;
             rbExifToolAllways.TabStop = true;
-            rbExifToolAllways.Text = "常時これのみ";
+            rbExifToolAllways.Text = "ExifToolのみ";
             rbExifToolAllways.UseVisualStyleBackColor = true;
             rbExifToolAllways.CheckedChanged += rbExifToolAllways_CheckedChanged;
             // 
             // rbExiToolIfNeed
             // 
             rbExiToolIfNeed.AutoSize = true;
-            rbExiToolIfNeed.Location = new System.Drawing.Point(92, 70);
+            rbExiToolIfNeed.Location = new System.Drawing.Point(123, 93);
             rbExiToolIfNeed.Name = "rbExiToolIfNeed";
-            rbExiToolIfNeed.Size = new System.Drawing.Size(161, 19);
+            rbExiToolIfNeed.Size = new System.Drawing.Size(99, 19);
             rbExiToolIfNeed.TabIndex = 1;
             rbExiToolIfNeed.TabStop = true;
-            rbExiToolIfNeed.Text = "標準で取得できないときのみ";
+            rbExiToolIfNeed.Text = "ExifToolも使用";
             rbExiToolIfNeed.UseVisualStyleBackColor = true;
             rbExiToolIfNeed.CheckedChanged += rbExiToolIfNeed_CheckedChanged;
             // 
             // rbExifToolDonotUse
             // 
             rbExifToolDonotUse.AutoSize = true;
-            rbExifToolDonotUse.Location = new System.Drawing.Point(9, 70);
+            rbExifToolDonotUse.Location = new System.Drawing.Point(6, 93);
             rbExifToolDonotUse.Name = "rbExifToolDonotUse";
-            rbExifToolDonotUse.Size = new System.Drawing.Size(77, 19);
+            rbExifToolDonotUse.Size = new System.Drawing.Size(113, 19);
             rbExifToolDonotUse.TabIndex = 0;
             rbExifToolDonotUse.TabStop = true;
-            rbExifToolDonotUse.Text = "使用しない";
+            rbExifToolDonotUse.Text = "WindowsAPIのみ";
             rbExifToolDonotUse.UseVisualStyleBackColor = true;
             rbExifToolDonotUse.CheckedChanged += rbExifToolDonotUse_CheckedChanged;
             // 
@@ -684,33 +691,12 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
-            // chkUseExifPicture
-            // 
-            chkUseExifPicture.AutoSize = true;
-            chkUseExifPicture.Checked = true;
-            chkUseExifPicture.CheckState = System.Windows.Forms.CheckState.Checked;
-            chkUseExifPicture.Location = new System.Drawing.Point(61, 655);
-            chkUseExifPicture.Name = "chkUseExifPicture";
-            chkUseExifPicture.Size = new System.Drawing.Size(116, 19);
-            chkUseExifPicture.TabIndex = 25;
-            chkUseExifPicture.Text = "ExifPictureの使用";
-            chkUseExifPicture.UseVisualStyleBackColor = true;
-            // 
-            // label8
-            // 
-            label8.Location = new System.Drawing.Point(8, 19);
-            label8.Name = "label8";
-            label8.Size = new System.Drawing.Size(331, 48);
-            label8.TabIndex = 3;
-            label8.Text = "各カメラメーカーのRawファイルはのExifはWindows標準のAPIでは取得できないがExifToolを使用すれば取得できる場合が多いが処理に時間がかかる";
-            // 
             // Form1
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.SystemColors.Control;
             ClientSize = new System.Drawing.Size(679, 693);
-            Controls.Add(chkUseExifPicture);
             Controls.Add(button2);
             Controls.Add(groupBox4);
             Controls.Add(groupBoxExifExt);
@@ -811,7 +797,6 @@
         private System.Windows.Forms.RadioButton rbExifToolAllways;
         private System.Windows.Forms.RadioButton rbExiToolIfNeed;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.CheckBox chkUseExifPicture;
         private System.Windows.Forms.Label label8;
     }
 }

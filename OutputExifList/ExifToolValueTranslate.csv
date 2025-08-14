@@ -1,0 +1,163 @@
+TagID,ExifTool値,CIPA値
+0x0103,Uncompressed,非圧縮
+0x0103,JPEG (old-style),サムネイルもJPEG圧縮
+0x0112,Horizontal (normal),Exif回転無し
+0x0112,Mirror horizontal,上下反転
+0x0112,Rotate 180,180度回転
+0x0112,Mirror vertical,左右反転
+0x0112,Mirror horizontal and rotate 270 CW,上下反転+CW270度
+0x0112,Rotate 90 CW,CW90度
+0x0112,Mirror horizontal and rotate 90 CW,上下反転CW90度
+0x0112,Rotate 270 CW,CW270度
+0x011c,Chunky,点順次フォーマット
+0x011c,Planar,面順次フォーマット
+0x0128,None,なし
+0x0128,inches,インチ
+0x0212,YCbCr4:2:2 (2 1),YCbCr4:2:2
+0x0212,YCbCr4:2:0 (2 2),YCbCr4:2:0
+0x0213,Centered,中心
+0x0213,Co-sited,一致
+0x8822,Not Defined,未定義
+0x8822,Manual,マニュアル
+0x8822,Program AE,ノーマルプログラム
+0x8822,Aperture-priority AE,絞り優先
+0x8822,Shutter speed priority AE,シャッター優先
+0x8822,Creative (Slow speed),creative プログラム(被写界深度方向にバイアス)
+0x8822,Action (High speed),action プログラム(シャッタースピード高速側にバイアス)
+0x8822,Portrait,ポートレイトモード(クローズアップ撮影、背景はフォーカス外す)
+0x8822,Landscape,ランドスケープモード(landscape 撮影、背景はフォーカス合う)
+0x8830,Unknown,不明
+0x8830,Standard Output Sensitivity,標準出力感度(SOS)
+0x8830,Recommended Exposure Index,推奨露光指数(REI)
+0x8830,ISO Speed,ISO スピード(ISO Speed)
+0x8830,Standard Output Sensitivity and Recommended Exposure Index,標準出力感度(SOS)及び推奨露光指数(REI)
+0x8830,Standard Output Sensitivity and ISO Speed,標準出力感度(SOS)及びISO スピード(ISO Speed)
+0x8830,Recommended Exposure Index and ISO Speed,推奨露光指数(REI)及びISO スピード(ISO Speed)
+0x8830,"Standard Output Sensitivity, Recommended Exposure Index and ISO Speed",標準出力感度(SOS)、推奨露光指数(REI)及びISO スピード(ISO Speed)
+0x9207,Unknown,不明
+0x9207,Average,平均
+0x9207,Center-weighted average,中央重点
+0x9207,Spot,スポット
+0x9207,Multi-spot,マルチスポット
+0x9207,Multi-segment,分割測光
+0x9207,Partial,部分測光
+0x9207,Other,その他の測光方式
+0x9208,Unknown,不明
+0x9208,Daylight,昼光
+0x9208,Florescent,蛍光灯
+0x9208,Tungsten (Incandescent),タングステン
+0x9208,Flash,フラッシュ
+0x9208,Fine Weather,晴天
+0x9208,Cloudy,曇天
+0x9208,Shade,日陰
+0x9208,Daylight Fluorescent,昼光食蛍光灯
+0x9208,Day White Fluorescent,昼白色蛍光灯
+0x9208,Cool White Fluorescent,白色蛍光灯
+0x9208,White Fluorescent,温白色蛍光灯
+0x9208,Warm White Fluorescent,電球色蛍光灯
+0x9208,Standard light A,標準光A
+0x9208,Standard light B,標準光B
+0x9208,Standard light C,標準光C
+0x9208,Other,その他の光源
+0x9209,No Flash,フラッシュなし
+0x9209,Fired,発光あり
+0x9209,"Fired, Return not detected",発光、戻り検出せず
+0x9209,"Fired, Return detected",発光、戻り検出
+0x9209,"On, Did not fire",オン、未発光
+0x9209,"On, Fired",オン、発火
+0x9209,"On, Return not detected",オン、戻り検出せず
+0x9209,"On, Return detected",オン、戻り検出
+0x9209,"Off, Did not fire","オフ, 発火しなかった"
+0x9209,"Off, Did not fire, Return not detected",オフ、発火せず、戻り検出せず
+0x9209,"Auto, Did not fire","自動, 発火せず"
+0x9209,"Auto, Fired","自動, 発火"
+0x9209,"Auto, Fired, Return not detected","自動, 発火, 戻りは検出されない"
+0x9209,"Auto, Fired, Return detected",自動、発光、戻り検出済み
+0x9209,No flash function,フラッシュ機能なし
+0x9209,"Off, No flash function",消灯、フラッシュ機能なし
+0x9209,"Fired, Red-eye reduction",発光、赤目軽減
+0x9209,"Fired, Red-eye reduction, Return not detected",発光、赤目軽減、戻り未検出
+0x9209,"Fired, Red-eye reduction, Return detected",発光、赤目軽減、戻り検出あり
+0x9209,"On, Red-eye reduction",オン、赤目軽減
+0x9209,"On, Red-eye reduction, Return not detected","ON, 赤目軽減, 戻り検出なし"
+0x9209,"On, Red-eye reduction, Return detected","ON, 赤目軽減, 戻りを検出"
+0x9209,"Off, Red-eye reduction","オフ, 赤目軽減"
+0x9209,"Auto, Did not fire, Red-eye reduction","自動, 発光せず, 赤目軽減"
+0x9209,"Auto, Fired, Red-eye reduction","自動, 発光, 赤目軽減"
+0x9209,"Auto, Fired, Red-eye reduction, Return not detected","自動, 発射済, 赤目軽減, 戻りを検出せず"
+0x9209,"Auto, Fired, Red-eye reduction, Return detected","自動, 発光, 赤目軽減, 戻り検出済み"
+0xa210,None,なし
+0xa210,inches,インチ
+0xa217,Not defined,未定義
+0xa217,One-chip color area,単板カラーセンサー
+0xa217,Two-chip color area,2板カラーセンサー
+0xa217,Three-chip color area,3板カラーセンサー
+0xa217,Color sequential area,色順次カラーセンサー
+0xa217,Trilinear,3線リニアセンサー
+0xa217,Color sequential linear,色順次リニアセンサー
+0xa300,Film Scanner,透過型スキャナ
+0xa300,Reflection Print Scanner,反射型スキャナ
+0xa300,Digital Camera,DSC
+0xa300,Sigma Digital Camera,シグマデジタルカメラ
+0xa301,Directly photographed,直接撮影された画像
+0xa401,Normal,通常処理
+0xa401,Custom,特殊処理
+0xa402,Auto,露出自動
+0xa402,Manual,露出マニュアル
+0xa402,Auto bracket,オートブラケット
+0xa403,Auto,ホワイトバランス自動
+0xa403,Manual,ホワイトバランスマニュアル
+0xa406,Standard,標準
+0xa406,Landscape,風景
+0xa406,Portrait,人物
+0xa406,Night,夜景
+0xa406,Other,その他
+0xa407,None,無し
+0xa407,Low gain up,弱い増感
+0xa407,High gain up,強い増感
+0xa407,Low gain down,弱い減感
+0xa407,High gain down,強い減感
+0xa408,Normal,標準
+0xa408,Low,軟調
+0xa408,High,硬調
+0xa409,Normal,標準
+0xa409,Low,低彩度
+0xa409,High,高彩度
+0xa40a,Normal,標準
+0xa40a,Soft,弱い
+0xa40a,Hard,強い
+0xa40c,Unknown,不明
+0xa40c,Macro,マクロ
+0xa40c,Close,近景
+0xa40c,Distant,遠景
+0xa460,Unknown,不明
+0xa460,Not a Composite Image,非合成画像
+0xa460,General Composite Image,一般合成画像
+0xa460,Composite Image Captured While Shooting,撮影時取得合成画像
+0x0001,North,北緯
+0x0001,South,南緯
+0x0003,East,東経
+0x0003,West,西経
+0x0005,Above Sea Level,GPS高度+
+0x0005,Below Sea Level,GPS高度-
+0x0005,Positive Sea Level (sea-level ref),海抜+
+0x0005,Negative Sea Level (sea-level ref),海抜-
+0x0009,Measurement Active,測位中
+0x0009,Measurement Void,未測位（中断中)
+0x000a,2-Dimensional Measurement,2次元測位中
+0x000a,3-Dimensional Measurement,3次元測位中
+0x000e,Magnetic North,磁気方位
+0x000e,True North,真方位
+0x0010,Magnetic North,磁気方位
+0x0010,True North,真方位
+0x0013,North,北緯
+0x0013,South,南緯
+0x0015,East,東経
+0x0015,West,西経
+0x0017,Magnetic North,磁気方位
+0x0017,True North,真方位
+0x0019,Kilometers,km
+0x0019,Miles,マイル
+0x0019,Nautical Miles,海里
+0x001e,No Correction,単独測位
+0x001e,Differential Corrected,Differential補正測位

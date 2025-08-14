@@ -14,7 +14,6 @@ namespace PictureList {
     public partial class SelectForm : Form {
         private List<Form1.Exiflist> allLists;
         private List<Form1.Exiflist> iniLists;
-        public string exifListTitle; //呼出し元のForm1でセットする
 
         private int LastUnSelectIdx = -1;
         private int LastSelectIdx = -1;
@@ -59,7 +58,7 @@ namespace PictureList {
             listViewUnSelect.Columns.Add(Titles[0], 140);
             listViewUnSelect.Columns.Add(Titles[1], 165);
             //Titles[2]=型は使用しない
-            listViewUnSelect.Columns.Add(Titles[5], 80);
+            listViewUnSelect.Columns.Add(Titles[4], 80);
 
             for (int i = 0; i < allLists.Count; i++) {
                 if (allLists[i].Order == 0) {
@@ -108,8 +107,8 @@ namespace PictureList {
             listViewSelect.Columns.Add(Titles[0], 136);
             listViewSelect.Columns.Add(Titles[1], 150);
             //listViewSelect.Columns.Add(Titles[2], 64);　型は表示しない
-            listViewSelect.Columns.Add(Titles[5], 85);
-            listViewSelect.Columns.Add(Titles[4], 48);
+            listViewSelect.Columns.Add(Titles[4], 85);
+            listViewSelect.Columns.Add(Titles[3], 48);
 
             for (int i = 0; i < selectLists.Count; i++) {
                 ListViewItem SelectViewItem = new ListViewItem();
@@ -248,7 +247,7 @@ namespace PictureList {
         /// 両方のリストビューの再描画
         /// </summary>
         private void ReWriteViews() {
-            string[] exifTitles = exifListTitle.Split(',');
+            string[] exifTitles = Form1.ExifListTitle.Split(',');
             SetUnSelectView(exifTitles);
             SetSelectView(exifTitles);
         }
