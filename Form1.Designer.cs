@@ -23,7 +23,6 @@
         /// コード エディターで変更しないでください。
         /// </summary>
         private void InitializeComponent() {
-            button1 = new System.Windows.Forms.Button();
             openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             btnFolderSelect = new System.Windows.Forms.Button();
@@ -52,6 +51,7 @@
             txtComment = new System.Windows.Forms.TextBox();
             btnExit = new System.Windows.Forms.Button();
             groupBox3 = new System.Windows.Forms.GroupBox();
+            chkExt = new System.Windows.Forms.CheckBox();
             btnSetExif = new System.Windows.Forms.Button();
             chkExif = new System.Windows.Forms.CheckBox();
             chkAttribute = new System.Windows.Forms.CheckBox();
@@ -64,6 +64,8 @@
             progressBar1 = new System.Windows.Forms.ProgressBar();
             lblQty = new System.Windows.Forms.Label();
             groupBoxExifExt = new System.Windows.Forms.GroupBox();
+            label9 = new System.Windows.Forms.Label();
+            label4 = new System.Windows.Forms.Label();
             txtAdditionalExifExtLists = new System.Windows.Forms.TextBox();
             chkExifTextExt = new System.Windows.Forms.CheckBox();
             chkSubExifExt = new System.Windows.Forms.CheckBox();
@@ -76,24 +78,12 @@
             rbExifToolAllways = new System.Windows.Forms.RadioButton();
             rbExiToolIfNeed = new System.Windows.Forms.RadioButton();
             rbExifToolDonotUse = new System.Windows.Forms.RadioButton();
-            button2 = new System.Windows.Forms.Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBoxExifExt.SuspendLayout();
             groupBox4.SuspendLayout();
             SuspendLayout();
-            // 
-            // button1
-            // 
-            button1.Location = new System.Drawing.Point(277, 533);
-            button1.Margin = new System.Windows.Forms.Padding(4);
-            button1.Name = "button1";
-            button1.Size = new System.Drawing.Size(61, 20);
-            button1.TabIndex = 0;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
             // 
             // openFileDialog1
             // 
@@ -119,7 +109,7 @@
             lblSearchPath.Location = new System.Drawing.Point(136, 4);
             lblSearchPath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             lblSearchPath.Name = "lblSearchPath";
-            lblSearchPath.Size = new System.Drawing.Size(374, 46);
+            lblSearchPath.Size = new System.Drawing.Size(374, 40);
             lblSearchPath.TabIndex = 1;
             lblSearchPath.Text = "フォルダ名を選んでください";
             // 
@@ -162,7 +152,7 @@
             groupBox1.Margin = new System.Windows.Forms.Padding(4);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            groupBox1.Size = new System.Drawing.Size(177, 135);
+            groupBox1.Size = new System.Drawing.Size(177, 129);
             groupBox1.TabIndex = 6;
             groupBox1.TabStop = false;
             groupBox1.Text = "出力対象";
@@ -268,7 +258,7 @@
             // lblRows
             // 
             lblRows.AutoSize = true;
-            lblRows.Location = new System.Drawing.Point(80, 110);
+            lblRows.Location = new System.Drawing.Point(65, 111);
             lblRows.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             lblRows.Name = "lblRows";
             lblRows.Size = new System.Drawing.Size(13, 15);
@@ -304,7 +294,7 @@
             // 
             groupBox2.Controls.Add(rbtnTab);
             groupBox2.Controls.Add(rbtnCSV);
-            groupBox2.Location = new System.Drawing.Point(322, 188);
+            groupBox2.Location = new System.Drawing.Point(323, 179);
             groupBox2.Margin = new System.Windows.Forms.Padding(4);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new System.Windows.Forms.Padding(4);
@@ -342,7 +332,7 @@
             // chkDirMask
             // 
             chkDirMask.AutoSize = true;
-            chkDirMask.Location = new System.Drawing.Point(164, 106);
+            chkDirMask.Location = new System.Drawing.Point(181, 105);
             chkDirMask.Margin = new System.Windows.Forms.Padding(4);
             chkDirMask.Name = "chkDirMask";
             chkDirMask.Size = new System.Drawing.Size(131, 19);
@@ -354,7 +344,7 @@
             // lblOutFile
             // 
             lblOutFile.AutoEllipsis = true;
-            lblOutFile.Location = new System.Drawing.Point(14, 181);
+            lblOutFile.Location = new System.Drawing.Point(6, 182);
             lblOutFile.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             lblOutFile.Name = "lblOutFile";
             lblOutFile.Size = new System.Drawing.Size(301, 39);
@@ -363,20 +353,20 @@
             // 
             // txtComment
             // 
-            txtComment.Location = new System.Drawing.Point(6, 240);
+            txtComment.Location = new System.Drawing.Point(9, 240);
             txtComment.Margin = new System.Windows.Forms.Padding(4);
             txtComment.Multiline = true;
             txtComment.Name = "txtComment";
             txtComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            txtComment.Size = new System.Drawing.Size(308, 290);
+            txtComment.Size = new System.Drawing.Size(305, 290);
             txtComment.TabIndex = 16;
             // 
             // btnExit
             // 
-            btnExit.Location = new System.Drawing.Point(518, 598);
+            btnExit.Location = new System.Drawing.Point(523, 604);
             btnExit.Margin = new System.Windows.Forms.Padding(4);
             btnExit.Name = "btnExit";
-            btnExit.Size = new System.Drawing.Size(142, 44);
+            btnExit.Size = new System.Drawing.Size(142, 39);
             btnExit.TabIndex = 17;
             btnExit.Text = "設定を保存して終了";
             btnExit.UseVisualStyleBackColor = true;
@@ -384,6 +374,7 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(chkExt);
             groupBox3.Controls.Add(btnSetExif);
             groupBox3.Controls.Add(chkExif);
             groupBox3.Controls.Add(chkAttribute);
@@ -395,19 +386,29 @@
             groupBox3.Margin = new System.Windows.Forms.Padding(4);
             groupBox3.Name = "groupBox3";
             groupBox3.Padding = new System.Windows.Forms.Padding(4);
-            groupBox3.Size = new System.Drawing.Size(149, 248);
+            groupBox3.Size = new System.Drawing.Size(149, 234);
             groupBox3.TabIndex = 18;
             groupBox3.TabStop = false;
             groupBox3.Text = "出力項目の選択";
+            // 
+            // chkExt
+            // 
+            chkExt.AutoSize = true;
+            chkExt.Location = new System.Drawing.Point(6, 140);
+            chkExt.Name = "chkExt";
+            chkExt.Size = new System.Drawing.Size(62, 19);
+            chkExt.TabIndex = 9;
+            chkExt.Text = "拡張子";
+            chkExt.UseVisualStyleBackColor = true;
             // 
             // btnSetExif
             // 
             btnSetExif.BackColor = System.Drawing.SystemColors.Control;
             btnSetExif.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            btnSetExif.Location = new System.Drawing.Point(7, 199);
+            btnSetExif.Location = new System.Drawing.Point(26, 198);
             btnSetExif.Margin = new System.Windows.Forms.Padding(4);
             btnSetExif.Name = "btnSetExif";
-            btnSetExif.Size = new System.Drawing.Size(135, 40);
+            btnSetExif.Size = new System.Drawing.Size(114, 32);
             btnSetExif.TabIndex = 8;
             btnSetExif.Text = "Exif項目の選択";
             btnSetExif.UseVisualStyleBackColor = false;
@@ -418,10 +419,11 @@
             chkExif.AutoSize = true;
             chkExif.Checked = true;
             chkExif.CheckState = System.Windows.Forms.CheckState.Checked;
-            chkExif.Location = new System.Drawing.Point(7, 171);
+            chkExif.Font = new System.Drawing.Font("Yu Gothic UI", 11F);
+            chkExif.Location = new System.Drawing.Point(7, 175);
             chkExif.Margin = new System.Windows.Forms.Padding(4);
             chkExif.Name = "chkExif";
-            chkExif.Size = new System.Drawing.Size(71, 19);
+            chkExif.Size = new System.Drawing.Size(85, 24);
             chkExif.TabIndex = 7;
             chkExif.Text = "Exifデータ";
             chkExif.UseVisualStyleBackColor = true;
@@ -432,7 +434,7 @@
             chkAttribute.AutoSize = true;
             chkAttribute.Checked = true;
             chkAttribute.CheckState = System.Windows.Forms.CheckState.Checked;
-            chkAttribute.Location = new System.Drawing.Point(7, 124);
+            chkAttribute.Location = new System.Drawing.Point(7, 116);
             chkAttribute.Margin = new System.Windows.Forms.Padding(4);
             chkAttribute.Name = "chkAttribute";
             chkAttribute.Size = new System.Drawing.Size(84, 19);
@@ -445,7 +447,7 @@
             chkSize.AutoSize = true;
             chkSize.Checked = true;
             chkSize.CheckState = System.Windows.Forms.CheckState.Checked;
-            chkSize.Location = new System.Drawing.Point(7, 99);
+            chkSize.Location = new System.Drawing.Point(7, 92);
             chkSize.Margin = new System.Windows.Forms.Padding(4);
             chkSize.Name = "chkSize";
             chkSize.Size = new System.Drawing.Size(88, 19);
@@ -456,7 +458,7 @@
             // chkLastAccessTime
             // 
             chkLastAccessTime.AutoSize = true;
-            chkLastAccessTime.Location = new System.Drawing.Point(7, 74);
+            chkLastAccessTime.Location = new System.Drawing.Point(7, 68);
             chkLastAccessTime.Margin = new System.Windows.Forms.Padding(4);
             chkLastAccessTime.Name = "chkLastAccessTime";
             chkLastAccessTime.Size = new System.Drawing.Size(111, 19);
@@ -469,7 +471,7 @@
             chkCreationTime.AutoSize = true;
             chkCreationTime.Checked = true;
             chkCreationTime.CheckState = System.Windows.Forms.CheckState.Checked;
-            chkCreationTime.Location = new System.Drawing.Point(7, 49);
+            chkCreationTime.Location = new System.Drawing.Point(7, 44);
             chkCreationTime.Margin = new System.Windows.Forms.Padding(4);
             chkCreationTime.Name = "chkCreationTime";
             chkCreationTime.Size = new System.Drawing.Size(74, 19);
@@ -482,7 +484,7 @@
             chkLastWriteTime.AutoSize = true;
             chkLastWriteTime.Checked = true;
             chkLastWriteTime.CheckState = System.Windows.Forms.CheckState.Checked;
-            chkLastWriteTime.Location = new System.Drawing.Point(7, 24);
+            chkLastWriteTime.Location = new System.Drawing.Point(7, 20);
             chkLastWriteTime.Margin = new System.Windows.Forms.Padding(4);
             chkLastWriteTime.Name = "chkLastWriteTime";
             chkLastWriteTime.Size = new System.Drawing.Size(74, 19);
@@ -512,11 +514,11 @@
             // 
             // progressBar1
             // 
-            progressBar1.Location = new System.Drawing.Point(16, 598);
+            progressBar1.Location = new System.Drawing.Point(6, 604);
             progressBar1.Margin = new System.Windows.Forms.Padding(4);
             progressBar1.Minimum = 100;
             progressBar1.Name = "progressBar1";
-            progressBar1.Size = new System.Drawing.Size(454, 44);
+            progressBar1.Size = new System.Drawing.Size(454, 39);
             progressBar1.TabIndex = 21;
             progressBar1.Value = 100;
             // 
@@ -532,6 +534,8 @@
             // 
             // groupBoxExifExt
             // 
+            groupBoxExifExt.Controls.Add(label9);
+            groupBoxExifExt.Controls.Add(label4);
             groupBoxExifExt.Controls.Add(txtAdditionalExifExtLists);
             groupBoxExifExt.Controls.Add(chkExifTextExt);
             groupBoxExifExt.Controls.Add(chkSubExifExt);
@@ -539,52 +543,69 @@
             groupBoxExifExt.Controls.Add(chkMainExifExt);
             groupBoxExifExt.Controls.Add(label1);
             groupBoxExifExt.Controls.Add(rbtnAllExt);
-            groupBoxExifExt.Location = new System.Drawing.Point(359, 396);
+            groupBoxExifExt.Location = new System.Drawing.Point(320, 369);
             groupBoxExifExt.Margin = new System.Windows.Forms.Padding(4);
             groupBoxExifExt.Name = "groupBoxExifExt";
             groupBoxExifExt.Padding = new System.Windows.Forms.Padding(4);
-            groupBoxExifExt.Size = new System.Drawing.Size(307, 194);
+            groupBoxExifExt.Size = new System.Drawing.Size(346, 232);
             groupBoxExifExt.TabIndex = 23;
             groupBoxExifExt.TabStop = false;
             groupBoxExifExt.Text = "ExifToolで調べる拡張子";
             // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new System.Drawing.Point(203, 129);
+            label9.Name = "label9";
+            label9.Size = new System.Drawing.Size(121, 30);
+            label9.TabIndex = 6;
+            label9.Text = "Exifを持つ可能性のある\r\n特殊な静止画";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new System.Drawing.Point(238, 110);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(86, 15);
+            label4.TabIndex = 5;
+            label4.Text = "RAWファイルなど";
+            // 
             // txtAdditionalExifExtLists
             // 
-            txtAdditionalExifExtLists.Location = new System.Drawing.Point(40, 154);
+            txtAdditionalExifExtLists.Location = new System.Drawing.Point(40, 189);
             txtAdditionalExifExtLists.Margin = new System.Windows.Forms.Padding(4);
             txtAdditionalExifExtLists.Multiline = true;
             txtAdditionalExifExtLists.Name = "txtAdditionalExifExtLists";
-            txtAdditionalExifExtLists.Size = new System.Drawing.Size(212, 38);
+            txtAdditionalExifExtLists.Size = new System.Drawing.Size(247, 38);
             txtAdditionalExifExtLists.TabIndex = 4;
-            txtAdditionalExifExtLists.Text = "CR3,MFW,X3F,SRW,RWL,SR2,SRF";
-            txtAdditionalExifExtLists.TextChanged += txtAdditionalExifExtLists_TextChanged;
+            txtAdditionalExifExtLists.Text = "avif,exif,hdp,mp4,mov,3gp,mjpg,mjpeg";
             // 
             // chkExifTextExt
             // 
             chkExifTextExt.AutoSize = true;
-            chkExifTextExt.Location = new System.Drawing.Point(23, 132);
+            chkExifTextExt.Location = new System.Drawing.Point(20, 162);
             chkExifTextExt.Margin = new System.Windows.Forms.Padding(4);
             chkExifTextExt.Name = "chkExifTextExt";
-            chkExifTextExt.Size = new System.Drawing.Size(144, 19);
+            chkExifTextExt.Size = new System.Drawing.Size(222, 19);
             chkExifTextExt.TabIndex = 3;
-            chkExifTextExt.Text = "指定（カンマで区切る）";
+            chkExifTextExt.Text = "その他必要に応じてカンマで区切って入力";
             chkExifTextExt.UseVisualStyleBackColor = true;
             // 
             // chkSubExifExt
             // 
             chkSubExifExt.AutoSize = true;
-            chkSubExifExt.Location = new System.Drawing.Point(23, 113);
+            chkSubExifExt.Location = new System.Drawing.Point(22, 125);
             chkSubExifExt.Margin = new System.Windows.Forms.Padding(4);
             chkSubExifExt.Name = "chkSubExifExt";
-            chkSubExifExt.Size = new System.Drawing.Size(143, 19);
+            chkSubExifExt.Size = new System.Drawing.Size(153, 19);
             chkSubExifExt.TabIndex = 2;
-            chkSubExifExt.Text = "RAF,MEF,MRW,RW2,J6I";
+            chkSubExifExt.Text = "heic,heif,webp,j6i,jpegxr";
             chkSubExifExt.UseVisualStyleBackColor = true;
             // 
             // rbtnExtSelect
             // 
             rbtnExtSelect.AutoSize = true;
-            rbtnExtSelect.Location = new System.Drawing.Point(7, 76);
+            rbtnExtSelect.Location = new System.Drawing.Point(6, 88);
             rbtnExtSelect.Margin = new System.Windows.Forms.Padding(4);
             rbtnExtSelect.Name = "rbtnExtSelect";
             rbtnExtSelect.Size = new System.Drawing.Size(210, 19);
@@ -595,27 +616,27 @@
             // 
             // chkMainExifExt
             // 
-            chkMainExifExt.Location = new System.Drawing.Point(23, 94);
+            chkMainExifExt.Location = new System.Drawing.Point(22, 106);
             chkMainExifExt.Margin = new System.Windows.Forms.Padding(4);
             chkMainExifExt.Name = "chkMainExifExt";
             chkMainExifExt.Size = new System.Drawing.Size(216, 19);
             chkMainExifExt.TabIndex = 1;
-            chkMainExifExt.Text = "JPEG,CR2,DNG,NEF,ORF,PEF,ARW";
+            chkMainExifExt.Text = "dng,raw,cr2,cr3,nef,arw,rw2,orf,pef,x3f";
             chkMainExifExt.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
-            label1.Location = new System.Drawing.Point(7, 20);
+            label1.Location = new System.Drawing.Point(6, 20);
             label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(292, 34);
+            label1.Size = new System.Drawing.Size(331, 46);
             label1.TabIndex = 1;
-            label1.Text = "EXIF探索はファイルを読み込むので時間がかかるので指定すると無駄な読込時間が減る";
+            label1.Text = "EXIF探索はファイルを読み込むので時間がかかるのでExifを持つファイルのみ指定したほうが速度が速くなる\r\nなお、GIFやBMP形式はEXIFを持たない";
             // 
             // rbtnAllExt
             // 
             rbtnAllExt.AutoSize = true;
-            rbtnAllExt.Location = new System.Drawing.Point(7, 58);
+            rbtnAllExt.Location = new System.Drawing.Point(6, 70);
             rbtnAllExt.Margin = new System.Windows.Forms.Padding(4);
             rbtnAllExt.Name = "rbtnAllExt";
             rbtnAllExt.Size = new System.Drawing.Size(247, 19);
@@ -630,9 +651,9 @@
             groupBox4.Controls.Add(rbExifToolAllways);
             groupBox4.Controls.Add(rbExiToolIfNeed);
             groupBox4.Controls.Add(rbExifToolDonotUse);
-            groupBox4.Location = new System.Drawing.Point(321, 271);
+            groupBox4.Location = new System.Drawing.Point(321, 251);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new System.Drawing.Size(346, 118);
+            groupBox4.Size = new System.Drawing.Size(346, 111);
             groupBox4.TabIndex = 1;
             groupBox4.TabStop = false;
             groupBox4.Text = "Exif調査方法";
@@ -641,14 +662,14 @@
             // 
             label8.Location = new System.Drawing.Point(8, 19);
             label8.Name = "label8";
-            label8.Size = new System.Drawing.Size(331, 71);
+            label8.Size = new System.Drawing.Size(331, 60);
             label8.TabIndex = 3;
             label8.Text = "ExifはWindowsAPIが比較的早いがJpegのほぼすべてとTIFF形式の一部にしか対応していない\r\nExifToolはRAW形式をはじめ多くのファイル形式に対応しているが処理に時間がかかる";
             // 
             // rbExifToolAllways
             // 
             rbExifToolAllways.AutoSize = true;
-            rbExifToolAllways.Location = new System.Drawing.Point(257, 93);
+            rbExifToolAllways.Location = new System.Drawing.Point(250, 82);
             rbExifToolAllways.Name = "rbExifToolAllways";
             rbExifToolAllways.Size = new System.Drawing.Size(87, 19);
             rbExifToolAllways.TabIndex = 2;
@@ -660,7 +681,7 @@
             // rbExiToolIfNeed
             // 
             rbExiToolIfNeed.AutoSize = true;
-            rbExiToolIfNeed.Location = new System.Drawing.Point(123, 93);
+            rbExiToolIfNeed.Location = new System.Drawing.Point(132, 82);
             rbExiToolIfNeed.Name = "rbExiToolIfNeed";
             rbExiToolIfNeed.Size = new System.Drawing.Size(99, 19);
             rbExiToolIfNeed.TabIndex = 1;
@@ -672,7 +693,7 @@
             // rbExifToolDonotUse
             // 
             rbExifToolDonotUse.AutoSize = true;
-            rbExifToolDonotUse.Location = new System.Drawing.Point(6, 93);
+            rbExifToolDonotUse.Location = new System.Drawing.Point(6, 82);
             rbExifToolDonotUse.Name = "rbExifToolDonotUse";
             rbExifToolDonotUse.Size = new System.Drawing.Size(113, 19);
             rbExifToolDonotUse.TabIndex = 0;
@@ -681,23 +702,12 @@
             rbExifToolDonotUse.UseVisualStyleBackColor = true;
             rbExifToolDonotUse.CheckedChanged += rbExifToolDonotUse_CheckedChanged;
             // 
-            // button2
-            // 
-            button2.Location = new System.Drawing.Point(284, 556);
-            button2.Name = "button2";
-            button2.Size = new System.Drawing.Size(54, 21);
-            button2.TabIndex = 24;
-            button2.Text = "button2";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.SystemColors.Control;
-            ClientSize = new System.Drawing.Size(679, 693);
-            Controls.Add(button2);
+            ClientSize = new System.Drawing.Size(679, 647);
             Controls.Add(groupBox4);
             Controls.Add(groupBoxExifExt);
             Controls.Add(lblQty);
@@ -721,7 +731,6 @@
             Controls.Add(btnCopy2Clip);
             Controls.Add(lblSearchPath);
             Controls.Add(btnFolderSelect);
-            Controls.Add(button1);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             Margin = new System.Windows.Forms.Padding(4);
             MinimumSize = new System.Drawing.Size(585, 580);
@@ -743,8 +752,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button btnFolderSelect;
@@ -796,8 +803,10 @@
         private System.Windows.Forms.RadioButton rbExifToolDonotUse;
         private System.Windows.Forms.RadioButton rbExifToolAllways;
         private System.Windows.Forms.RadioButton rbExiToolIfNeed;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.CheckBox chkExt;
     }
 }
 

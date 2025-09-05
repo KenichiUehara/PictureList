@@ -35,15 +35,6 @@ namespace PictureList {
     public class ExifAPI {
 
         private const int BYTE = 1, ASCII = 2, SHORT = 3, LONG = 4, RATIONAL = 5, UNDEFINED = 7, SLONG = 9, SRATIONAL = 10, UTF8 = 129;
-        //ファイルとしての普通の属性
-        //public string FullPath { get; private set; }
-        //public string Name { get; private set; }
-        //public string Extension { get; private set; }
-        //public string NameWithoutExt { get; private set; }
-        //public long Size { get; private set; }
-        //public DateTime MDate { get; private set; }
-        //public long ImgWidth { get; private set; }
-        //public long ImgHeight { get; private set; }
 
         //ExifTagOutDicのこのクラスで使うための内部変数として用意した
         private List<Exiflist> _exifTagOutLists = new List<Exiflist>();
@@ -53,134 +44,134 @@ namespace PictureList {
         // 不要なプロパティはコメントにした方が良いかもしれない
 
         //以下のExif情報はNetFrameWorkで取得対象タグでないものは XXXX で示す
-        //NetFrameWorkで取得対象タグでなくとも値が取得でき保夫は oooo で示す
+        //NetFrameWorkで取得対象タグでなくとも値が取得できるものは oooo で示す
         //Exif情報
         //
         //TIFF Rev6.0の付属情報からのもの
-        public string ImageWidth { get; private set; } //0x0100 画像の幅 JPRG圧縮データでは記録不可
-        public string ImageLength { get; private set; } //0x0101 画像の高さ JPRG圧縮データでは記録不可
-        public string BitsPerSample { get; private set; } //0x0102 画像のビットの深さ JPRG圧縮データでは記録不可
-        public string Compression { get; private set; } //0x0103 圧縮の種類 JPRG圧縮データでは記録不可
-        public string PhotometricInterpretation { get; private set; } //0x0106 画素構成
-        public string ImageDescription { get; private set; } //0x010E 画像タイトル
-        public string Make { get; private set; } //0x010F 画像入力機器のメーカー名
-        public string Model { get; private set; } //0x0110 画像入力機器のモデル名
-        public string StripOffsets { get; private set; } //0x0111 画像データのロケーション
-        public string Orientation { get; private set; } //0x0112 画像方向
-        public string SamplesPerPixel { get; private set; } //0x0115 コンポーネント数
-        public string RowsPerStrip { get; private set; } //0x0116 1ストリップあたりの行の数
-        public string StripByteCounts { get; private set; } //0x0117 ストリップの総バイト数
+        //public string ImageWidth { get; private set; } //0x0100 画像の幅 JPRG圧縮データでは記録不可
+        //public string ImageLength { get; private set; } //0x0101 画像の高さ JPRG圧縮データでは記録不可
+        //public string BitsPerSample { get; private set; } //0x0102 画像のビットの深さ JPRG圧縮データでは記録不可
+        //public string Compression { get; private set; } //0x0103 圧縮の種類 JPRG圧縮データでは記録不可
+        //public string PhotometricInterpretation { get; private set; } //0x0106 画素構成
+        //public string ImageDescription { get; private set; } //0x010E 画像タイトル
+        //public string Make { get; private set; } //0x010F 画像入力機器のメーカー名
+        //public string Model { get; private set; } //0x0110 画像入力機器のモデル名
+        //public string StripOffsets { get; private set; } //0x0111 画像データのロケーション
+        //public string Orientation { get; private set; } //0x0112 画像方向
+        //public string SamplesPerPixel { get; private set; } //0x0115 コンポーネント数
+        //public string RowsPerStrip { get; private set; } //0x0116 1ストリップあたりの行の数
+        //public string StripByteCounts { get; private set; } //0x0117 ストリップの総バイト数
         public string XResolution { get; private set; } //0x011A 画像の幅の解像度
         public string YResolution { get; private set; } //0x011B 画像の高さの解像度
         public string PlanarConfiguration { get; private set; } //0x011C 画像データの並び
         public string ResolutionUnit { get; private set; } //0x0128 画像の幅と高さの解像度の単位
-        public string TransferFunction { get; private set; } //0x012D 再生階調カーブ特性
-        public string Software { get; private set; } //0x0131 ソフトウェア
-        public string DateTimeE { get; private set; } //0x0132 ファイル変更日時 Exifの規定では DateTimeだがC#のDateTimeと区別するためDateTimeEとした
-        public string Artist { get; private set; } //0x013B アーティスト
-        public string WhitePoint { get; private set; } //0x013E 参照白色点の色度座標値
-        public string PrimaryChromaticities { get; private set; } //0x013F 原色の色度座標値
-        public string JPEGInterchangeFormat { get; private set; } //0x0201 JPEGのSOIへのオフセット
-        public string JPEGInterchangeFormatLength { get; private set; } //0x0202 JPEGデータのバイト数(サムネイル）
-        public string YCbCrCoefficients { get; private set; } //0x0211 色変換マトリクス係数
-        public string YCbCrSubSampling { get; private set; } //0x0212 YCCの画素構成(Cの間引き率)
-        public string YCbCrPositioning { get; private set; } //0x0213 YCCの画素構成(YとCの位置)
-        public string ReferenceBlackWhite { get; private set; } //0x0214 参照黒色点値と参照白色点値
-        public string Copyright { get; private set; } //0x8298 撮影著作権者/編集著作権者        
-        public string Exif_IFD_Pointer { get; private set; } //0x8769 Exifタグ
-        public string GPSInfoIFDPointer { get; private set; } //0x8825 GPSタグ
+        //public string TransferFunction { get; private set; } //0x012D 再生階調カーブ特性
+        //public string Software { get; private set; } //0x0131 ソフトウェア
+        //public string DateTimeE { get; private set; } //0x0132 ファイル変更日時 Exifの規定では DateTimeだがC#のDateTimeと区別するためDateTimeEとした
+        //public string Artist { get; private set; } //0x013B アーティスト
+        //public string WhitePoint { get; private set; } //0x013E 参照白色点の色度座標値
+        //public string PrimaryChromaticities { get; private set; } //0x013F 原色の色度座標値
+        //public string JPEGInterchangeFormat { get; private set; } //0x0201 JPEGのSOIへのオフセット
+        //public string JPEGInterchangeFormatLength { get; private set; } //0x0202 JPEGデータのバイト数(サムネイル）
+        //public string YCbCrCoefficients { get; private set; } //0x0211 色変換マトリクス係数
+        //public string YCbCrSubSampling { get; private set; } //0x0212 YCCの画素構成(Cの間引き率)
+        //public string YCbCrPositioning { get; private set; } //0x0213 YCCの画素構成(YとCの位置)
+        //public string ReferenceBlackWhite { get; private set; } //0x0214 参照黒色点値と参照白色点値
+        //public string Copyright { get; private set; } //0x8298 撮影著作権者/編集著作権者        
+        //public string Exif_IFD_Pointer { get; private set; } //0x8769 Exifタグ
+        //public string GPSInfoIFDPointer { get; private set; } //0x8825 GPSタグ
         //
         //Exif固有のIFD
         //
         public string ExposureTime { get; private set; } //0x829A 露出時間
-        public string FNumber { get; private set; } //0x829D Fナンバー
-        public string ExposureProgram { get; private set; } //0x8822 露出プログラム
-        public string SpectralSensitivity { get; private set; } //0x8824 スペクトル感度
-        public string PhotographicSensitivity { get; private set; } //0x8827 撮影感度
-        public string OECF { get; private set; } //0x8828 光電変換関数
-        public string SensitivityType { get; private set; } //0x8830 感度種別 XXXX
-        public string StandardOutputSensitivity { get; private set; } //0x8831 標準出力感度 XXXX
-        public string RecommendedExposureIndex { get; private set; } //0x8832 推奨露光指数 XXXX
-        public string ISOSpeed { get; private set; } //0x8833 ISOスピード XXXX
-        public string ISOSpeedLatitudeyyy { get; private set; } //0x8834 ISOスピードラチチュードyyy XXXX
-        public string ISOSpeedLatitudezzz { get; private set; } //0x8835 ISOスピードラチチュードzzz XXXX
-        public string ExifVersion { get; private set; } //0x9000 Exifバージョン
-        public string DateTimeOriginal { get; private set; } //0x9003 原画像データの生成日時
-        public string DateTimeDigitized { get; private set; } //0x9004 デジタルデータの作成日時
-        public string OffsetTime { get; private set; } //0X9010 DateTimeの時差データ Exif2.31で追加 oooo
-        public string OffsetTimeOriginal { get; private set; } //0X9011 DateTimeOrigialの時差データ Exif2.31で追加 oooo
-        public string OffsetTimeDigitized { get; private set; } //0X9012 DateTimeDigitizedの時差データ Exif2.31で追加 oooo
-        public string ComponentsConfiguration { get; private set; } //0x9101 各コンポーネントの意味
-        public string CompressedBitsPerPixel { get; private set; } //0x9102 画像圧縮モード
-        public string ShutterSpeedValue { get; private set; } //0x9201 APEX(EV)値のシャッタースピード
-        public string ApertureValue { get; private set; } //0x9202 絞り値
-        public string BrightnessValue { get; private set; } //0x9203 輝度値
-        public string ExposureBiasValue { get; private set; } //0x9204 露光補正値
-        public string MaxApertureValue { get; private set; } //0x9205 レンズ最小Ｆ値
-        public string SubjectDistance { get; private set; } //0x9206 被写体距離
-        public string MeteringMode { get; private set; } //0x9207 測光方式
-        public string LightSource { get; private set; } //0x9208 光源
-        public string Flash { get; private set; } //0x9209 フラッシュ
-        public string FocalLength { get; private set; } //0x920A レンズ焦点距離
-        public string SubjectArea { get; private set; } //0x9214 被写体領域 XXXX
-        public string MakerNote { get; private set; } //0x927C メーカノート
-        public string UserComment { get; private set; } //0x9286 ユーザコメント
-        public string SubSecTime { get; private set; } //0x9290 DateTimeのサブセック
-        public string SubSecTimeOriginal { get; private set; } //0x9291 DateTimeOriginalのサブセック
-        public string SubSecTimeDigitized { get; private set; } //0x9292 DateTimeDigitizedのサブセック
-        public string Temperature { get; private set; } //0x9400 温度 XXXX
-        public string Humidity { get; private set; } //0x9401 湿度 XXXX
-        public string Pressure { get; private set; } //0x9402 圧力 XXXX
-        public string WaterDepth { get; private set; } //0x9403 水深 XXXX
-        public string Acceleration { get; private set; } //0x9404 加速度 XXXX
-        public string CameraElevationAngle { get; private set; } //0x9405 カメラの迎角 XXXX
-        public string FlashpixVersion { get; private set; } //0xA000 対応フラッシュピックスバージョン
-        public string ColorSpace { get; private set; } //0xA001 色空間情報
+        //public string FNumber { get; private set; } //0x829D Fナンバー
+        //public string ExposureProgram { get; private set; } //0x8822 露出プログラム
+        //public string SpectralSensitivity { get; private set; } //0x8824 スペクトル感度
+        //public string PhotographicSensitivity { get; private set; } //0x8827 撮影感度
+        //public string OECF { get; private set; } //0x8828 光電変換関数
+        //public string SensitivityType { get; private set; } //0x8830 感度種別 XXXX
+        //public string StandardOutputSensitivity { get; private set; } //0x8831 標準出力感度 XXXX
+        //public string RecommendedExposureIndex { get; private set; } //0x8832 推奨露光指数 XXXX
+        //public string ISOSpeed { get; private set; } //0x8833 ISOスピード XXXX
+        //public string ISOSpeedLatitudeyyy { get; private set; } //0x8834 ISOスピードラチチュードyyy XXXX
+        //public string ISOSpeedLatitudezzz { get; private set; } //0x8835 ISOスピードラチチュードzzz XXXX
+        //public string ExifVersion { get; private set; } //0x9000 Exifバージョン
+        //public string DateTimeOriginal { get; private set; } //0x9003 原画像データの生成日時
+        //public string DateTimeDigitized { get; private set; } //0x9004 デジタルデータの作成日時
+        //public string OffsetTime { get; private set; } //0X9010 DateTimeの時差データ Exif2.31で追加 oooo
+        //public string OffsetTimeOriginal { get; private set; } //0X9011 DateTimeOrigialの時差データ Exif2.31で追加 oooo
+        //public string OffsetTimeDigitized { get; private set; } //0X9012 DateTimeDigitizedの時差データ Exif2.31で追加 oooo
+        //public string ComponentsConfiguration { get; private set; } //0x9101 各コンポーネントの意味
+        //public string CompressedBitsPerPixel { get; private set; } //0x9102 画像圧縮モード
+        //public string ShutterSpeedValue { get; private set; } //0x9201 APEX(EV)値のシャッタースピード
+        //public string ApertureValue { get; private set; } //0x9202 絞り値
+        //public string BrightnessValue { get; private set; } //0x9203 輝度値
+        //public string ExposureBiasValue { get; private set; } //0x9204 露光補正値
+        //public string MaxApertureValue { get; private set; } //0x9205 レンズ最小Ｆ値
+        //public string SubjectDistance { get; private set; } //0x9206 被写体距離
+        //public string MeteringMode { get; private set; } //0x9207 測光方式
+        //public string LightSource { get; private set; } //0x9208 光源
+        //public string Flash { get; private set; } //0x9209 フラッシュ
+        //public string FocalLength { get; private set; } //0x920A レンズ焦点距離
+        //public string SubjectArea { get; private set; } //0x9214 被写体領域 XXXX
+        //public string MakerNote { get; private set; } //0x927C メーカノート
+        //public string UserComment { get; private set; } //0x9286 ユーザコメント
+        //public string SubSecTime { get; private set; } //0x9290 DateTimeのサブセック
+        //public string SubSecTimeOriginal { get; private set; } //0x9291 DateTimeOriginalのサブセック
+        //public string SubSecTimeDigitized { get; private set; } //0x9292 DateTimeDigitizedのサブセック
+        //public string Temperature { get; private set; } //0x9400 温度 XXXX
+        //public string Humidity { get; private set; } //0x9401 湿度 XXXX
+        //public string Pressure { get; private set; } //0x9402 圧力 XXXX
+        //public string WaterDepth { get; private set; } //0x9403 水深 XXXX
+        //public string Acceleration { get; private set; } //0x9404 加速度 XXXX
+        //public string CameraElevationAngle { get; private set; } //0x9405 カメラの迎角 XXXX
+        //public string FlashpixVersion { get; private set; } //0xA000 対応フラッシュピックスバージョン
+        //public string ColorSpace { get; private set; } //0xA001 色空間情報
         public string PixelXDimension { get; private set; } //0xA002 実効画像幅
         public string PixelYDimension { get; private set; } //0xA003 実効画像高さ
-        public string RelatedSoundFile { get; private set; } //0xA004 関連音声ファイル
-        public string InteroperabilityIFDPointer { get; private set; } //0xA005 互換性IFDへのポインタ このプログラムでは不要？
-        public string FlashEnergy { get; private set; } //0xA20B フラッシュ強度
-        public string SpatialFrequencyResponse { get; private set; } //0xA20C 空間周波数応答
-        public string FocalPlaneXResolution { get; private set; } //0xA20E 焦点面の幅の解像度
-        public string FocalPlaneYResolution { get; private set; } //0xA20F 焦点面の高さの解像度
-        public string FocalPlaneResolutionUnit { get; private set; } //0xA210 焦点面解像度単位
-        public string SubjectLocation { get; private set; } //0xA214 被写体位置
-        public string ExposureIndex { get; private set; } //0xA215 露出インデックス
-        public string SensingMethod { get; private set; } //0xA217 センサ方式
-        public string FileSource { get; private set; } //0xA300 ファイルソース
-        public string SceneType { get; private set; } //0xA301 シーンタイプ
-        public string CFAPattern { get; private set; } //0xA302 CFAパターン
-        public string CustomRendered { get; private set; } //0xA401 個別画像処理 oooo
-        public string ExposureMode { get; private set; } //0xA402 露出モード oooo
-        public string WhiteBalance { get; private set; } //0xA403 ホワイトバランス oooo
-        public string DigitalZoomRatio { get; private set; } //0xA404 デジタルズーム倍率 oooo
-        public string FocalLengthIn35mmFilm { get; private set; } //0xA405 35mm換算レンズ焦点距離 XXXX
-        public string SceneCaptureType { get; private set; } //0xA406 撮影シーンタイプ oooo
-        public string GainControl { get; private set; } //0xA407 ゲイン制御 XXXX
-        public string Contrast { get; private set; } //0xA408 撮影コントラスト XXXX
-        public string Saturation { get; private set; } //0xA409 撮影彩度 XXXX
-        public string Sharpness { get; private set; } //0xA40A 撮影シャープネス XXXX
-        public string DeviceSettingDescription { get; private set; } //0xA40B 撮影条件記述情報 XXXX
-        public string SubjectDistanceRange { get; private set; } //0xA40C 被写体距離レンジ oooo
-        public string ImageUniqueID { get; private set; } //0xA420 画像ユニークID XXXX
-        public string CameraOwnerName { get; private set; } //0xA430 カメラ所有者名 XXXX
-        public string BodySerialNumber { get; private set; } //0xA431 カメラシリアル番号 XXXX
-        public string LensSpecification { get; private set; } //0xA432 レンズの仕様情報 XXXX
-        public string LensMake { get; private set; } //0xA433 レンズのメーカ名 XXXX
-        public string LensModel { get; private set; } //0xA434 レンズのモデル名 XXXX
-        public string LensSerialNumber { get; private set; } //0xA435 レンズシリアル番号 XXXX
-        public string ImageTitle { get; private set; } //0xA436 タイトル名 XXXX
-        public string Photographer { get; private set; } //0xA437 フォトグラファー XXXX
-        public string ImageEditor { get; private set; } //0xA438 画像編集者
-        public string CameraFirmware { get; private set; } //0xA439 カメラファームウェア XXXX
-        public string RAWDevelopingSoftware { get; private set; } //0xA43A RAW現像ソフトウェア XXXX
-        public string ImageEditingSoftware { get; private set; } //0xA43B 画像編集ソフトウェア XXXX
-        public string MetadataEditingSoftware { get; private set; } //0xA43C メタデータ編集ソフトウェア XXXX
-        public string CompositeImage { get; private set; } //0xA460 合成画像 XXXX
-        public string SourceImageNumberOfCompositeImage { get; private set; } //0xA461 合成画像のソース画像数 XXXX
-        public string SourceExposureTimesOfCompositeImage { get; private set; } //0xA462 合成画像のソース画像露光時間 XXXX
-        public string Gamma { get; private set; } //0xA500 再生ガンマ XXXX
+        //public string RelatedSoundFile { get; private set; } //0xA004 関連音声ファイル
+        //public string InteroperabilityIFDPointer { get; private set; } //0xA005 互換性IFDへのポインタ このプログラムでは不要？
+        //public string FlashEnergy { get; private set; } //0xA20B フラッシュ強度
+        //public string SpatialFrequencyResponse { get; private set; } //0xA20C 空間周波数応答
+        //public string FocalPlaneXResolution { get; private set; } //0xA20E 焦点面の幅の解像度
+        //public string FocalPlaneYResolution { get; private set; } //0xA20F 焦点面の高さの解像度
+        //public string FocalPlaneResolutionUnit { get; private set; } //0xA210 焦点面解像度単位
+        //public string SubjectLocation { get; private set; } //0xA214 被写体位置
+        //public string ExposureIndex { get; private set; } //0xA215 露出インデックス
+        //public string SensingMethod { get; private set; } //0xA217 センサ方式
+        //public string FileSource { get; private set; } //0xA300 ファイルソース
+        //public string SceneType { get; private set; } //0xA301 シーンタイプ
+        //public string CFAPattern { get; private set; } //0xA302 CFAパターン
+        //public string CustomRendered { get; private set; } //0xA401 個別画像処理 oooo
+        //public string ExposureMode { get; private set; } //0xA402 露出モード oooo
+        //public string WhiteBalance { get; private set; } //0xA403 ホワイトバランス oooo
+        //public string DigitalZoomRatio { get; private set; } //0xA404 デジタルズーム倍率 oooo
+        //public string FocalLengthIn35mmFilm { get; private set; } //0xA405 35mm換算レンズ焦点距離 XXXX
+        //public string SceneCaptureType { get; private set; } //0xA406 撮影シーンタイプ oooo
+        //public string GainControl { get; private set; } //0xA407 ゲイン制御 XXXX
+        //public string Contrast { get; private set; } //0xA408 撮影コントラスト XXXX
+        //public string Saturation { get; private set; } //0xA409 撮影彩度 XXXX
+        //public string Sharpness { get; private set; } //0xA40A 撮影シャープネス XXXX
+        //public string DeviceSettingDescription { get; private set; } //0xA40B 撮影条件記述情報 XXXX
+        //public string SubjectDistanceRange { get; private set; } //0xA40C 被写体距離レンジ oooo
+        //public string ImageUniqueID { get; private set; } //0xA420 画像ユニークID XXXX
+        //public string CameraOwnerName { get; private set; } //0xA430 カメラ所有者名 XXXX
+        //public string BodySerialNumber { get; private set; } //0xA431 カメラシリアル番号 XXXX
+        //public string LensSpecification { get; private set; } //0xA432 レンズの仕様情報 XXXX
+        //public string LensMake { get; private set; } //0xA433 レンズのメーカ名 XXXX
+        //public string LensModel { get; private set; } //0xA434 レンズのモデル名 XXXX
+        //public string LensSerialNumber { get; private set; } //0xA435 レンズシリアル番号 XXXX
+        //public string ImageTitle { get; private set; } //0xA436 タイトル名 XXXX
+        //public string Photographer { get; private set; } //0xA437 フォトグラファー XXXX
+        //public string ImageEditor { get; private set; } //0xA438 画像編集者
+        //public string CameraFirmware { get; private set; } //0xA439 カメラファームウェア XXXX
+        //public string RAWDevelopingSoftware { get; private set; } //0xA43A RAW現像ソフトウェア XXXX
+        //public string ImageEditingSoftware { get; private set; } //0xA43B 画像編集ソフトウェア XXXX
+        //public string MetadataEditingSoftware { get; private set; } //0xA43C メタデータ編集ソフトウェア XXXX
+        //public string CompositeImage { get; private set; } //0xA460 合成画像 XXXX
+        //public string SourceImageNumberOfCompositeImage { get; private set; } //0xA461 合成画像のソース画像数 XXXX
+        //public string SourceExposureTimesOfCompositeImage { get; private set; } //0xA462 合成画像のソース画像露光時間 XXXX
+        //public string Gamma { get; private set; } //0xA500 再生ガンマ XXXX
         //
         //GPS
         //
@@ -191,40 +182,31 @@ namespace PictureList {
         public string GPSLongitude { get; private set; } //0x0004 経度(数値)
         public string GPSAltitudeRef { get; private set; } //0x0005 高度の基準
         public string GPSAltitude { get; private set; } //0x0006 高度(数値)
-        public string GPSTimeStamp { get; private set; } //0x0007 GPS時間(原子時計の時間)
-        public string GPSSatellites { get; private set; } //0x0008 測位に使った衛星信号
-        public string GPSStatus { get; private set; } //0x0009 GPS受信機の状態
-        public string GPSMeasureMode { get; private set; } //0x000A GPSの測位方法
-        public string GPSDOP { get; private set; } //0x000B 測位の信頼性
-        public string GPSSpeedRef { get; private set; } //0x000C 速度の単位
-        public string GPSSpeed { get; private set; } //0x000D 速度(数値)
-        public string GPSTrackRef { get; private set; } //0x000E 進行方向の単位
-        public string GPSTrack { get; private set; } //0x000F 進行方向(数値)
-        public string GPSImgDirectionRef { get; private set; } //0x0010 撮影した画像の方向の単位
-        public string GPSImgDirection { get; private set; } //0x0011 撮影した画像の方向(数値)
-        public string GPSMapDatum { get; private set; } //0x0012 測位に用いた地図データ
-        public string GPSDestLatitudeRef { get; private set; } //0x0013 目的地の北緯(N) or 南緯(S)
-        public string GPSDestLatitude { get; private set; } //0x0014 目的地の緯度(数値)
-        public string GPSDestLongitudeRef { get; private set; } //0x0015 目的地の東経(E) or 西経(W)
-        public string GPSDestLongitude { get; private set; } //0x0016 目的地の経度(数値)
-        public string GPSDestBearingRef { get; private set; } //0x0017 目的地の方角の単位
-        public string GPSDestBearing { get; private set; } //0x0018 目的の方角(数値)
-        public string GPSDestDistanceRef { get; private set; } //0x0019 目的地までの距離の単位
-        public string GPSDestDistance { get; private set; } //0x001A 目的地までの距離(数値)
-        public string GPSProcessingMethod { get; private set; } //0x001B 測位方式の名称 oooo
-        public string GPSAreaInformation { get; private set; } //0x001C 測位地点の名称 XXXX
-        public string GPSDateStamp { get; private set; } //0x001D GPS日付 oooo
-        public string GPSDifferential { get; private set; } //0x001E GPS補正測位 XXXX
-        public string GPSHPositioningError { get; private set; } //0x001F 水平方向測位誤差 XXXX
-        //
-        //このクラスの中で計算したほうが良いと思われるもの
-        //
-        //public string GPSLocation { get; private set; } //GPSのGoogleMapなどで指定できる緯度経度値
-        //public string GPSHeight { get; private set; } //GPS高度（海抜- の表示有)
-        //public string Resolution { get; private set; } //幅ｘ高さの解像度（DPI）
-        //public string WidthHeight { get; private set; } //幅ｘ高さ(Pixel)
-        //public string ShutterSpeed { get; private set; } //1/n 秒　または n 秒表示
-
+                                                        //public string GPSTimeStamp { get; private set; } //0x0007 GPS時間(原子時計の時間)
+                                                        //public string GPSSatellites { get; private set; } //0x0008 測位に使った衛星信号
+                                                        //public string GPSStatus { get; private set; } //0x0009 GPS受信機の状態
+                                                        //public string GPSMeasureMode { get; private set; } //0x000A GPSの測位方法
+                                                        //public string GPSDOP { get; private set; } //0x000B 測位の信頼性
+                                                        //public string GPSSpeedRef { get; private set; } //0x000C 速度の単位
+                                                        //public string GPSSpeed { get; private set; } //0x000D 速度(数値)
+                                                        //public string GPSTrackRef { get; private set; } //0x000E 進行方向の単位
+                                                        //public string GPSTrack { get; private set; } //0x000F 進行方向(数値)
+                                                        //public string GPSImgDirectionRef { get; private set; } //0x0010 撮影した画像の方向の単位
+                                                        //public string GPSImgDirection { get; private set; } //0x0011 撮影した画像の方向(数値)
+                                                        //public string GPSMapDatum { get; private set; } //0x0012 測位に用いた地図データ
+                                                        //public string GPSDestLatitudeRef { get; private set; } //0x0013 目的地の北緯(N) or 南緯(S)
+                                                        //public string GPSDestLatitude { get; private set; } //0x0014 目的地の緯度(数値)
+                                                        //public string GPSDestLongitudeRef { get; private set; } //0x0015 目的地の東経(E) or 西経(W)
+                                                        //public string GPSDestLongitude { get; private set; } //0x0016 目的地の経度(数値)
+                                                        //public string GPSDestBearingRef { get; private set; } //0x0017 目的地の方角の単位
+                                                        //public string GPSDestBearing { get; private set; } //0x0018 目的の方角(数値)
+                                                        //public string GPSDestDistanceRef { get; private set; } //0x0019 目的地までの距離の単位
+                                                        //public string GPSDestDistance { get; private set; } //0x001A 目的地までの距離(数値)
+                                                        //public string GPSProcessingMethod { get; private set; } //0x001B 測位方式の名称 oooo
+                                                        //public string GPSAreaInformation { get; private set; } //0x001C 測位地点の名称 XXXX
+                                                        //public string GPSDateStamp { get; private set; } //0x001D GPS日付 oooo
+                                                        //public string GPSDifferential { get; private set; } //0x001E GPS補正測位 XXXX
+                                                        //public string GPSHPositioningError { get; private set; } //0x001F 水平方向測位誤差 XXXX
 
         /// <summary>
         /// コンストラクタ
@@ -240,41 +222,36 @@ namespace PictureList {
         private void _exifPciture(string fullPath) {
 
             // デバッグ用
-            System.Diagnostics.Debug.Print(fullPath);
+            // System.Diagnostics.Debug.Print(fullPath);
             //
 
-            System.Drawing.Bitmap bmp = null;
 
-            try {
-                bmp = new System.Drawing.Bitmap(fullPath);
-                //bmp = new System.Drawing.Bitmap(fullPath);
-                //bmp= Image.FromFile(fullPath);
-            } catch (Exception exception) {
-                string error = fullPath + " : " + exception.Message;
-                // Console.WriteLine(error);
-                System.Diagnostics.Debug.Print(error);
-                //System.Windows.Forms.MessageBox.Show(error);
-                DateTimeOriginal = ""; //以前はなぜか error;
-            }
+            //            System.Drawing.Bitmap bmp = null;
 
+            //            try {
+            //                bmp = new System.Drawing.Bitmap(fullPath);
+            //                //bmp = new System.Drawing.Bitmap(fullPath);
+            //                //bmp= Image.FromFile(fullPath);
+            //            } catch (Exception exception) {
+            //                string error = fullPath + " : " + exception.Message;
+            //                // Console.WriteLine(error);
+            //#if DEBUG
+            //                System.Diagnostics.Debug.Print(error);
+            //#endif
+            //                //System.Windows.Forms.MessageBox.Show(error);
+            //                //DateTimeOriginal = ""; //以前はなぜか error;
+            //            }
+
+            Bitmap bmp = MakeBMP(fullPath);
 
 
             if (bmp != null) {
-                //IsImage = true;
-                //ImgWidth = bmp.Width;
-                //ImgHeight = bmp.Height;
 
 
-                //var sortPrpTag = bmp.PropertyItems.OrderByDescending(x => x.Id).ToList();
-                //foreach(var item in sortPrpTag) {
-                //    Debug.Print("0x{0:x4} {1} {2}", item.Id, item.Type, item.Len);
-                //}
-
-
-                //ここからがPropertyItemsEータの取得
+                //ここからがPropertyItemsデータの取得
                 foreach (System.Drawing.Imaging.PropertyItem item in bmp.PropertyItems) {
                     string DicKey = "0x" + item.Id.ToString("x4");
-                    Debug.Print("{0} , {1}", item.Id, DicKey);
+                    // Debug.Print("{0} , {1}", item.Id, DicKey);
                     if (_exifTagOutDic.ContainsKey(DicKey)) {
                         string _eVal = "";
                         switch (item.Id) {
@@ -285,7 +262,7 @@ namespace PictureList {
                             case 0x0103: _eVal = GetCommpression(item); /* Compression = _eVal; */ break;
                             case 0x0106: _eVal = GetPhotometricInterpretation(item); /* PhotometricInterpretation = _eVal; */ break;
                             //case 0x010E: _eVal = GetExifAsci(item).Replace(Environment.NewLine, "⏎"); /* ImageDescription = _eVal; */ break;
-                            case 0x010E: _eVal = GetExifAsci(item).Replace("\n", "⏎"); /* ImageDescription = _eVal; */ break;
+                            case 0x010E: _eVal = GetExifAsci(item).Replace("\n", "."); /* ImageDescription = _eVal; */ break;
                             case 0x010F: _eVal = GetExifAsci(item); /* Make = _eVal; */ break;
                             case 0x0110: _eVal = GetExifAsci(item); /* Model = _eVal; */ break;
                             case 0x0111: _eVal = AnyTypeAndCount(item, ":"); /* StripOffsets = _eVal; */ break;
@@ -448,12 +425,11 @@ namespace PictureList {
                 //ここから合成関数用の値を求める _exifTagOutListsの中に合成関数名があれば処理する
                 string gValue;
                 if (_exifTagOutDic.ContainsKey("G-WidthHeight")) {
+                    //BitMapではWidthとHeightが有効でExif値よりもこれを優先する
                     gValue = bmp.Width.ToString() + " x " + bmp.Height.ToString();
-                    if (gValue != "") {
-                        _exifTagOutLists[_exifTagOutDic["G-WidthHeight"] - 1].EValue = gValue;
-                        _exifTagOutDic.Remove("G-WidthHeight"); //出力済みは削除
-                    }
-                }
+                    _exifTagOutLists[_exifTagOutDic["G-WidthHeight"] - 1].EValue = gValue;
+                    _exifTagOutDic.Remove("G-WidthHeight"); //出力済みは削除
+                                    }
                 if (_exifTagOutDic.ContainsKey("G-ShutterSpeed")) {
                     _exifTagOutLists[_exifTagOutDic["G-ShutterSpeed"] - 1].EValue = ExposureTime;
                     _exifTagOutDic.Remove("G-ShutterSpeed"); //出力済みは削除
@@ -481,62 +457,6 @@ namespace PictureList {
                     }
                 }
 
-                // ここからは画像の情報を取得してプロパティに設定
-                FileInfo file = new FileInfo(fullPath);
-                //FileInfo file = new(fullPath);
-                //FullPath = fullPath;
-                //NameWithoutExt = Path.GetFileNameWithoutExtension(fullPath);
-                //Name = file.Name;
-                //Extension = file.Extension;
-                //Size = file.Length;
-                //MDate = file.LastWriteTime;
-                //if (_exifTagOutDic.ContainsKey("F-FullPAth")) {
-                //    _exifTagOutLists[_exifTagOutDic["F-FullPAth"] - 1].EValue = fullPath;
-                //    _exifTagOutDic.Remove("F-FullPAth"); //出力済みは削除
-                //}
-                //if (_exifTagOutDic.ContainsKey("F-FileName")) {
-                //    _exifTagOutLists[_exifTagOutDic["F-FileName"] - 1].EValue = file.Name;
-                //    _exifTagOutDic.Remove("F-FileName"); //出力済みは削除
-                //}
-                //if (_exifTagOutDic.ContainsKey("F-Ext")) {
-                //    _exifTagOutLists[_exifTagOutDic["F-Ext"] - 1].EValue = file.Extension;
-                //    _exifTagOutDic.Remove("F-Ext"); //出力済みは削除
-                //}
-                //if (_exifTagOutDic.ContainsKey("F-FileBody")) {
-                //    _exifTagOutLists[_exifTagOutDic["F-FileBody"] - 1].EValue = Path.GetFileNameWithoutExtension(fullPath);
-                //    _exifTagOutDic.Remove("F-FileBody"); //出力済みは削除
-                //}
-                //if (_exifTagOutDic.ContainsKey("F-Size")) {
-                //    _exifTagOutLists[_exifTagOutDic["F-Size"] - 1].EValue = file.Length.ToString();
-                //    _exifTagOutDic.Remove("F-Size"); //出力済みは削除
-                //}
-                //if (_exifTagOutDic.ContainsKey("F-DateTime")) {
-                //    _exifTagOutLists[_exifTagOutDic["F-DateTime"] - 1].EValue = file.LastWriteTime.ToString();
-                //    _exifTagOutDic.Remove("F-DateTime"); //出力済みは削除
-                //}
-                //if (_exifTagOutDic.ContainsKey("F-Width")) {
-                //    _exifTagOutLists[_exifTagOutDic["F-Width"] - 1].EValue = bmp.Width.ToString();
-                //    _exifTagOutDic.Remove("F-Width"); //出力済みは削除
-                //}
-                //if (_exifTagOutDic.ContainsKey("F-Height")) {
-                //    _exifTagOutLists[_exifTagOutDic["F-Height"] - 1].EValue = bmp.Height.ToString();
-                //    _exifTagOutDic.Remove("F-Height"); //出力済みは削除
-                //}
-
-
-                //GPSLocation = GetGPSLocation();
-                //if (ExposureTime != null)
-                //    ShutterSpeed = GetShutterSpeed(ExposureTime);
-                //GPSHeight = GetGPSHeight();
-                //Resolution = GetResolution();
-                //WidthHeight = GetWidthHeight();
-
-                //if (ImageWidth == null)       TiFもPropertyItemで取得できる場合があるので別途計算は止める
-                //    ImageWidth = bmp.Width.ToString();
-                //if (ImageLength == null)
-                //    ImageLength = bmp.Height.ToString();
-
-
                 bmp.Dispose();
             }
 
@@ -551,7 +471,58 @@ namespace PictureList {
             string str;
             switch (n) {
                 case 1: str = "非圧縮"; break;
+                case 2: str = "CCITT 1D"; break;
+                case 3: str = "T4/Group 3 Fax"; break;
+                case 4: str = "T6/Group 4 Fax"; break;
+                case 5: str = "LZW"; break;
                 case 6: str = "サムネイルもJPEG圧縮"; break;
+                case 7: str = "JPEG"; break;
+                case 8: str = "Adobe Deflate"; break;
+                case 9: str = "JBIG B&W"; break;
+                case 10: str = "JBIG Color"; break;
+                case 99: str = "JPEG"; break;
+                case 262: str = "Kodak 262"; break;
+                case 32766: str = "Next"; break;
+                case 32767: str = "Sony ARW Compressed"; break;
+                case 32769: str = "Packed RAW"; break;
+                case 32770: str = "Samsung SRW Compressed"; break;
+                case 32771: str = "CCIRLEW"; break;
+                case 32772: str = "Samsung SRW Compressed 2"; break;
+                case 32773: str = "PackBits"; break;
+                case 32809: str = "Thunderscan"; break;
+                case 32867: str = "Kodak KDC Compressed"; break;
+                case 32895: str = "IT8CTPAD"; break;
+                case 32896: str = "IT8LW"; break;
+                case 32897: str = "IT8MP"; break;
+                case 32898: str = "IT8BL"; break;
+                case 32908: str = "PixarFilm"; break;
+                case 32909: str = "PixarLog"; break;
+                case 32946: str = "Deflate"; break;
+                case 32947: str = "DCS"; break;
+                case 33003: str = "Aperio JPEG 2000 YCbCr"; break;
+                case 33005: str = "Aperio JPEG 2000 RGB"; break;
+                case 34661: str = "JBIG"; break;
+                case 34676: str = "SGILog"; break;
+                case 34677: str = "SGILog24"; break;
+                case 34712: str = "JPEG 2000"; break;
+                case 34713: str = "Nikon NEF Compressed"; break;
+                case 34715: str = "JBIG2 TIFF FX"; break;
+                case 34718: str = "Microsoft Document Imaging (MDI) Binary Level Codec"; break;
+                case 34719: str = "Microsoft Document Imaging (MDI) Progressive Transform Codec"; break;
+                case 34720: str = "Microsoft Document Imaging (MDI) Vector"; break;
+                case 34887: str = "ESRI Lerc"; break;
+                case 34892: str = "Lossy JPEG"; break;
+                case 34925: str = "LZMA2"; break;
+                case 34926: str = "Zstd (old)"; break;
+                case 34927: str = "WebP (old)"; break;
+                case 34933: str = "PNG"; break;
+                case 34934: str = "JPEG XR"; break;
+                case 50000: str = "Zstd"; break;
+                case 50001: str = "WebP"; break;
+                case 50002: str = "JPEG XL (old)"; break;
+                case 52546: str = "JPEG XL"; break;
+                case 65000: str = "Kodak DCR Compressed"; break;
+                case 65535: str = "Pentax PEF Compressed"; break;                               
                 default: str = "予約"; break;
             }
             return str;
@@ -678,12 +649,6 @@ namespace PictureList {
                 //一つ目がNaNならば焦点距離は不明
                 str = "異常値";
             }
-
-            //if (Pitem.Type != RATIONAL || LenToCount(Pitem) != 4) {
-            //    str = "異常値"; return str;
-            //}
-            //str = AnyValueToString(Pitem, 0) + "-" + AnyValueToString(Pitem, 1);
-            //str += "mm F" + AnyValueToString(Pitem, 2) + "-" + AnyValueToString(Pitem, 3);
             return str;
         }
 
@@ -896,8 +861,8 @@ namespace PictureList {
 
         static private object GetFlashpixVersion(System.Drawing.Imaging.PropertyItem Pitem) { //0xA000
             string str;
-            str= Encoding.ASCII.GetString(Pitem.Value).Replace("\0","");
-            Debug.Print( Pitem.Type.ToString() + " " + Encoding.ASCII.GetString(Pitem.Value));
+            str = Encoding.ASCII.GetString(Pitem.Value).Replace("\0", "");
+            // Debug.Print( Pitem.Type.ToString() + " " + Encoding.ASCII.GetString(Pitem.Value));
             if (str == "0100")
                 str = "Flashpix Format Version 1.0";
             else
@@ -915,27 +880,6 @@ namespace PictureList {
                 str = "未定義";
             return str;
         }
-
-        /*
-        private string GetPixelXDimension(System.Drawing.Imaging.PropertyItem Pitem) { //0xA002
-            string str;
-            if (Pitem.Type == SHORT)
-                str = GetExifShort(Pitem).ToString();
-            else if (Pitem.Type == LONG)
-                str = AnyTypeAndCount(Pitem);
-            else
-                str = "未定義";
-            return str;
-        }
-        */
-
-        // 0xA210のValueの評価は0X0128と同じ
-        //static private string GetFocalPlaneResolutionUnit(System.Drawing.Imaging.PropertyItem Pitem) { //0xA210
-        //    if (Pitem.Type == SHORT && LenToCount(Pitem) == 1 && GetExifShort(Pitem) == 2)
-        //        return "inch";
-        //    else
-        //        return "未定義";
-        //}
 
         static private string GetSubjectLocation(System.Drawing.Imaging.PropertyItem Pitem) { //0xA214
             string str;
@@ -1508,7 +1452,7 @@ namespace PictureList {
             }
             return val.Replace("\0", "").Trim(); //ValueにはNuullが含まれるとあるので削除する
         }
-        // Byte[]の文字をCharとし、 COUNT数 区切子 spr でつなぐ
+        // Byte[]の文字をCharとし、 COUNT数 区切子 spr でつなぐ 文字にNullが含まれている場合があったのでNullは削除する
         static private string GetUndefinedMultiByteToString(System.Drawing.Imaging.PropertyItem Pitem, string spr) {
             string str = "";
             int cnt = LenToCount(Pitem);
@@ -1517,7 +1461,7 @@ namespace PictureList {
                 if (i != cnt - 1)
                     str += spr;
             }
-            return str.Trim();
+            return str.Replace("\0", "").Trim();
         }
         // Undefinedを一つのAscii文字列として返す
         static private string GetUndefinedUniStringValue(System.Drawing.Imaging.PropertyItem Pitem) {
@@ -1534,14 +1478,6 @@ namespace PictureList {
             return BitConverter.ToUInt16(Pitem.Value, 0);
         }
 
-        /*
-        private long GetExifLong(System.Drawing.Imaging.PropertyItem Pitem) {
-            return BitConverter.ToUInt32(Pitem.Value, 0);
-        }
-        private long GetExifSLong(System.Drawing.Imaging.PropertyItem Pitem) {
-            return BitConverter.ToInt32(Pitem.Value, 0);
-        }
-        */
         static private double GetExifRational(System.Drawing.Imaging.PropertyItem Pitem) {
             switch (Pitem.Type) {
                 case RATIONAL: return GetRational(Pitem.Value);
@@ -1572,15 +1508,6 @@ namespace PictureList {
             return dbl;
         }
 
-        /* 未使用
-        static private string GetMultiShortToString(System.Drawing.Imaging.PropertyItem Pitem, int cnt) {
-            string str = "";
-            for (int i = 0; i < cnt; i++) {
-                str += BitConverter.ToUInt16(Pitem.Value, i * 2).ToString() + " ";
-            }
-            return str.Trim();
-        }
-        */
         /// <summary>
         /// 複数のRATIONALを小数文字列として書き出す
         /// </summary>

@@ -15,31 +15,41 @@ namespace PictureList {
 
         //ExfToolのEXIFグループのTagIDと値を格納する辞書
         public Dictionary<string, string> ExifToolValueDic = new();
-        //ExifToolの出力のうち"[File"で始まるFile情報の名前と値を格納する辞書
-        //public Dictionary<string, string> FileInfoDic = new();
         //　Exif出力用のリストを取り合えず内部変数として使用
         private List<Exiflist> exifTagOutLists = new List<Exiflist>();
         // Exif出力用のリストのインデックスをTagIDで指定するための辞書
         private Dictionary<string, int> exifTagOutDic = new Dictionary<string, int>();
-        private Dictionary<string, Dictionary<string, ExifTransDic>> _exifToolDic = new();
+        // private Dictionary<string, Dictionary<string, ExifTransDic>> _exifToolDic = new();
         private Dictionary<string, Dictionary<string, ExifTransDic>> exifToolListsDic = new();
+        private string cExt;
+        //ExifToolMyで使用するExifToolの出力読み込み時の拡張子の優先グループの辞書
+        public static Dictionary<string, string> PriorityExifGroup = new Dictionary<string, string> {
+            {"arw","EXIF:SubIFD" },
+            {"dng", "EXIF:SubIFD" },
+            {"nef","EXIF:SubIFD1" },
+        };
 
-        public ExifToolMy(string fullpath, List<Exiflist> exifTagOutLists, Dictionary<string, int> exifTagOutDic, Dictionary<string, Dictionary<string, ExifTransDic>> exifToolListsDic) {
+        public ExifToolMy(string fullpath, List<Exiflist> exifTagOutLists, Dictionary<string, int> exifTagOutDic, Dictionary<string, Dictionary<string, ExifTransDic>> exifToolListsDic, string CExt) {
             this.exifTagOutLists = exifTagOutLists;
             this.exifTagOutDic = exifTagOutDic;
             this.exifToolListsDic = exifToolListsDic;
+            this.cExt = CExt;
             this.exifToolMy(fullpath);
         }
 
         private void exifToolMy(string fullpath) {
             string stdout;
             ExifToolValueDic.Clear();
-            //FileInfoDic.Clear(); // File情報の辞書をクリア
             stdout = GetRawExif(fullpath);          //ExifToolでデータを取得
             if (string.IsNullOrEmpty(stdout)) {
+#if DEBUG
                 Debug.Print("ExifToolの出力が空です。ファイルパス: " + fullpath);
+#endif
                 return; // 出力が空の場合は何もしない
             }
+#if DEBUG
+            Debug.Print($"ExifToolMy内 {fullpath}");
+#endif
             GetExifToolLDic(stdout); // EXIFツールデータを辞書に変換
 
             //未所得の辞書リストExifTagOutDicのTagIDが値がExifToolVakueDicのキーに含まれていたらその値を所得する
@@ -51,14 +61,10 @@ namespace PictureList {
                         exifTagOutLists[eDic.Value - 1].EValue = foundTagValue; // ExifToolValueDicの値を出力用リストに設定
                         // CIPA風への訳があるときの処理
                         if (exifToolListsDic.ContainsKey(foundTagID)) { // 翻訳辞書ExifToolListsDicにToolTagIDが存在する場合
-                            System.Collections.Generic.Dictionary<string, PictureList.Form1.ExifTransDic> ToolDicLists = exifToolListsDic[foundTagID];
+                            Dictionary<string, PictureList.Form1.ExifTransDic> ToolDicLists = exifToolListsDic[foundTagID];
                             // CIPA風の訳がある場合はそれを使用
                             if (ToolDicLists.ContainsKey(foundTagValue)) { // CIPA風の訳がある場合はそれを採用
-                                //var TagTmp = ToolDicLists[foundTagValue];
-                                //var TransVal = TagTmp[foundTagValue];
                                 string TransVal = ToolDicLists[foundTagValue][foundTagValue];
-                                //var TransVal = exifToolListsDic[foundTagID][foundTagValue]; // 辞書から値を取得してリストに設定
-                                // string TransVal = ToolDicLists[foundTagValue];
                                 exifTagOutLists[eDic.Value - 1].EValue = TransVal; // 辞書から値を取得してリストに設定
                                 foundTagValue = TransVal; // 変換後の値を更新
                             } else {
@@ -104,25 +110,16 @@ namespace PictureList {
             // 合成関数を処理
             string fgStr = "";    // 変換前の値
             string tgStr = fgStr;
-            // G-WidthHeigh
+            // G-WidthHeigh 0x0100,101は圧縮画像用なので0xa002の値が無いときに使用
             if (exifTagOutDic.ContainsKey("G-WidthHeight")) {
-                string sWidth = "", sHeight = "";
-                if (exifTagOutDic.ContainsKey("0xa002") && exifTagOutDic.ContainsKey("0xa002")) {
-                    // Fix for CS1061, CS1002, and CS1513 errors in the problematic code block.
-
-                    if (exifTagOutDic.ContainsKey("0xa002") && exifTagOutDic.ContainsKey("0xa003")) {
-                        // Correctly access the index from the dictionary and retrieve the EValue property.
-                        sWidth = exifTagOutLists[exifTagOutDic["0xa002"] - 1].EValue;
-                        sHeight = exifTagOutLists[exifTagOutDic["0xa003"] - 1].EValue;
-                    } else if (exifTagOutDic.ContainsKey("0x0100") && exifTagOutDic.ContainsKey("0x0101")) {
-                        sWidth = exifTagOutLists[exifTagOutDic["0x0100"] - 1].EValue;
-                        sHeight = exifTagOutLists[exifTagOutDic["0x0101"] - 1].EValue;
-                    } else {
-                        sWidth = "";
-                    }
-                    if (!string.IsNullOrEmpty(sWidth) && !string.IsNullOrEmpty(sHeight)) {
-                        exifTagOutLists[exifTagOutDic["G-WidthHeight"] - 1].EValue = $"{sWidth} x {sHeight}";
-                    }
+                string sWidth = GetExifLastValue("0xa002");
+                string sHeight = GetExifLastValue("0xa003");
+                if(string.IsNullOrEmpty(sWidth) || string.IsNullOrEmpty(sHeight)) {
+                    sWidth = GetExifLastValue("0x0100");
+                    sHeight = GetExifLastValue("0x0101");
+                }
+                if (!string.IsNullOrEmpty(sWidth) && !string.IsNullOrEmpty(sHeight)) {
+                    exifTagOutLists[exifTagOutDic["G-WidthHeight"] - 1].EValue = $"{sWidth} x {sHeight}";
                 }
             }
             // G-ShutterSpeed
@@ -133,9 +130,11 @@ namespace PictureList {
             }
             // G-Resolution
             if (exifTagOutDic.ContainsKey("G-Resolution")) {
-                if (ExifToolValueDic.ContainsKey("0x011a") && ExifToolValueDic.ContainsKey("0x011b") && ExifToolValueDic.ContainsKey("0x0128")) {
-                    string str = ExifToolValueDic["0x011a"] + " x " + ExifToolValueDic["0x011b"] + " /";
-                    str += exifTagOutLists[exifTagOutDic["0x0128"] - 1].EValue;
+                string Xreso = GetExifLastValue("0x011a");
+                string Yreso = GetExifLastValue("0x011b");
+                string ResoUnit = GetExifLastValue("0x0128");
+                if (!string.IsNullOrEmpty(Xreso) && !string.IsNullOrEmpty(Yreso) && !string.IsNullOrEmpty(ResoUnit)) {
+                    string str = Xreso + " x " + Yreso + " /" + ResoUnit;
                     exifTagOutLists[exifTagOutDic["G-Resolution"] - 1].EValue = str;
                 }
             }
@@ -149,65 +148,133 @@ namespace PictureList {
             }
         }
 
+        private string GetExifLastValue(string TagID) {
+            if (!ExifToolValueDic.ContainsKey(TagID))
+                return "";
+            string foundTagValue = ExifToolValueDic[TagID];
+            if (exifToolListsDic.ContainsKey(TagID)) {
+                var ToolDicLists = exifToolListsDic[TagID];
+                if (ToolDicLists.ContainsKey(foundTagValue))
+                    return ToolDicLists[foundTagValue][foundTagValue];    // 辞書の内容を返す
+            }
+            return foundTagValue;
+        }
+
         // 合成関数用関数
         // GPS情報を取得して緯度経度を返す
         private string GetGPSLocation() {
-            string lat = "", lon = "";
-            if (ExifToolValueDic.ContainsKey("0x0001") && ExifToolValueDic.ContainsKey("0x0002") && ExifToolValueDic.ContainsKey("0x0003") && ExifToolValueDic.ContainsKey("0x0004")) { // GPS座標すべての値がそろっていれば
-                lat = ExifToolValueDic["0x0001"];
-                if (lat.ToUpper().StartsWith("N") || lat.StartsWith("北")) { // 北緯または南緯
-                    lat = "N ";
-                } else if (lat.ToUpper().StartsWith("S") || lat.StartsWith("南")) { // 北緯または南緯
-                    lat = "S ";
-                } else {
-                    return ""; // 値を返す
-                }
-                lon = ExifToolValueDic["0x0003"];
-                if (lon.ToUpper().StartsWith("E") || lon.StartsWith("東")) { // 東経または西経
-                    lon = " , E ";
-                } else if (lon.ToUpper().StartsWith("W") || lon.StartsWith("西")) { // 東経または西経
-                    lon = " , W ";
-                } else {
-                    return ""; // 値を返す
-                }
-                double latitude = 0.0, longitude = 0.0; // 緯度と経度の初期化
-                                                        // ここからは緯度のnn deg nn ' nn.nn " 形式を値への変換
-                string latStr = ExifToolValueDic["0x0002"]; // 緯度の値を取得
-                int posdeg = latStr.IndexOf(" deg");
-                string sDeg = latStr.Substring(0, posdeg).Trim(); // 度の部分を取得
-                int posmin = latStr.IndexOf('\'');
-                string sMin = latStr.Substring(posdeg + 4, posmin - posdeg - 4).Trim(); // 分の部分を取得
-                string sSec = latStr.Substring(posmin + 1).Trim(); // 秒の部分を取得
-                sSec = sSec.Replace("\"", "").Trim(); // 秒の部分からダブルクォーテーションを削除
-                if (int.TryParse(sDeg, out int deg) && int.TryParse(sMin, out int min) && double.TryParse(sSec, out double secD)) {
-                    if (deg < 0 || deg >= 90 || min < 0 || min >= 60 || secD < 0 || secD >= 60) {
-                        return ""; // 度、分、秒が不正な場合は空文字を返す
+            string lat = GetExifLastValue("0x0001");
+            string lon = GetExifLastValue("0x0003");
+            string latStr = GetExifLastValue("0x0002");
+            string lonStr = GetExifLastValue("0x0004");
+            if(!string.IsNullOrEmpty(lat) && !string.IsNullOrEmpty(lon) && !string.IsNullOrEmpty(latStr) && !string.IsNullOrEmpty(lonStr)) {
+                if (GetGPSCoordinates(latStr, out string latD) && GetGPSCoordinates(lonStr, out string lonD)) {
+                    if (lat.ToUpper().StartsWith("N") || lat.StartsWith("北")) { // 北緯または南緯
+                        lat = "N ";
+                    } else if (lat.ToUpper().StartsWith("S") || lat.StartsWith("南")) { // 北緯または南緯
+                        lat = "S ";
+                    } else {
+                        return ""; // 値を返す
                     }
-                    latitude = deg + min / 60.0 + secD / 3600.0; // 緯度を計算
-                }
+                    if (lon.ToUpper().StartsWith("E") || lon.StartsWith("東")) { // 東経または西経
+                        lon = " , E ";
+                    } else if (lon.ToUpper().StartsWith("W") || lon.StartsWith("西")) { // 東経または西経
+                        lon = " , W ";
+                    } else {
+                        return ""; // 値を返す
+                    }
+                    double latitude = 0.0, longitude = 0.0; // 緯度と経度の初期化
+                                                            // ここからは緯度のnn deg nn ' nn.nn " 形式を値への変換
+                    int posdeg = latStr.IndexOf(" deg");
+                    string sDeg = latStr.Substring(0, posdeg).Trim(); // 度の部分を取得
+                    int posmin = latStr.IndexOf('\'');
+                    string sMin = latStr.Substring(posdeg + 4, posmin - posdeg - 4).Trim(); // 分の部分を取得
+                    string sSec = latStr.Substring(posmin + 1).Trim(); // 秒の部分を取得
+                    sSec = sSec.Replace("\"", "").Trim(); // 秒の部分からダブルクォーテーションを削除
+                    if (int.TryParse(sDeg, out int deg) && int.TryParse(sMin, out int min) && double.TryParse(sSec, out double secD)) {
+                        if (deg < 0 || deg >= 90 || min < 0 || min >= 60 || secD < 0 || secD >= 60) {
+                            return ""; // 度、分、秒が不正な場合は空文字を返す
+                        }
+                        latitude = deg + min / 60.0 + secD / 3600.0; // 緯度を計算
+                    }
 
-                // ここからは経度の 　nnn deg nn ' nn.nn " 形式を値への変換
-                string lonStr = ExifToolValueDic["0x0004"]; // 経度の値を取得
-                posdeg = lonStr.IndexOf(" deg");
-                sDeg = lonStr.Substring(0, posdeg).Trim(); // 度の部分を取得
-                posmin = lonStr.IndexOf('\'');
-                sMin = lonStr.Substring(posdeg + 4, posmin - posdeg - 4).Trim(); // 分の部分を取得
-                sSec = lonStr.Substring(posmin + 1).Trim(); // 秒の部分を取得
-                sSec = sSec.Replace("\"", "").Trim(); // 秒の部分からダブルクォーテーションを削除
-                if (int.TryParse(sDeg, out int deg2) && int.TryParse(sMin, out int min2) && double.TryParse(sSec, out double secD2)) {
-                    if (deg2 < 0 || deg2 >= 180 || min2 < 0 || min2 >= 60 || secD2 < 0 || secD2 >= 60) {
-                        return ""; // 度、分、秒が不正な場合は空文字を返す
+                    // ここからは経度の 　nnn deg nn ' nn.nn " 形式を値への変換
+                    posdeg = lonStr.IndexOf(" deg");
+                    sDeg = lonStr.Substring(0, posdeg).Trim(); // 度の部分を取得
+                    posmin = lonStr.IndexOf('\'');
+                    sMin = lonStr.Substring(posdeg + 4, posmin - posdeg - 4).Trim(); // 分の部分を取得
+                    sSec = lonStr.Substring(posmin + 1).Trim(); // 秒の部分を取得
+                    sSec = sSec.Replace("\"", "").Trim(); // 秒の部分からダブルクォーテーションを削除
+                    if (int.TryParse(sDeg, out int deg2) && int.TryParse(sMin, out int min2) && double.TryParse(sSec, out double secD2)) {
+                        if (deg2 < 0 || deg2 >= 180 || min2 < 0 || min2 >= 60 || secD2 < 0 || secD2 >= 60) {
+                            return ""; // 度、分、秒が不正な場合は空文字を返す
+                        }
+                        longitude = deg2 + min2 / 60.0 + secD2 / 3600.0; // 経度を計算
                     }
-                    longitude = deg2 + min2 / 60.0 + secD2 / 3600.0; // 経度を計算
-                }
-                return lat + latitude.ToString("#.########") + lon + longitude.ToString("#.########"); // 緯度と経度を返す
+                    return lat + latitude.ToString("#.########") + lon + longitude.ToString("#.########"); // 緯度と経度を返す
+                }                
             }
             return ""; // GPS情報が不完全な場合は空文字を返す
+
+
+            //if (ExifToolValueDic.ContainsKey("0x0001") && ExifToolValueDic.ContainsKey("0x0002") && ExifToolValueDic.ContainsKey("0x0003") && ExifToolValueDic.ContainsKey("0x0004")) { // GPS座標すべての値がそろっていれば
+            //    lat = ExifToolValueDic["0x0001"];
+            //    if (lat.ToUpper().StartsWith("N") || lat.StartsWith("北")) { // 北緯または南緯
+            //        lat = "N ";
+            //    } else if (lat.ToUpper().StartsWith("S") || lat.StartsWith("南")) { // 北緯または南緯
+            //        lat = "S ";
+            //    } else {
+            //        return ""; // 値を返す
+            //    }
+            //    lon = ExifToolValueDic["0x0003"];
+            //    if (lon.ToUpper().StartsWith("E") || lon.StartsWith("東")) { // 東経または西経
+            //        lon = " , E ";
+            //    } else if (lon.ToUpper().StartsWith("W") || lon.StartsWith("西")) { // 東経または西経
+            //        lon = " , W ";
+            //    } else {
+            //        return ""; // 値を返す
+            //    }
+            //    double latitude = 0.0, longitude = 0.0; // 緯度と経度の初期化
+            //                                            // ここからは緯度のnn deg nn ' nn.nn " 形式を値への変換
+            //    string latStr = ExifToolValueDic["0x0002"]; // 緯度の値を取得
+            //    int posdeg = latStr.IndexOf(" deg");
+            //    string sDeg = latStr.Substring(0, posdeg).Trim(); // 度の部分を取得
+            //    int posmin = latStr.IndexOf('\'');
+            //    string sMin = latStr.Substring(posdeg + 4, posmin - posdeg - 4).Trim(); // 分の部分を取得
+            //    string sSec = latStr.Substring(posmin + 1).Trim(); // 秒の部分を取得
+            //    sSec = sSec.Replace("\"", "").Trim(); // 秒の部分からダブルクォーテーションを削除
+            //    if (int.TryParse(sDeg, out int deg) && int.TryParse(sMin, out int min) && double.TryParse(sSec, out double secD)) {
+            //        if (deg < 0 || deg >= 90 || min < 0 || min >= 60 || secD < 0 || secD >= 60) {
+            //            return ""; // 度、分、秒が不正な場合は空文字を返す
+            //        }
+            //        latitude = deg + min / 60.0 + secD / 3600.0; // 緯度を計算
+            //    }
+
+            //    // ここからは経度の 　nnn deg nn ' nn.nn " 形式を値への変換
+            //    string lonStr = ExifToolValueDic["0x0004"]; // 経度の値を取得
+            //    posdeg = lonStr.IndexOf(" deg");
+            //    sDeg = lonStr.Substring(0, posdeg).Trim(); // 度の部分を取得
+            //    posmin = lonStr.IndexOf('\'');
+            //    sMin = lonStr.Substring(posdeg + 4, posmin - posdeg - 4).Trim(); // 分の部分を取得
+            //    sSec = lonStr.Substring(posmin + 1).Trim(); // 秒の部分を取得
+            //    sSec = sSec.Replace("\"", "").Trim(); // 秒の部分からダブルクォーテーションを削除
+            //    if (int.TryParse(sDeg, out int deg2) && int.TryParse(sMin, out int min2) && double.TryParse(sSec, out double secD2)) {
+            //        if (deg2 < 0 || deg2 >= 180 || min2 < 0 || min2 >= 60 || secD2 < 0 || secD2 >= 60) {
+            //            return ""; // 度、分、秒が不正な場合は空文字を返す
+            //        }
+            //        longitude = deg2 + min2 / 60.0 + secD2 / 3600.0; // 経度を計算
+            //    }
+            //    return lat + latitude.ToString("#.########") + lon + longitude.ToString("#.########"); // 緯度と経度を返す
+            //}
+            //return ""; // GPS情報が不完全な場合は空文字を返す
         }
 
         // GPS高度を取得して返す
         private string GetGPSHeight() {
             string sAlt = ExifToolValueDic.TryGetValue("0x0005", out string value) ? value : ""; // GPS高度の値を取得
+            if(sAlt == "") {
+                return ""; // GPS高度の値が無ければ空文字を返す
+            }
             switch (sAlt) {
                 case "Above Sea Level": sAlt = "GPS高度+"; break;
                 case "Below Sea Level": sAlt = "GPS高度-"; break;
@@ -222,7 +289,7 @@ namespace PictureList {
 
 
         /// <summary>
-        /// exiftool EXIF:ALL --IFD1:ALL --SubIFD:All --InteropIFD:All -G0:1 -H -a -s ファイル名 コマンドで取得されたデータを素早くTagIDと値の辞書に変換するメソッド
+        /// exiftool -EXIF:ALL --IFD1:ALL --InteropIFD:All -G0:1 -H -a -s ファイル名 コマンドで取得されたデータを素早くTagIDと値の辞書に変換するメソッド
         /// </summary>
         /// <remarks>入力文字列の各行はタグ ID とその値を含むことが期待されタグ ID は 17 文字目から 6 文字に渡り、
         /// 値はコロン (':') 文字の後に始まる。</remarks>
@@ -233,24 +300,19 @@ namespace PictureList {
             string TagGrp, TagID, TagName, Value;
             foreach (string line in lines) {
                 string str = GetTagGrp(line, out TagGrp);  // グループ名を取り出し、残りの文字列を取得
-                //if (str.StartsWith("[File", StringComparison.OrdinalIgnoreCase)) {  // File情報の行
-                //    if (GetFileInfo(line, out TagName, out Value)) { // File情報の取得
-                //        if (!FileInfoDic.ContainsKey(TagName)) {
-                //            FileInfoDic[TagName] = Value; // 辞書に追加
-                //        }
-                //    }
-                //} else {                // Exif情報
-                    //if (!TagGrp.Contains("SubIFD") && !TagGrp.Contains("InteropIFD")) {       // SubIFDとInteropIFDは無視する
-                        GetTagIDetc(str, out TagID, out TagName, out Value); // タグID、タグ名、値を取得
-                        if (TagID.StartsWith("0x")) {       // TagIDが0xで始まる場合のみ追加
-                            if (ExifToolValueDic.ContainsKey(TagID)) {
-                                Debug.Print($"TagID {TagID}     旧値:[ExifToolValueDic[TgaID]] 新値:[Value]"); // デバッグ用の出力
+                // ExifToolの出力値を得る方法を重複値はデフォルトで許さないようにし、拡張子によっては許す場合を設けるように変更
+                GetTagIDetc(str, out TagID, out TagName, out Value); // タグID、タグ名、値を取得
+                if (TagID.StartsWith("0x")) {       // TagIDが0xで始まる場合のみ追加
+                    if (ExifToolValueDic.ContainsKey(TagID)) {  //すでに取得済みと同じTagIDの場合
+                        if (PriorityExifGroup.ContainsKey(cExt)) {
+                            if (TagGrp == PriorityExifGroup[cExt]) {
+                                ExifToolValueDic[TagID] = Value; // 辞書に追加(上書き可能）
                             }
-                            ExifToolValueDic[TagID] = Value; // 辞書に追加.  同じTagIDの場合は上書きされる
                         }
-                    //}
-
-                //}
+                    } else {
+                        ExifToolValueDic[TagID] = Value;
+                    }
+                }
             }
             return true;
         }
@@ -300,51 +362,17 @@ namespace PictureList {
         }
 
         // [File で始まる FileInfo関連の
-        bool GetFileInfo(string str, out string tagName, out string value) {
-            // File情報の取得
-            int pos = str.IndexOf('-');
-            int pos2 = str.IndexOf(':');
-            if (pos < 0 || pos2 < pos) {
-                tagName = string.Empty;
-                value = string.Empty;
-                return false; // 見つからない場合は空の値を返す
-            }
-            tagName = str.Substring(pos + 2, pos2 - pos - 2).Trim(); // タグ名を取得
-            value = str.Substring(pos2 + 1).Trim(); // 値を取得
-            return true;
-        }
-
-        ////以下は、ExifToolの出力を解析するためのメソッドで、EXIFグループのみの値を探すには冗長であるが、拡張に備えて残しておく
-        ///// <summary>
-        ///// PEXIFツールデータを含む文字列を解析し、抽出された値で提供された辞書を更新する。
-        ///// </summary>
-        ///// <remarks>解析するためには、入力文字列は特定のフォーマットに従わなければならない： - それは 『[』 で始まらなければ
-        /////なりません。- グループ名は角括弧で囲み、その後に 「0x 」で始まるタグIDを続けなければならない。- タグ名はコロンで区
-        /////切り、その後に関連する値を続けなければならない。フォーマットが無効な場合、メソッドは辞書を修正せずに
-        /////<see langword="false"/>を返す。
-        /////</remarks>
-        ///// <param name="str">特定のフォーマットのEXIFツールデータを含む入力文字列。</param>
-        ///// <param name="eXifToolLists">抽出されたEXIFツールデータを格納する辞書。</param>
-        ///// <returns><see langword="true"/> 正しいデータでない場合は false を返す</returns>
-        //bool GetExifToolLists(string str, Dictionary<string, string> eXifToolLists) {
-        //    int len, pos;
-        //    len = str.Length;
-        //    string Grp, TagID, TagName, Value;
-        //    if (len < 14 || str[0] != '[') return false; //先頭は [ でなければならない
-        //    pos = str.IndexOf(']');
-        //    if (pos < 0 || pos > 15) return false;   // ] は 15 文字以内にある必要がある
-        //    Grp = str.Substring(1, pos - 1).Trim(); // グループ名を取得
-        //    str = str.Substring(pos + 1).Trim(); // グループ名を削除
-        //    pos = str.IndexOf(' '); // タグIDの区切り文字はスペース
-        //    if (pos < 0 || !str.StartsWith("0x")) return false; // タグIDが見つからない場合は失敗
-        //    TagID = str.Substring(0, pos).Trim(); // タグIDを取得
-        //    str = str.Substring(pos).Trim(); // タグIDを削除
-        //    pos = str.IndexOf(':'); // タグ名の区切り文字はコロン
-        //    if (pos < 0) return false; // タグ名が見つからない場合は失敗
-        //    TagName = str.Substring(0, pos).Trim(); // タグ名を取得
-        //    Value = str.Substring(pos + 1).Trim(); // 値を取得
-        //    txtOut.Text += $"{Grp} {TagID} {TagName} : {Value}" + Environment.NewLine;
-        //    eXifToolLists[TagID] = Value; // 辞書に追加
+        //bool GetFileInfo(string str, out string tagName, out string value) {
+        //    // File情報の取得
+        //    int pos = str.IndexOf('-');
+        //    int pos2 = str.IndexOf(':');
+        //    if (pos < 0 || pos2 < pos) {
+        //        tagName = string.Empty;
+        //        value = string.Empty;
+        //        return false; // 見つからない場合は空の値を返す
+        //    }
+        //    tagName = str.Substring(pos + 2, pos2 - pos - 2).Trim(); // タグ名を取得
+        //    value = str.Substring(pos2 + 1).Trim(); // 値を取得
         //    return true;
         //}
 
@@ -355,9 +383,9 @@ namespace PictureList {
         /// <returns>標準出力</returns>
         string GetRawExif(string fPath) {
             // 実行するExifToolのコマンドは、引数にパス名を取る、項目名と値がコロンで区切られただけの形式
-            // Exifグループすべてとその中のIFD１グループ=サムネイル を除外し、グループ名のレベル０と１を表示し
+            // Exifグループすべてとその中のIFD１グループ=サムネイルとInterrop を除外し、グループ名のレベル０と１を表示し
             // TagIDを16進数で表示し、重複を許し名前は短い形式（スペースを除去）で表示する
-            ProcessStartInfo processStartInfo = new("exiftool", "-EXIF:ALL --IFD1:ALL --SubIFD:All --InteropIFD:All -G0:1 -H -a -s " + fPath);
+            ProcessStartInfo processStartInfo = new("exiftool", "-EXIF:ALL --IFD1:ALL --InteropIFD:All -G0:1 -H -a -s " + fPath);
             //ウィンドーを表示しない
             processStartInfo.CreateNoWindow = true;
             processStartInfo.UseShellExecute = false;
@@ -458,7 +486,7 @@ namespace PictureList {
                 return inStr;
             }
             if (focusNum - Math.Truncate(focusNum) == 0) {
-            return focusNum.ToString("#.") + " mm";
+                return focusNum.ToString("#.") + " mm";
             } else {
                 return focusNum.ToString() + " mm";
             }
@@ -494,46 +522,5 @@ namespace PictureList {
             outStr = coord.ToString("#.########"); // 緯度または経度を計算
             return true;
         }
-
-        //// F-FullPath 合成関数でフルパスを取得する
-        //private string GetFullPath(string inStr) {
-        //    if (!FileInfoDic.ContainsKey("FileName") || !FileInfoDic.ContainsKey("Directory")) {
-        //        return inStr;
-        //    }
-        //    string outStr = FileInfoDic["Directory"] + "\\" + FileInfoDic["FileName"];
-        //    return outStr.Replace('/', '\\'); // Windowsのパス区切りをUNIX形式に変換
-        //}
-
-        //// F-FileBody
-        //private string GetFileBody(string inStr) {
-        //    if (!FileInfoDic.ContainsKey("FileName")) {
-        //        return inStr;
-        //    }
-        //    string fileName = FileInfoDic["FileName"];
-        //    int pos = fileName.LastIndexOf('.');
-        //    if (pos < 0) {
-        //        return fileName; // 拡張子がない場合はそのまま返す
-        //    }
-        //    return fileName.Substring(0, pos); // 拡張子を除いたファイル名を返す
-
-        //}
-
-        //// F-DateTime ExifToolの日付形式を日本の標準的な形式に変換する
-        //private string GetFileDateTime(string inStr) {
-        //    if (!FileInfoDic.ContainsKey("FileModifyDate")) {
-        //        return inStr;
-        //    }
-        //    string outStr = "";
-        //    try {
-        //        string dateTime = FileInfoDic["FileModifyDate"];
-        //        // ExifToolでは日付と時刻が "yyyy:MM:dd HH:mm:ss" の形式で出力される
-        //        DateTime parsedDate = DateTime.ParseExact(dateTime, "yyyy:MM:dd HH:mm:ss", null);
-        //        // 日付と時刻を適切な形式に変換
-        //        outStr = parsedDate.ToString("yyyy/MM/dd HH:mm:ss");
-        //    } catch (FormatException) {
-        //        return inStr; // 解析に失敗した場合はそのまま返す
-        //    }
-        //    return outStr;
-        //}
     }
 }

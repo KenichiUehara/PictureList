@@ -25,35 +25,24 @@ using System.Windows.Resources;
 using System.Windows.Shapes;
 using static System.Net.Mime.MediaTypeNames;
 
-//using System.Drawing;
-//using System.Drawing.Imaging;
-
-//#pragma warning disable CA1416
 namespace PictureList {
     public partial class Form1 : Form {
         private static List<Exiflist> exifLists = new();  //Exif項目のリスト
-        public static List<Exiflist> ExifTagOutLists = new(); //出力するExif項目のリスト  
-        //public Dictionary<string, int> OrgExifTagOutDic = []; //出力するExif項目の辞書の初期値
+        public static List<Exiflist> ExifTagOutLists = new(); //出力するExif項目のリスト          
         public static string ExifListTitle;                                    //読み込んだExif CSVファイルの先頭行
         StringBuilder OutText = new();                    //出力テキスト
         StringBuilder OutTitleList = new();               //出力用のタイトル文字列
 
         public const string SettingCSVPath = "./OutputExifList/PictureListExif.csv"; //Exif CSVへのパス
         public const string SettingDefaultCSVPath = "./OutputExifList/DefaultPictureListExif.csv"; //同上デフォルト
-        //public const string SettingExifToolCSVPath = "./OutputExifList/ExifToolConv.csv"; //ExifToolConv.csvVへのパス
         public static bool IsReadCSV = false;                           //Exif CSVファイルを読み込んだかのフラグ
-        List<string> ExifExtLists = new();                 //Exif調査用拡張子のリスト
+        Dictionary<string, string> ExifExtDic = new();                 //Exif調査用拡張子のリスト
         // ExifAPIを適用できるファイルの拡張子のリスト
-        static public readonly List<string> APIEXTs = new() { "JPG", "JPEG", "TIFF", "TIF" };
+        static public readonly List<string> APIEXTs = new() { "jpg", "jpeg", "tiff", "tif" };
         // ExifToolで調査できる拡張子のリスト
         static public List<string> ExifToolEXTs = new();
         //ExifTool関係
         public const string ExifToolValueCSVPath = "./OutputExifList/ExifToolValueTranslate.csv"; //ExifTool変換CSVファイルへのパス
-
-        // ExifToolのExif値の選択肢の値のCIPA準拠の翻訳を格納するディクショナリのクラス
-        //public class ExifToolDic : Dictionary<string, string> {
-        //    public ExifToolDic() : base() { }
-        //}
 
         public class ExifTransDic : Dictionary<string, string> {
             public ExifTransDic() : base() { }
@@ -65,24 +54,21 @@ namespace PictureList {
 
         // Change the field `ExifToolListsDic` to be static since it is being accessed in a static context.
         private static Dictionary<string, Dictionary<string, ExifTransDic>> ExifToolListsDic = new();
-        //public static Dictionary<string, ExifToolDic> ExifToolListsDic = new();
-        // Change the field `IsReadExifToolConv` to be static since it is being accessed in a static context.
-        private static bool IsReadExifToolConv = false; // ExifTool変換CSVファイルを読み込んだかのフラグ
+        // private static bool IsReadExifToolConv = false; // ExifTool変換CSVファイルを読み込んだかのフラグ
 
         // プログレスバーなどのための変数
         private int FileSum, FileDone, DirSum, DirDone, BothSum, CountInterval, NextDispNum; //探索数カウント用
         const int ProgressBarDivide = 200;
         string mask, dmask, sepa, sepaHead, sepaTail = "\r\n";
         private bool IsMadeExifToolConv = false;
-        static private bool IsExifAllSet = true;
+        //static private bool IsExifAllSet = true;
 
         private int exifToolUse;
-        //public Dictionary<string, string> ExifToolVal = new();
         public static List<Exiflist> ExifLists { get => exifLists; set => exifLists = value; }
 
         //ExifToolConvList ExifToolのExifPictureの項目への対照ディクショナリ用
         class ExifToolItems {
-            public int qty;
+            // public int qty;
             public string[] exifToolItem = new string[4];
         };
 
@@ -130,7 +116,7 @@ namespace PictureList {
                         IsFistLine = false;
                 }
             }
-            IsReadExifToolConv = true; // ExifTool変換CSVファイルを読み込んだ
+            //IsReadExifToolConv = true; // ExifTool変換CSVファイルを読み込んだ
         }
 
         //出力するもののリスト
@@ -270,8 +256,8 @@ namespace PictureList {
             //以下の2行は開発時に不用意に属性候補リストを変更しないため
             if (!IsReadCSV)
                 return;
-            DialogResult result = MessageBox.Show("表示属性の変更を保存するなら ハイ", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result != DialogResult.Yes) return; //ハイでなければ保存しない
+            DialogResult result = MessageBox.Show("Exif表示項目の変更を保存するなら はい", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result != DialogResult.Yes) return; //はいでなければ保存しない
             string path = SettingCSVPath;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             using StreamWriter sw = new(path, false, System.Text.Encoding.GetEncoding("shift_jis"));
@@ -291,7 +277,7 @@ namespace PictureList {
 
         public Dictionary<string, int> OrgExiftTagOutDic { get; set; } = new(); //出力用のExif項目のディクショナリの大本
         public Dictionary<string, int> ExifTagOutDic { get; set; } = new();    //出力用のExif項目のディクショナリ
-        public Dictionary<string, string> ExifOutLists { get; private set; } //OrgExiftOutDicの探索時の変更される辞書
+        // public Dictionary<string, string> ExifOutLists { get; private set; } //OrgExiftOutDicの探索時の変更される辞書
 
         // OrgExifTagOutDic を作成する。これには合成関数用のTagID（そのValueは -1)も含まれる
         void SetOrgExifTagOutDic() {
@@ -315,6 +301,8 @@ namespace PictureList {
                     OrgExiftTagOutDic.Add("0x011a", -1);
                 if (!OrgExiftTagOutDic.ContainsKey("0x011b"))
                     OrgExiftTagOutDic.Add("0x011b", -1);
+                if (!OrgExiftTagOutDic.ContainsKey("0x0128"))
+                    OrgExiftTagOutDic.Add("0x0128", -1);
             }
             if (OrgExiftTagOutDic.ContainsKey("G-GPSLocation")) { //G-GPSLocationは0x0001 GPSLatitudeRef,0x0002 GPSLatitude,0x0003
                                                                   //GPSLongitudeRef,0x0004 GPSLongitude を使用
@@ -333,78 +321,10 @@ namespace PictureList {
                 if (!OrgExiftTagOutDic.ContainsKey("0x0006"))
                     OrgExiftTagOutDic.Add("0x0006", -1);
             }
-            ////FileInfで取得する値を追加する
-            //if (!OrgExiftTagOutDic.ContainsKey("F-FullPAth")) { //F-FullPAth は フルパス
-            //    if (!OrgExiftTagOutDic.ContainsKey("F-FullPAth"))
-            //        OrgExiftTagOutDic.Add("F-FullPAth", -2);
-            //}
-            //if (!OrgExiftTagOutDic.ContainsKey("F-FileName")) { //F-FileName は ファイル名
-            //    if (!OrgExiftTagOutDic.ContainsKey("F-FileName"))
-            //        OrgExiftTagOutDic.Add("F-FileName", -2);
-            //}
-            //if (!OrgExiftTagOutDic.ContainsKey("F-Ext")) { //F-Ext は 拡張子
-            //    if (!OrgExiftTagOutDic.ContainsKey("F-Ext"))
-            //        OrgExiftTagOutDic.Add("F - Ext", -2);
-            //}
-            //if (!OrgExiftTagOutDic.ContainsKey("F-FileBody")) { //F-FileBody は ファイル名本体
-            //    if (!OrgExiftTagOutDic.ContainsKey("F-FileBody"))
-            //        OrgExiftTagOutDic.Add("F-FileBody", -2);
-            //}
-            //if (!OrgExiftTagOutDic.ContainsKey("F-Size")) { //F-Size は サイズ
-            //    if (!OrgExiftTagOutDic.ContainsKey("F-Size"))
-            //        OrgExiftTagOutDic.Add("F-Size", -2);
-            //}
-            //if (!OrgExiftTagOutDic.ContainsKey("F-DateTime")) { //F-DateTime は 作成日
-            //    if (!OrgExiftTagOutDic.ContainsKey("F-DateTime"))
-            //        OrgExiftTagOutDic.Add("F-DateTime", -2);
-            //}
-            //if (!OrgExiftTagOutDic.ContainsKey("F-Width")) { //F-Width は 横幅(Pixel)
-            //    if (!OrgExiftTagOutDic.ContainsKey("F-Width"))
-            //        OrgExiftTagOutDic.Add("F-Width", -2);
-            //}
-            //if (!OrgExiftTagOutDic.ContainsKey("F-Height")) { //F-Height は 縦幅(Pixel)
-            //    if (!OrgExiftTagOutDic.ContainsKey("F-Height"))
-            //        OrgExiftTagOutDic.Add("F-Height", -2);
-            //}
         }
-
-        ///<summary>
-        /// ExifPictureクラスからExifTagOutListsに従ってExif項目の出力用項目名と値のリスト ExifOutLists を作る
-        /// 値はすべて文字列に変換。値が見つからなければ ""とする
-        /// </summary>
-        /// <param name="exifPicture"></param>
-        private void GetExifList(ExifAPI exifPicture) {
-            ExifOutLists.Clear();
-            IsExifAllSet = true;
-            foreach (var item in ExifTagOutLists) {
-                //string type = item.Type.ToLower();
-
-                //string tmpstr = exifPicture.FullPath + " , " + item.Property;
-                //Debug.Print(tmpstr);
-
-                bool isOk = false;
-                object obj = new();
-                PropertyInfo propertyInfo = exifPicture.GetType().GetProperty(item.Property);
-                if (propertyInfo != null) {
-                    obj = propertyInfo.GetValue(exifPicture);
-                    if (obj != null)
-                        isOk = true;
-                }
-                if (isOk) {
-                    ExifOutLists.Add(item.Property, obj.ToString());
-                } else {
-                    ExifOutLists.Add(item.Property, "");
-                    IsExifAllSet = false;
-
-                }
-            }
-        }
-
-
 
 
         //以下はFilesからの改良部分
-
 
         /// <summary>
         /// 探索中は各実行ボタンを押せないようにする
@@ -425,14 +345,14 @@ namespace PictureList {
         /// <param name="Dir">探索の基準になるディレクトリ</param>
         private void GetDirsFilesList(string Dir) {
 
+# if DEBUG
             // 実行時間の計測
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            //
-
+#endif
             InSaerching(true);
             if (chkExif.Checked)    //Exifを出力する場合は対象の拡張子リストを得る
-                GetExifExt();
+                GetExifExtDic();
             //Exif項目を読む必要がある場合はExif項目を読み込む Imageの場合はその判定に必要
             if ((chkExif.Checked || rbtnOnlyImage.Checked || rbtnOnlyExif.Checked) && !IsReadCSV) {
                 ReadExifListFromContent(SettingCSVPath);
@@ -503,6 +423,7 @@ namespace PictureList {
 
                     //出力にFileInfo項目を追加する。
                     foreach (System.IO.FileInfo finfo in fInfoList) {
+                        string CExt = finfo.Extension.ToLower().Replace(".", "");
                         OutText.Append(sepaHead + finfo.DirectoryName);
                         OutText.Append(sepa + finfo.Name);
                         if (chkLastWriteTime.Checked)
@@ -515,11 +436,13 @@ namespace PictureList {
                             OutText.Append(sepa + finfo.Length.ToString());
                         if (chkAttribute.Checked)
                             OutText.Append(sepa + finfo.Attributes.ToString());
+                        if(chkExt.Checked)
+                            OutText.Append(sepa + CExt);
 
 
-                        //Exif属性を表示する場合
-                        //Exif属性取得には時間が掛かると思われるためここでExif属性が不要な場合は先に進まないようにしたい
-                        if (chkExif.Checked) {
+                        //Exif属性を表示する
+                        //Exif属性取得には時間が掛かると思われるためここでExif属性が不要な場合は先に進まないようにするい
+                        if (chkExif.Checked && ( rbtnAllExt.Checked || ExifExtDic.ContainsKey(CExt) || CExt=="gif" || CExt=="bmp" || CExt=="png")) {
                             //ExifTagOutListsのExif値を初期化
                             foreach (Exiflist eList in ExifTagOutLists) {
                                 eList.EValue = ""; //初期値は空文字列
@@ -529,25 +452,26 @@ namespace PictureList {
                             foreach (var exiflis in OrgExiftTagOutDic) {
                                 ExifTagOutDic.Add(exiflis.Key, exiflis.Value);
                             }
-                            //先にFileInfoで取得できる情報をExifTagOutListsに追加する
-                            GetExifFileInfo(finfo);
-
-                            //ExifAPIクラスでExif情報を取得。拡張子がJPG, JPEG, TIFF, TIFの時のみ
-                            if (APIEXTs.Contains(finfo.Extension.Replace(".", "").ToUpper()) && exifToolUse != 2) {
-                                if (ExifTagOutDic.Count > 0) {
-                                    // ExifAPIを使用してExif情報を取得
-                                    ExifAPI exifData = new(finfo.FullName, ExifTagOutLists, ExifTagOutDic);
+                            //拡張子がgif,bmpの時はBitmapで画像情報を取得する
+                            if (CExt == "gif" || CExt == "bmp" || CExt=="png") {
+                                ChkGIFBMP(finfo.FullName);
+                            } else { 
+                                //ExifAPIクラスでExif情報を取得。拡張子がjpg, jpeg, tiff, tifの時のみ
+                                if (APIEXTs.Contains(CExt) && exifToolUse != 2) {
+                                    if (ExifTagOutDic.Count > 0) {
+                                        // ExifAPIを使用してExif情報を取得
+                                        ExifAPI exifData = new(finfo.FullName, ExifTagOutLists, ExifTagOutDic);
+                                    }
                                 }
-                            }
-                            //ExixToolを調べる必要のある時だけExifToolで調べる
-                            if (IsExifAllSet && exifToolUse != 0 && ExifTagOutDic.Count > 0) {
-                                if (!IsMadeExifToolConv) {  // ExifToolConvが読み込まれていなければ読み込む
-                                    ReadExifToolConv(ExifToolValueCSVPath);
-                                    IsMadeExifToolConv = true;
+                                //ExixToolを調べる必要のある時だけExifToolで調べる
+                                if (/* IsExifAllSet && */ exifToolUse != 0 && ExifTagOutDic.Count > 0) {
+                                    //
+                                    if (!IsMadeExifToolConv) {  // ExifToolConvが読み込まれていなければ読み込む
+                                        ReadExifToolConv(ExifToolValueCSVPath);
+                                        IsMadeExifToolConv = true;
+                                    }
+                                    var exifToolData = new ExifToolMy(finfo.FullName, ExifTagOutLists, ExifTagOutDic, ExifToolListsDic, CExt);  //ExifToolのExifの読込
                                 }
-                                var exifToolData = new ExifToolMy(finfo.FullName, ExifTagOutLists, ExifTagOutDic, ExifToolListsDic);  //ExifToolのExifの読込
-                                //ExifOutListsの値を順に調べて値が無ければExifToolであるか調べる
-                                //GetExifOutValue(exifToolData);
                             }
                             makeExifData(); // ExifTagOutListsの値をOutTextに追加する
                         }
@@ -567,71 +491,64 @@ namespace PictureList {
             InSaerching(false);
 
             // 実行時間の表示
+# if DEBUG
             stopwatch.Stop();
             Debug.Print($"処理数: {FileDone + DirDone}  時間: {stopwatch.ElapsedMilliseconds / 1000.0}Sec");
-            //
-
+#endif
         }
 
-        private void GetExifFileInfo(System.IO.FileInfo finfo) {
-            var FInfos = new string[] { "F-FullPath", "F-FileName", "F-Ext", "F-FileBody", "F-Size", "F-DateTime", };
-            foreach (var FInfo in FInfos) {
-                if (ExifTagOutDic.ContainsKey(FInfo)) {
-                    int idx = ExifTagOutDic[FInfo];
-                    if (idx > 0) {
-                        string eVal = "";
-                        switch (FInfo) {
-                            case "F-FullPath": eVal = finfo.FullName; break;
-                            case "F-FileName": eVal = finfo.Name; break;
-                            case "F-Ext": eVal = finfo.Extension; break;
-                            case "F-FileBody": eVal = finfo.Name.Substring(0, finfo.Name.Length - finfo.Extension.Length); break;
-                            case "F-Size": eVal = finfo.Length.ToString(); break;
-                            case "F-DateTime": eVal = finfo.CreationTime.ToString(); break;
+        // Exif検索対象の拡張子の辞書を作成する
+        private void GetExifExtDic() {
+            ExifExtDic.Clear();
+            if (rbtnExtSelect.Checked) {
+                //if (chkMainExifExt.Checked) {
+                var exts = ".JPG,.JPEG,TIF,TIFF".Split(',');
+                foreach (var ext in exts) {
+                    string sExt = ext.ToLower().Trim();
+                    if (sExt[0] == '.')
+                        sExt = sExt.Substring(1); //先頭のドットを削除
+                    if (!ExifExtDic.ContainsKey(sExt)) {
+                        ExifExtDic.Add(sExt, "0");
+                    }
+                }
+                //}
+                if (chkMainExifExt.Checked) {
+                    exts = chkMainExifExt.Text.Split(',');
+                    foreach (var ext in exts) {
+                        string sExt = ext.ToLower().Trim();
+                        if (sExt[0] == '.')
+                            sExt = sExt.Substring(1); //先頭のドットを削除
+                        if (!ExifExtDic.ContainsKey(sExt)) {
+                            ExifExtDic.Add(sExt, "1");
                         }
-                        if (eVal != "") {
-                            ExifTagOutLists[idx - 1].EValue = eVal; // ExifTagOutListsの値を更新
-                            ExifTagOutDic.Remove(FInfo);                                    // 
+                    }
+                }
+                if (chkSubExifExt.Checked) {
+                    exts = chkSubExifExt.Text.Split(',');
+                    foreach (var ext in exts) {
+                        string sExt = ext.ToLower().Trim();
+                        if (sExt[0] == '.')
+                            sExt = sExt.Substring(1); //先頭のドットを削除
+                        if (!ExifExtDic.ContainsKey(sExt)) {
+                            ExifExtDic.Add(sExt, "2");
                         }
-
+                    }
+                }
+                if (chkExifTextExt.Checked) {
+                    exts = txtAdditionalExifExtLists.Text.Split(',');
+                    foreach (var ext in exts) {
+                        string sExt = ext.ToLower().Trim();
+                        if (sExt[0] == '.')
+                            sExt = sExt.Substring(1); //先頭のドットを削除
+                        if (!ExifExtDic.ContainsKey(sExt)) {
+                            ExifExtDic.Add(sExt, "3");
+                        }
                     }
                 }
             }
         }
 
-        /// <summary>
-        /// ExifOutListsの値をExifConvListsの変換表に従ってExifToolの値で更新する
-        /// </summary>
-        /// <param name="exifToolMy"></param>
-        /// <returns></returns>
-        private bool GetExifOutValue(ExifToolMy exifToolMy) {
-            bool rtnBool = false;
-            foreach (var exifOutList in ExifOutLists) {
-                if (exifToolUse == 2 || exifOutList.Value == "") {
-                    string exifName = exifOutList.Key;
-                    string nValue = "";
-                    rtnBool = false;
-                    if (ExifConvList.TryGetValue(exifName, out ExifToolItems value)) {
-                        for (int i = 0; i < value.qty; i++) {
-                            //rtnBool = false;
-                            if (exifToolMy.ExifToolValueDic.ContainsKey(value.exifToolItem[i])) {
-                                nValue = exifToolMy.ExifToolValueDic[value.exifToolItem[i]];
-                                if (nValue != "") {
-                                    rtnBool = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (rtnBool)
-                            ExifOutLists[exifName] = nValue;
-
-                        if (nValue != "")
-                            ExifOutLists[exifName] = nValue;
-                    }
-                }
-            }
-            return rtnBool;
-        }
-
+        
         /// <summary>
         /// ディレクトリ情報を出す設定ならその情報を追加する
         /// </summary>
@@ -653,8 +570,84 @@ namespace PictureList {
                     OutText.Append(sepa + "0");
                 if (chkAttribute.Checked)
                     OutText.Append(sepa + dirInfo.Attributes.ToString());
+                if(chkExt.Checked)
+
                 OutText.Append(sepaTail);
                 DirDone++;
+            }
+        }
+
+        /// <summary>
+        /// fullpathで示すBtmapを返そうとする
+        /// </summary>
+        /// <param name="fullpath"></param>
+        /// <returns></returns>
+        static public Bitmap MakeBMP(string fullpath) {
+            System.Drawing.Bitmap bmp = null;
+
+            try {
+                bmp = new System.Drawing.Bitmap(fullpath);
+                //bmp = new System.Drawing.Bitmap(fullPath);
+                //bmp= Image.FromFile(fullPath);
+            } catch (Exception exception) {
+                string error = fullpath + " : " + exception.Message;
+                // Console.WriteLine(error);
+#if DEBUG
+                System.Diagnostics.Debug.Print(error);
+#endif
+                //System.Windows.Forms.MessageBox.Show(error);
+                //DateTimeOriginal = ""; //以前はなぜか error;
+            }
+            return bmp;
+        }
+
+        //fullpathで渡されるgif,bmp,pngのファイルに対してBitmap情報の値をExif値の代わりに代入する
+        private void ChkGIFBMP(string fullpath) {
+            Bitmap bmp = MakeBMP(fullpath);
+            if (bmp != null) {
+                if (ExifTagOutDic.ContainsKey("G-WidthHeight")) {
+                    int idx = ExifTagOutDic["G-WidthHeight"];
+                    if (idx > 0) {
+                        ExifTagOutLists[idx - 1].EValue = bmp.Width.ToString() + " x " + bmp.Height.ToString();
+                        ExifTagOutDic.Remove("G-WidthHeight");
+                    }
+                }
+                if (ExifTagOutDic.ContainsKey("G-Resolution")) {
+                    int idx = ExifTagOutDic["G-Resolution"];
+                    if (idx > 0) {
+                        ExifTagOutLists[idx - 1].EValue = bmp.HorizontalResolution.ToString("0.##") + " x " + bmp.VerticalResolution.ToString("0.##") + " " + bmp.PixelFormat.ToString();
+                        ExifTagOutDic.Remove("G-Resolution");
+                    }
+                }
+                if(ExifTagOutDic.ContainsKey("0x0100")) { //ImageWidth
+                    int idx = ExifTagOutDic["0x0100"];
+                    if (idx > 0) {
+                        ExifTagOutLists[idx - 1].EValue = bmp.Width.ToString();
+                        ExifTagOutDic.Remove("0x0100");
+                    }
+                }
+                if (ExifTagOutDic.ContainsKey("0x0101")) {
+                    int idx = ExifTagOutDic["0x0101"];
+                    if (idx > 0) {
+                        ExifTagOutLists[idx - 1].EValue = bmp.Height.ToString();
+                        ExifTagOutDic.Remove("0x0101");
+                    }
+                }
+                if (ExifTagOutDic.ContainsKey("0x011a")) { //ImageWidth
+                    int idx = ExifTagOutDic["0x011a"];
+                    if (idx > 0) {
+                        ExifTagOutLists[idx - 1].EValue = bmp.HorizontalResolution.ToString();
+                        ExifTagOutDic.Remove("0x011a");
+                    }
+                }
+                if (ExifTagOutDic.ContainsKey("0x011b")) {
+                    int idx = ExifTagOutDic["0x011b"];
+                    if (idx > 0) {
+                        ExifTagOutLists[idx - 1].EValue = bmp.VerticalResolution.ToString();
+                        ExifTagOutDic.Remove("0x011b");
+                    }
+                }
+                bmp.Dispose();
             }
         }
 
@@ -667,7 +660,6 @@ namespace PictureList {
             progressBar1.Value = BothDone;
         }
 
-        // この関数はExifOutListsを使用するものに変える
         /// <summary>
         /// 引数で指定したExifPictureクラスのタグデータからExifTagOutListsに一致するタグプロパティを順番に調べてそれと一致する情報をOutTextに追加していく
         /// </summary>
@@ -678,24 +670,7 @@ namespace PictureList {
             }
         }
 
-        //テスト用の関数
-        private void button1_Click(object sender, EventArgs e) {
-            bool busy = btnFind.Enabled; //探索中はボタンを無効にする
-            foreach (Control c in this.Controls) {
-                //if (c is CheckBox || c is RadioButton || c is Button || c is GroupBox) {
-                if (c is Button || c is GroupBox)
-                    c.Enabled = !busy;
-                //if (c is Button)
-                //    c.Enabled = !busy;          
-            }
-            //groupBoxExifExt.Enabled = chkExif.Enabled;
-            if (!chkExif.Checked)
-                groupBoxExifExt.Enabled = false;
-
-            button1.Enabled = true;
-
-        }
-
+        
 
         private void Form1_Load(object sender, EventArgs e) {
             //Settings.settingsに保存したデータの読み込み
@@ -705,7 +680,7 @@ namespace PictureList {
             chkDirMask.Checked = Properties.Settings.Default.IsMaskDir;
             saveFileDialog1.InitialDirectory = Properties.Settings.Default.OutputDir;
             //SetOutPutFileType();
-            chkLastWriteTime.Checked = Properties.Settings.Default.IsLastWriteTime;
+            //chkLastWriteTime.Checked = Properties.Settings.Default.IsLastWriteTime;　ダブっていたので削除
             OutputType Otype = (OutputType)Properties.Settings.Default.OutPutType;
             switch (Otype) {
                 case OutputType.DirFiles:
@@ -727,6 +702,7 @@ namespace PictureList {
             chkSize.Checked = Properties.Settings.Default.IsSize;
             chkAttribute.Checked = Properties.Settings.Default.IsAttribute;
             chkExif.Checked = Properties.Settings.Default.IsExif;
+            chkExt.Checked = Properties.Settings.Default.IsExt;
 
             rbtnAllExt.Checked = Properties.Settings.Default.ExifExtAllExt;
             rbtnExtSelect.Checked = !rbtnAllExt.Checked;
@@ -756,7 +732,7 @@ namespace PictureList {
             }
 
             SetOutPutFileType();
-            GetExifExt();
+            // GetExifExt();
         }
 
         //探索フォルダーを得る
@@ -790,9 +766,9 @@ namespace PictureList {
             }
         }
 
-        private void txtAdditionalExifExtLists_TextChanged(object sender, EventArgs e) {
-            GetExifExt();
-        }
+        //private void txtAdditionalExifExtLists_TextChanged(object sender, EventArgs e) {
+        //    GetExifExt();
+        //}
 
         private void btnFind_Click(object sender, EventArgs e) {
             if (System.IO.Directory.Exists(lblSearchPath.Text)) {
@@ -827,6 +803,7 @@ namespace PictureList {
             Properties.Settings.Default.IsLastAccessTime = chkLastAccessTime.Checked;
             Properties.Settings.Default.IsSize = chkSize.Checked;
             Properties.Settings.Default.IsAttribute = chkAttribute.Checked;
+            Properties.Settings.Default.IsExt = chkExt.Checked;
             Properties.Settings.Default.IsExif = chkExif.Checked;
             Properties.Settings.Default.ExifExtAllExt = rbtnAllExt.Checked;
             Properties.Settings.Default.IsChkExifMainExt = chkMainExifExt.Checked;
@@ -889,6 +866,8 @@ namespace PictureList {
                 OutTitleList.Append(sepa + "サイズ");
             if (chkAttribute.Checked)
                 OutTitleList.Append(sepa + "属性");
+            if (chkExt.Checked)
+                OutTitleList.Append(sepa + "拡張子");
             if (chkExif.Checked) {
                 foreach (var exiflist in ExifTagOutLists) {
                     OutTitleList.Append(sepa + exiflist.TagName);
@@ -941,39 +920,6 @@ namespace PictureList {
             if (rbExifToolAllways.Checked) exifToolUse = 2;
         }
 
-        //Test用
-        private void button2_Click(object sender, EventArgs e) {
-            //if (IsMadeExifToolConv == false) {
-            //    ReadExifToolConv(SettingExifToolCSVPath);
-            //    IsMadeExifToolConv = true;
-            //}
-            string fullPath = @"D:\Temp\Test\JPG\20240623_193051723.JPG";
-            System.Drawing.Image newImage = System.Drawing.Image.FromFile(fullPath);
-
-            foreach (PropertyItem propertyItem in newImage.PropertyItems) {
-                //Console.WriteLine($"ID: {propertyItem.Id}, Type: {propertyItem.Type}, Length: {propertyItem.Len}");
-                Debug.Print($"ID: {propertyItem.Id}, Type: {propertyItem.Type}, Length: {propertyItem.Len}");
-            }
-            //// System.Drawing.Bitmap bmp = null;
-            //System.Drawing.Image bmp = null;
-            //try {
-            //    //bmp = new System.Drawing.Bitmap(fullPath);
-            //    Image newImage = Image.FromFile(fullPath);
-            //    bmp = Image.FromFile(fullPath);
-
-            //    //bmp = new System.Drawing.Image.FromFile         //(fullPath);
-            //    //bmp= Image.FromFile(fullPath);
-            //} catch (Exception exception) {
-            //    string error = fullPath + " : " + exception.Message;
-            //    // Console.WriteLine(error);
-            //    System.Diagnostics.Debug.Print(error);
-            //    //System.Windows.Forms.MessageBox.Show(error);                
-            //}
-            //Debug.Print( bmp.PropertyItems.ToString());
-
-
-
-
-        }
+        
     }
 }
