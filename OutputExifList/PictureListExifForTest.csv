@@ -1,9 +1,0 @@
-プロパティ,タグ名称,型,表示順,TagID
-Org1,テスト1行目,string,,F-Test1
-Org2,テスト2行目,string,,F-Test2
-Org3,テスト3行目,string,1,F-Test3
-Org4,4テスト行目,string,,F-Test4
-Org5,テスト5行目,string,2,F-Test5
-Org6,テスト6行目,string,,F-Test6
-Org7,テスト1行目,string,3,F-Test7
-Org8,テスト1行目,string,,F-Test8

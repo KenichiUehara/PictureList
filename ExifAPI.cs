@@ -30,7 +30,9 @@ namespace PictureList {
     // パスを受けて写真ならExif情報を得る
     //
     // 注意事項
-    // このプロパティはExifの規定から作成しているが、
+    // このプロパティはExifの規定から作成していてプロパティとしてほとんどのExifタグを用意していたが特に外部から参照する必要が
+    // ないものはコメントにしている。またExifタグの中には.NET FrameworkのSystem.Drawing.Imaging.PropertyItemで取得できない
+    // ものもある。
 
     public class ExifAPI {
 
@@ -182,31 +184,31 @@ namespace PictureList {
         public string GPSLongitude { get; private set; } //0x0004 経度(数値)
         public string GPSAltitudeRef { get; private set; } //0x0005 高度の基準
         public string GPSAltitude { get; private set; } //0x0006 高度(数値)
-                                                        //public string GPSTimeStamp { get; private set; } //0x0007 GPS時間(原子時計の時間)
-                                                        //public string GPSSatellites { get; private set; } //0x0008 測位に使った衛星信号
-                                                        //public string GPSStatus { get; private set; } //0x0009 GPS受信機の状態
-                                                        //public string GPSMeasureMode { get; private set; } //0x000A GPSの測位方法
-                                                        //public string GPSDOP { get; private set; } //0x000B 測位の信頼性
-                                                        //public string GPSSpeedRef { get; private set; } //0x000C 速度の単位
-                                                        //public string GPSSpeed { get; private set; } //0x000D 速度(数値)
-                                                        //public string GPSTrackRef { get; private set; } //0x000E 進行方向の単位
-                                                        //public string GPSTrack { get; private set; } //0x000F 進行方向(数値)
-                                                        //public string GPSImgDirectionRef { get; private set; } //0x0010 撮影した画像の方向の単位
-                                                        //public string GPSImgDirection { get; private set; } //0x0011 撮影した画像の方向(数値)
-                                                        //public string GPSMapDatum { get; private set; } //0x0012 測位に用いた地図データ
-                                                        //public string GPSDestLatitudeRef { get; private set; } //0x0013 目的地の北緯(N) or 南緯(S)
-                                                        //public string GPSDestLatitude { get; private set; } //0x0014 目的地の緯度(数値)
-                                                        //public string GPSDestLongitudeRef { get; private set; } //0x0015 目的地の東経(E) or 西経(W)
-                                                        //public string GPSDestLongitude { get; private set; } //0x0016 目的地の経度(数値)
-                                                        //public string GPSDestBearingRef { get; private set; } //0x0017 目的地の方角の単位
-                                                        //public string GPSDestBearing { get; private set; } //0x0018 目的の方角(数値)
-                                                        //public string GPSDestDistanceRef { get; private set; } //0x0019 目的地までの距離の単位
-                                                        //public string GPSDestDistance { get; private set; } //0x001A 目的地までの距離(数値)
-                                                        //public string GPSProcessingMethod { get; private set; } //0x001B 測位方式の名称 oooo
-                                                        //public string GPSAreaInformation { get; private set; } //0x001C 測位地点の名称 XXXX
-                                                        //public string GPSDateStamp { get; private set; } //0x001D GPS日付 oooo
-                                                        //public string GPSDifferential { get; private set; } //0x001E GPS補正測位 XXXX
-                                                        //public string GPSHPositioningError { get; private set; } //0x001F 水平方向測位誤差 XXXX
+            //public string GPSTimeStamp { get; private set; } //0x0007 GPS時間(原子時計の時間)
+            //public string GPSSatellites { get; private set; } //0x0008 測位に使った衛星信号
+            //public string GPSStatus { get; private set; } //0x0009 GPS受信機の状態
+            //public string GPSMeasureMode { get; private set; } //0x000A GPSの測位方法
+            //public string GPSDOP { get; private set; } //0x000B 測位の信頼性
+            //public string GPSSpeedRef { get; private set; } //0x000C 速度の単位
+            //public string GPSSpeed { get; private set; } //0x000D 速度(数値)
+            //public string GPSTrackRef { get; private set; } //0x000E 進行方向の単位
+            //public string GPSTrack { get; private set; } //0x000F 進行方向(数値)
+            //public string GPSImgDirectionRef { get; private set; } //0x0010 撮影した画像の方向の単位
+            //public string GPSImgDirection { get; private set; } //0x0011 撮影した画像の方向(数値)
+            //public string GPSMapDatum { get; private set; } //0x0012 測位に用いた地図データ
+            //public string GPSDestLatitudeRef { get; private set; } //0x0013 目的地の北緯(N) or 南緯(S)
+            //public string GPSDestLatitude { get; private set; } //0x0014 目的地の緯度(数値)
+            //public string GPSDestLongitudeRef { get; private set; } //0x0015 目的地の東経(E) or 西経(W)
+            //public string GPSDestLongitude { get; private set; } //0x0016 目的地の経度(数値)
+            //public string GPSDestBearingRef { get; private set; } //0x0017 目的地の方角の単位
+            //public string GPSDestBearing { get; private set; } //0x0018 目的の方角(数値)
+            //public string GPSDestDistanceRef { get; private set; } //0x0019 目的地までの距離の単位
+            //public string GPSDestDistance { get; private set; } //0x001A 目的地までの距離(数値)
+            //public string GPSProcessingMethod { get; private set; } //0x001B 測位方式の名称 oooo
+            //public string GPSAreaInformation { get; private set; } //0x001C 測位地点の名称 XXXX
+            //public string GPSDateStamp { get; private set; } //0x001D GPS日付 oooo
+            //public string GPSDifferential { get; private set; } //0x001E GPS補正測位 XXXX
+            //public string GPSHPositioningError { get; private set; } //0x001F 水平方向測位誤差 XXXX
 
         /// <summary>
         /// コンストラクタ

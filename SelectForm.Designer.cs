@@ -24,6 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] { "Test" }, -1, System.Drawing.Color.Empty, System.Drawing.SystemColors.Window, null);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectForm));
             listViewUnSelect = new System.Windows.Forms.ListView();
             property = new System.Windows.Forms.ColumnHeader();
             tagNae = new System.Windows.Forms.ColumnHeader();
@@ -172,14 +173,14 @@
             btnExit.Name = "btnExit";
             btnExit.Size = new System.Drawing.Size(145, 66);
             btnExit.TabIndex = 5;
-            btnExit.Text = "&S 保存して終了";
+            btnExit.Text = " 保存して終了";
             btnExit.UseVisualStyleBackColor = true;
             btnExit.Click += btnExit_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new System.Drawing.Font("MS UI Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            label1.Font = new System.Drawing.Font("MS UI Gothic", 10F);
             label1.Location = new System.Drawing.Point(14, 22);
             label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label1.Name = "label1";
@@ -190,7 +191,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new System.Drawing.Font("MS UI Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            label2.Font = new System.Drawing.Font("MS UI Gothic", 10F);
             label2.Location = new System.Drawing.Point(918, 22);
             label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label2.Name = "label2";
@@ -201,7 +202,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            label3.Font = new System.Drawing.Font("MS UI Gothic", 12F);
             label3.Location = new System.Drawing.Point(390, 11);
             label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label3.Name = "label3";
@@ -258,6 +259,7 @@
             Controls.Add(listViewSelect);
             Controls.Add(listViewUnSelect);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Margin = new System.Windows.Forms.Padding(4);
             Name = "SelectForm";
             Text = "SelectForm";

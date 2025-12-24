@@ -1,11 +1,13 @@
-﻿//using Microsoft.Win32;
+﻿using log4net;
+using log4net.Appender;
+using log4net.Layout;
+using log4net.Repository.Hierarchy;
 using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Data;
-// /*using ExifLib;*/          //未使用かも
 using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
@@ -18,15 +20,28 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Resources;
 using System.Windows.Shapes;
+using Windows.Media.Core;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Boolean = System.Runtime.InteropServices.JavaScript.JSType.Boolean;
 
 namespace PictureList {
     public partial class Form1 : Form {
+        // ログ出力用
+        private static readonly log4net.ILog logger = log4net.LogManager.GetLogger("Main");
+        // キャンセルトークンソース(２個用意したがひとつですます方法もあるようだ）
+        CancellationTokenSource cts1 = new CancellationTokenSource();
+        CancellationTokenSource cts2 = new CancellationTokenSource();
+
+        static bool  IsFinding = false; //探索中かどうかのフラグ
+        const int DelayTime = 250; //探索中止後の待ち時間(ms)
+
         private static List<Exiflist> exifLists = new();  //Exif項目のリスト
         public static List<Exiflist> ExifTagOutLists = new(); //出力するExif項目のリスト          
         public static string ExifListTitle;                                    //読み込んだExif CSVファイルの先頭行
@@ -46,34 +61,27 @@ namespace PictureList {
 
         public class ExifTransDic : Dictionary<string, string> {
             public ExifTransDic() : base() { }
-
-            //public static implicit operator string(ExifTransDic v) {
-            //    throw new NotImplementedException();
-            //}
         }
 
-        // Change the field `ExifToolListsDic` to be static since it is being accessed in a static context.
+        // TagIDをキーとするExifToolDicへの辞書
         private static Dictionary<string, Dictionary<string, ExifTransDic>> ExifToolListsDic = new();
-        // private static bool IsReadExifToolConv = false; // ExifTool変換CSVファイルを読み込んだかのフラグ
 
         // プログレスバーなどのための変数
-        private int FileSum, FileDone, DirSum, DirDone, BothSum, CountInterval, NextDispNum; //探索数カウント用
-        const int ProgressBarDivide = 200;
+        private int FileSum, FileDone, DirSum, DirDone, BothSum;　//探索数カウント用
         string mask, dmask, sepa, sepaHead, sepaTail = "\r\n";
         private bool IsMadeExifToolConv = false;
-        //static private bool IsExifAllSet = true;
+        Stopwatch stopwatch = new Stopwatch();
+        TimeSpan dirTimeSpan = new TimeSpan(0);
 
         private int exifToolUse;
         public static List<Exiflist> ExifLists { get => exifLists; set => exifLists = value; }
 
         //ExifToolConvList ExifToolのExifPictureの項目への対照ディクショナリ用
         class ExifToolItems {
-            // public int qty;
             public string[] exifToolItem = new string[4];
         };
 
         static Dictionary<string, ExifToolItems> ExifConvList = new Dictionary<string, ExifToolItems>();
-        //private Dictionary<string, string> exifOutLists = new Dictionary<string, string>();
 
         /// <summary>
         /// ExifToolListsを pathのcsvファイルから作成する
@@ -85,7 +93,6 @@ namespace PictureList {
             bool IsFistLine = true; // 最初の行は項目名なので無視する
             string TagID, ToolName, CIPAName;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            //using var sr = new StreamReader(path, System.Text.Encoding.GetEncoding("Shift_Jis"));
             TextFieldParser parser = new TextFieldParser(path, Encoding.GetEncoding("Shift_JIS")); //ファイルとエンコードを指定する
             parser.TextFieldType = FieldType.Delimited;    // 区切子での処理を指定
             parser.SetDelimiters(",");                     // ","区切り 
@@ -186,8 +193,6 @@ namespace PictureList {
             string strs;
 
             ExifLists.Clear();
-            //string path = SettingCSVPath;
-            //using (var sr = new StreamReader(path, System.Text.Encoding.GetEncoding("shift_jis"))) {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             using (var sr = new StreamReader(path, System.Text.Encoding.GetEncoding("Shift_Jis"))) {
                 ExifListTitle = sr.ReadLine();
@@ -206,8 +211,7 @@ namespace PictureList {
             }
             IsReadCSV = true;
         }
-
-        // Change the method `FormTo0xffff` to be static since it is being called in a static context.
+                
         /// <summary>
         /// フォーマット "0xXXXX" の16進文字列を、標準フォーマット "0xffff" 小文字の１６進数に変換する。
         /// 元の形式が16進数でない場合は元の値を返す
@@ -266,7 +270,6 @@ namespace PictureList {
                 string property = exifItem.Property;
                 string tagName = exifItem.TagName;
                 string type = exifItem.Type;
-                //string eValue = "";
                 string order = "";
                 string tagID = exifItem.TagID; // TagIDを追加
                 if (exifItem.Order != 0)
@@ -277,7 +280,6 @@ namespace PictureList {
 
         public Dictionary<string, int> OrgExiftTagOutDic { get; set; } = new(); //出力用のExif項目のディクショナリの大本
         public Dictionary<string, int> ExifTagOutDic { get; set; } = new();    //出力用のExif項目のディクショナリ
-        // public Dictionary<string, string> ExifOutLists { get; private set; } //OrgExiftOutDicの探索時の変更される辞書
 
         // OrgExifTagOutDic を作成する。これには合成関数用のTagID（そのValueは -1)も含まれる
         void SetOrgExifTagOutDic() {
@@ -337,20 +339,27 @@ namespace PictureList {
             }
             if (!chkExif.Checked)   // Exifを出力しない場合はExifの拡張子グループを無効にする
                 groupBoxExifExt.Enabled = false;
+            if (busy) {
+                btnFind.Text = "探索中止";
+                btnFind.BackColor = SystemColors.Info;
+            } else {
+                btnFind.Text = "探索開始";
+                btnFind.BackColor = SystemColors.Control;
+            }
+            btnFind.Enabled = true;
         }
 
-        /// <summary>
+        /// <summary>fairun
         /// ファイル探索のメインルーチン
         /// </summary>
         /// <param name="Dir">探索の基準になるディレクトリ</param>
-        private void GetDirsFilesList(string Dir) {
+        private void GetDirsFilesListAsync(string Dir) {
 
 # if DEBUG
             // 実行時間の計測
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            Stopwatch stopw = new Stopwatch();
+            stopw.Start();
 #endif
-            InSaerching(true);
             if (chkExif.Checked)    //Exifを出力する場合は対象の拡張子リストを得る
                 GetExifExtDic();
             //Exif項目を読む必要がある場合はExif項目を読み込む Imageの場合はその判定に必要
@@ -362,7 +371,7 @@ namespace PictureList {
             var serchOption = System.IO.SearchOption.TopDirectoryOnly;    //SearchOptionはSystem.IO名前空間の列挙型
             if (chkSubDir.Checked)
                 serchOption = System.IO.SearchOption.AllDirectories;
-            txtComment.Text = "";
+            string CommentTxt = "";
             try {
                 // LINQ Directory.EnumerateDirectoriesは高速に処理できるので採用
                 if (chkSubDir.Checked) {
@@ -372,12 +381,18 @@ namespace PictureList {
                 }
 
             } catch (UnauthorizedAccessException) {
-                txtComment.Text = "必要なアクセス許可がありません\n";
+                CommentTxt = "必要なアクセス許可がありません\n";
             } catch (PathTooLongException) {
-                txtComment.Text = "パス名として長すぎます\n";
+                CommentTxt = "パス名として長すぎます\n";
             } catch (DirectoryNotFoundException) {
-                txtComment.Text = "マップされていない参照など無効です\n";
+                CommentTxt = "マップされていない参照など無効です\n";
             }
+            if (CommentTxt != "") {
+                logger.Info(CommentTxt);
+            }
+            this.Invoke((System.Windows.Forms.MethodInvoker)(() => {
+                txtComment.Text = CommentTxt; // テキストボックスのテキストを更新
+            }));
             dirLists.Insert(0, Dir);  //探索開始のDirを含める
             //FileSum:ファイルの総数, DirSim:フォルダの総数, BothSum 両者の合計
             FileSum = Directory.GetFiles(Dir, mask, serchOption).Length;
@@ -389,25 +404,30 @@ namespace PictureList {
             } else {
                 BothSum = FileSum + DirSum;
             }
-            lblRows.Text = BothSum.ToString("#,0");
-            lblRows.Refresh();
+            this.Invoke((System.Windows.Forms.MethodInvoker)(() => {
+                lblRows.Text = BothSum.ToString("#,0");
+            }));
+            dirTimeSpan = stopwatch.Elapsed;
+            stopwatch.Restart();
 
             //ここからファイル情報を取り出す
             //まずExif出力用のリストとタイトルの行の作成
             makeExifTagOutLists();
             SetOrgExifTagOutDic();  //ExifTagOutDicの大本となるディクショナリをセット
-            makeTextTitle();
+
+            this.Invoke((System.Windows.Forms.MethodInvoker)(() => {
+                txtComment.Text = makeTextTitle();
+            }));
+
             OutText.Clear();
             OutText.Append(OutTitleList);
-            //ファイル情報を取り出す時間が掛かる処理の進捗表示の初期設定       
-            progressBar1.Minimum = 0;
-            progressBar1.Maximum = BothSum;
+            //ファイル情報を取り出す時間が掛かる処理の進捗表示の初期設定
+            this.Invoke((System.Windows.Forms.MethodInvoker)(() => {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = BothSum;
+                progressBar1.Value = 0;
+            }));
             FileDone = 0; DirDone = 0;
-            CountInterval = (int)(BothSum / ProgressBarDivide);
-            if (CountInterval < 1) CountInterval = 1;
-            lblQty.Text = String.Format("{0:#,0} / {1:#,0}", (FileDone + DirDone), BothSum);
-            lblQty.Refresh();
-            NextDispNum = CountInterval;
 
             //ファイルの情報をフォルダ単位で取り出す 
             foreach (var dirList in dirLists) { //DirListsのDir名毎に回す
@@ -423,6 +443,9 @@ namespace PictureList {
 
                     //出力にFileInfo項目を追加する。
                     foreach (System.IO.FileInfo finfo in fInfoList) {
+                        if (cts2.Token.IsCancellationRequested) {
+                            return;
+                        }
                         string CExt = finfo.Extension.ToLower().Replace(".", "");
                         OutText.Append(sepaHead + finfo.DirectoryName);
                         OutText.Append(sepa + finfo.Name);
@@ -436,13 +459,13 @@ namespace PictureList {
                             OutText.Append(sepa + finfo.Length.ToString());
                         if (chkAttribute.Checked)
                             OutText.Append(sepa + finfo.Attributes.ToString());
-                        if(chkExt.Checked)
+                        if (chkExt.Checked)
                             OutText.Append(sepa + CExt);
 
 
                         //Exif属性を表示する
                         //Exif属性取得には時間が掛かると思われるためここでExif属性が不要な場合は先に進まないようにするい
-                        if (chkExif.Checked && ( rbtnAllExt.Checked || ExifExtDic.ContainsKey(CExt) || CExt=="gif" || CExt=="bmp" || CExt=="png")) {
+                        if (chkExif.Checked && (rbtnAllExt.Checked || ExifExtDic.ContainsKey(CExt) || CExt == "gif" || CExt == "bmp" || CExt == "png")) {
                             //ExifTagOutListsのExif値を初期化
                             foreach (Exiflist eList in ExifTagOutLists) {
                                 eList.EValue = ""; //初期値は空文字列
@@ -453,9 +476,9 @@ namespace PictureList {
                                 ExifTagOutDic.Add(exiflis.Key, exiflis.Value);
                             }
                             //拡張子がgif,bmpの時はBitmapで画像情報を取得する
-                            if (CExt == "gif" || CExt == "bmp" || CExt=="png") {
+                            if (CExt == "gif" || CExt == "bmp" || CExt == "png") {
                                 ChkGIFBMP(finfo.FullName);
-                            } else { 
+                            } else {
                                 //ExifAPIクラスでExif情報を取得。拡張子がjpg, jpeg, tiff, tifの時のみ
                                 if (APIEXTs.Contains(CExt) && exifToolUse != 2) {
                                     if (ExifTagOutDic.Count > 0) {
@@ -477,23 +500,13 @@ namespace PictureList {
                         }
                         OutText.Append(sepaTail);
                         FileDone++;
-                        if (FileDone + DirDone > NextDispNum) {
-                            DisplayDidFiles();
-                            NextDispNum += CountInterval;
-                        }
                     }
                 }
-                if (FileDone + DirDone > NextDispNum) {
-                    DisplayDidFiles();
-                    NextDispNum += CountInterval;
-                }
             }
-            InSaerching(false);
-
             // 実行時間の表示
 # if DEBUG
-            stopwatch.Stop();
-            Debug.Print($"処理数: {FileDone + DirDone}  時間: {stopwatch.ElapsedMilliseconds / 1000.0}Sec");
+            stopw.Stop();
+            Debug.Print($"処理数: {FileDone + DirDone}  時間: {stopw.ElapsedMilliseconds / 1000.0}Sec");
 #endif
         }
 
@@ -511,7 +524,6 @@ namespace PictureList {
                         ExifExtDic.Add(sExt, "0");
                     }
                 }
-                //}
                 if (chkMainExifExt.Checked) {
                     exts = chkMainExifExt.Text.Split(',');
                     foreach (var ext in exts) {
@@ -548,7 +560,6 @@ namespace PictureList {
             }
         }
 
-        
         /// <summary>
         /// ディレクトリ情報を出す設定ならその情報を追加する
         /// </summary>
@@ -570,9 +581,9 @@ namespace PictureList {
                     OutText.Append(sepa + "0");
                 if (chkAttribute.Checked)
                     OutText.Append(sepa + dirInfo.Attributes.ToString());
-                if(chkExt.Checked)
+                if (chkExt.Checked)
 
-                OutText.Append(sepaTail);
+                    OutText.Append(sepaTail);
                 DirDone++;
             }
         }
@@ -619,7 +630,7 @@ namespace PictureList {
                         ExifTagOutDic.Remove("G-Resolution");
                     }
                 }
-                if(ExifTagOutDic.ContainsKey("0x0100")) { //ImageWidth
+                if (ExifTagOutDic.ContainsKey("0x0100")) { //ImageWidth
                     int idx = ExifTagOutDic["0x0100"];
                     if (idx > 0) {
                         ExifTagOutLists[idx - 1].EValue = bmp.Width.ToString();
@@ -651,14 +662,7 @@ namespace PictureList {
             }
         }
 
-        private void DisplayDidFiles() {
-            int BothDone = FileDone + DirDone;
-            lblQty.Text = String.Format("{0:#,#} / {1:#,#}", BothDone, BothSum);
-            lblQty.Refresh();
-            if (BothDone > progressBar1.Maximum)
-                BothDone = progressBar1.Maximum;
-            progressBar1.Value = BothDone;
-        }
+
 
         /// <summary>
         /// 引数で指定したExifPictureクラスのタグデータからExifTagOutListsに一致するタグプロパティを順番に調べてそれと一致する情報をOutTextに追加していく
@@ -670,9 +674,29 @@ namespace PictureList {
             }
         }
 
-        
-
         private void Form1_Load(object sender, EventArgs e) {
+            //log4net の初期設定
+            // アペンダー（ログの出力を担当するオブジェクト）の作成
+            var rollingFileAppender = new RollingFileAppender() {
+                Name = "RollingFileAppender",   // Appenderの名前
+                File = "PictureList.log",            // 出力ファイル名
+                AppendToFile = true,        // 追記モード
+                Layout = new PatternLayout("%date %-5level %logger - %message%newline"),    // ログのフォーマット
+                RollingStyle = RollingFileAppender.RollingMode.Size,    // ログローテーションのスタイル（サイズごと）
+                MaxFileSize = 10 * 1024,    // 10KBごとにローテーション
+                MaxSizeRollBackups = 5,     // 最大バックアップ数
+                StaticLogFileName = true,   // ログファイル名を固定にする
+                Threshold = log4net.Core.Level.Info     //ログレベルの設定
+            };
+            // アペンダーをロガーに登録
+            var mainLogger = (Logger)logger.Logger;
+            mainLogger.AddAppender(rollingFileAppender);
+            rollingFileAppender.ActivateOptions();
+
+            // ロガーの設定を有効にする
+            var hierarchy = (Hierarchy)LogManager.GetRepository();
+            hierarchy.Configured = true;
+
             //Settings.settingsに保存したデータの読み込み
             lblSearchPath.Text = Properties.Settings.Default.StartDir;
             chkSubDir.Checked = Properties.Settings.Default.IsIncludeSubDir;
@@ -732,7 +756,6 @@ namespace PictureList {
             }
 
             SetOutPutFileType();
-            // GetExifExt();
         }
 
         //探索フォルダーを得る
@@ -766,15 +789,108 @@ namespace PictureList {
             }
         }
 
-        //private void txtAdditionalExifExtLists_TextChanged(object sender, EventArgs e) {
-        //    GetExifExt();
-        //}
-
-        private void btnFind_Click(object sender, EventArgs e) {
+        // 探索開始ボタン
+        private async void btnFind_Click(object sender, EventArgs e) {
+            if(IsFinding) {
+                //探索中止
+                doCancel();
+                return;
+            }
             if (System.IO.Directory.Exists(lblSearchPath.Text)) {
-                GetDirsFilesList(lblSearchPath.Text);
+                stopwatch.Restart();
+                dirTimeSpan = stopwatch.Elapsed;
+                lblPrcsdQty.Text = "対象ファイル調査中";
+                lblEstTime.Text = "ファイル内容調査時間";
+                lblRmningTime.Text = "---";
+                IsFinding = true;
+                InSaerching(IsFinding);
+                //キャンセル可能な進行表示非同期タスク
+                //再度実行したときのために既存のcts1, cts2をキャンセルして破棄する
+                cts1?.Cancel();
+                cts1?.Dispose();
+                cts1 = new CancellationTokenSource();
+
+                Task Prgrstask = new Task(() => {
+                    try {
+                        while (!cts1.Token.IsCancellationRequested) {
+                            PrgrsDispAsync();
+                        }
+                    } catch (Exception ec) {
+                        Debug.Print("Error in dispPrgrsAsync:" + ec.Message);
+                        logger.Error("Error in dispPrgrsAsync:" + ec.Message);
+                    }
+                }, cts1.Token);
+                Prgrstask.Start();
+                //再度実行したときのために既存のcts2をキャンセルして破棄する
+                cts2?.Cancel();
+                cts2?.Dispose();
+                cts2 = new CancellationTokenSource();
+                try {
+                    await Task.Run(() => {
+                        GetDirsFilesListAsync(lblSearchPath.Text);
+                    }, cts2.Token);
+                } catch (Exception ec) {
+                    Debug.Print("Error in PrgrsLoop:" + ec.Message);
+                    logger.Error("Error in PrgrsLoop:" + ec.Message);
+                }
+                cts1.Cancel();
+                IsFinding = false;
+                InSaerching(IsFinding);
+                stopwatch.Stop();
+                progressBar1.Value = progressBar1.Maximum;
+                //結果の最終表示
+                int BothDone = FileDone + DirDone;
+                if (BothDone >= BothSum) { //完了時
+                    lblQty.Text = "対象ファイル数　/　ファイル数探索時間";
+                    lblPrcsdQty.Text = System.String.Format($"{BothDone:#,#} / {dirTimeSpan.ToString(@"hh\:mm\:ss\.fff")}");
+                    lblEstTime.Text= "ファイル内容調査時間";
+                    lblRmningTime.Text = "ファイル調査時間 : " + stopwatch.Elapsed.ToString(@"hh\:mm\:ss\.fff");
+                } else {                //キャンセル時
+                    lblPrcsdQty.Text = System.String.Format($"キャンセル : {BothDone:#,#} / {BothSum:#,#}");
+                    lblRmningTime.Text = "経過時間 : " + stopwatch.Elapsed.ToString(@"hh\:mm\:ss\.fff");
+                }
+#if DEBUG
+                logger.Info($"処理数: {lblPrcsdQty.Text}  時間: {lblRmningTime.Text}");
+#endif
+
             } else {
                 MessageBox.Show("ディレクトリ " + lblSearchPath.Text + "\nは見つかりません");
+            }
+        }
+
+        // 進行表示の非同期処理
+        void PrgrsDispAsync() {
+            string qtyText, timeText,qtyCaption,timeCaption;
+            int BothDone = FileDone + DirDone;
+            TimeSpan ts = stopwatch.Elapsed;
+            if (BothDone > 0) { // ファイル探索中のとき
+                qtyCaption = "対象ファイル調査中"; qtyText = System.String.Format("{0:#,#} / {1:#,#}", BothDone, BothSum);
+                TimeSpan RmngTs = ts * ((double)BothSum / (double)BothDone - 1.0);
+                timeCaption= "内容調査時間 / 残り見込み時間";
+                timeText = "経過時間 / 残り時間 : " + (dirTimeSpan + ts).ToString(@"hh\:mm\:ss") + " / " + RmngTs.ToString(@"hh\:mm\:ss");
+            } else {    // フォルダリスト探索中のとき
+                qtyCaption = "対象ファイル調査中"; qtyText = $"{ts.ToString(@"hh\:mm\:ss")}";
+                timeCaption = "対象ファイル確認中"; timeText = "数量確認中";
+            }
+            this.Invoke((System.Windows.Forms.MethodInvoker)(() => {
+                lblQty.Text = qtyCaption;
+                lblPrcsdQty.Text = qtyText;
+                lblEstTime.Text= timeCaption;
+                lblRmningTime.Text = timeText;
+                if (BothDone <= progressBar1.Maximum && BothDone >= progressBar1.Minimum)
+                    progressBar1.Value = BothDone;
+            }));
+
+            Task.Delay(DelayTime).Wait();
+        }
+
+        void doCancel() {
+            if (IsFinding) {
+                //探索中止
+                cts1.Cancel();
+                cts2.Cancel();
+            } else {
+                logger.Error("探索実行中でないのに doCancel()が呼ばれた");
             }
         }
 
@@ -853,7 +969,7 @@ namespace PictureList {
                 saveFileDialog1.Filter = "テキストファイル(*.csv)|*.csv|すべて(*.*)|*.*";
             }
         }
-        private void makeTextTitle() {
+        private string makeTextTitle() {
             OutTitleList.Clear();
             OutTitleList.Append(sepaHead + "フォルダ名" + sepa + "ファイル名");
             if (chkLastWriteTime.Checked)
@@ -874,8 +990,7 @@ namespace PictureList {
                 }
             }
             OutTitleList.Append(sepaTail);
-            txtComment.Text = OutTitleList.ToString();
-            txtComment.Refresh();
+            return OutTitleList.ToString();
         }
 
         private void rbtnCSV_CheckedChanged(object sender, EventArgs e) {
@@ -892,22 +1007,6 @@ namespace PictureList {
             }
         }
 
-        //Exifを調べるファイルの拡張子のリスト  ExifExtLists を作成する
-        private void GetExifExt() {
-            ExifToolEXTs.Clear();
-            ExifToolEXTs.AddRange(APIEXTs);
-            if (chkMainExifExt.Checked) {
-                //表示の都合で入る改行を取り除いて大文字にして追加する（以下同じ
-                ExifToolEXTs.AddRange(chkMainExifExt.Text.Replace("\r", "").Replace("\n", "").ToUpper().Split(','));
-            }
-            if (chkSubExifExt.Checked) {
-                ExifToolEXTs.AddRange(chkSubExifExt.Text.Replace("\r", "").Replace("\n", "").ToUpper().Split(','));
-            }
-            if (chkExifTextExt.Checked) {
-                ExifToolEXTs.AddRange(chkExifTextExt.Text.Replace("\r", "").Replace("\n", "").ToUpper().Split(','));
-            }
-        }
-
         private void rbExifToolDonotUse_CheckedChanged(object sender, EventArgs e) {
             if (rbExifToolDonotUse.Checked) exifToolUse = 0;
         }
@@ -920,6 +1019,6 @@ namespace PictureList {
             if (rbExifToolAllways.Checked) exifToolUse = 2;
         }
 
-        
+
     }
 }

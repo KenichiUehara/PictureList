@@ -23,6 +23,7 @@
         /// コード エディターで変更しないでください。
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             btnFolderSelect = new System.Windows.Forms.Button();
@@ -60,9 +61,9 @@
             chkCreationTime = new System.Windows.Forms.CheckBox();
             chkLastWriteTime = new System.Windows.Forms.CheckBox();
             label6 = new System.Windows.Forms.Label();
-            label7 = new System.Windows.Forms.Label();
-            progressBar1 = new System.Windows.Forms.ProgressBar();
             lblQty = new System.Windows.Forms.Label();
+            progressBar1 = new System.Windows.Forms.ProgressBar();
+            lblPrcsdQty = new System.Windows.Forms.Label();
             groupBoxExifExt = new System.Windows.Forms.GroupBox();
             label9 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
@@ -78,11 +79,15 @@
             rbExifToolAllways = new System.Windows.Forms.RadioButton();
             rbExiToolIfNeed = new System.Windows.Forms.RadioButton();
             rbExifToolDonotUse = new System.Windows.Forms.RadioButton();
+            lblEstTime = new System.Windows.Forms.Label();
+            lblRmningTime = new System.Windows.Forms.Label();
+            pictureBox1 = new System.Windows.Forms.PictureBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBoxExifExt.SuspendLayout();
             groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // openFileDialog1
@@ -92,7 +97,7 @@
             // btnFolderSelect
             // 
             btnFolderSelect.BackColor = System.Drawing.SystemColors.Control;
-            btnFolderSelect.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
+            btnFolderSelect.Font = new System.Drawing.Font("MS UI Gothic", 10F, System.Drawing.FontStyle.Bold);
             btnFolderSelect.Location = new System.Drawing.Point(6, 1);
             btnFolderSelect.Margin = new System.Windows.Forms.Padding(4);
             btnFolderSelect.Name = "btnFolderSelect";
@@ -116,7 +121,7 @@
             // btnCopy2Clip
             // 
             btnCopy2Clip.BackColor = System.Drawing.SystemColors.Control;
-            btnCopy2Clip.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
+            btnCopy2Clip.Font = new System.Drawing.Font("MS UI Gothic", 10F, System.Drawing.FontStyle.Bold);
             btnCopy2Clip.Location = new System.Drawing.Point(9, 132);
             btnCopy2Clip.Margin = new System.Windows.Forms.Padding(4);
             btnCopy2Clip.Name = "btnCopy2Clip";
@@ -148,6 +153,7 @@
             groupBox1.Controls.Add(rbtnIncldDir);
             groupBox1.Controls.Add(rbtnOnlyFiles);
             groupBox1.Controls.Add(rbtnOnlyDir);
+            groupBox1.Font = new System.Drawing.Font("Yu Gothic UI", 10F);
             groupBox1.Location = new System.Drawing.Point(321, 45);
             groupBox1.Margin = new System.Windows.Forms.Padding(4);
             groupBox1.Name = "groupBox1";
@@ -169,6 +175,7 @@
             // rbtnOnlyExif
             // 
             rbtnOnlyExif.AutoSize = true;
+            rbtnOnlyExif.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             rbtnOnlyExif.Location = new System.Drawing.Point(21, 109);
             rbtnOnlyExif.Margin = new System.Windows.Forms.Padding(4);
             rbtnOnlyExif.Name = "rbtnOnlyExif";
@@ -181,6 +188,7 @@
             // rbtnOnlyImage
             // 
             rbtnOnlyImage.AutoSize = true;
+            rbtnOnlyImage.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             rbtnOnlyImage.Location = new System.Drawing.Point(9, 88);
             rbtnOnlyImage.Margin = new System.Windows.Forms.Padding(4);
             rbtnOnlyImage.Name = "rbtnOnlyImage";
@@ -194,6 +202,7 @@
             // 
             rbtnIncldDir.AutoSize = true;
             rbtnIncldDir.Checked = true;
+            rbtnIncldDir.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             rbtnIncldDir.Location = new System.Drawing.Point(9, 18);
             rbtnIncldDir.Margin = new System.Windows.Forms.Padding(4);
             rbtnIncldDir.Name = "rbtnIncldDir";
@@ -206,6 +215,7 @@
             // rbtnOnlyFiles
             // 
             rbtnOnlyFiles.AutoSize = true;
+            rbtnOnlyFiles.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             rbtnOnlyFiles.Location = new System.Drawing.Point(9, 39);
             rbtnOnlyFiles.Margin = new System.Windows.Forms.Padding(4);
             rbtnOnlyFiles.Name = "rbtnOnlyFiles";
@@ -217,6 +227,7 @@
             // rbtnOnlyDir
             // 
             rbtnOnlyDir.AutoSize = true;
+            rbtnOnlyDir.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             rbtnOnlyDir.Location = new System.Drawing.Point(9, 60);
             rbtnOnlyDir.Margin = new System.Windows.Forms.Padding(4);
             rbtnOnlyDir.Name = "rbtnOnlyDir";
@@ -268,7 +279,7 @@
             // btnFind
             // 
             btnFind.BackColor = System.Drawing.SystemColors.Control;
-            btnFind.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
+            btnFind.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
             btnFind.Location = new System.Drawing.Point(6, 44);
             btnFind.Margin = new System.Windows.Forms.Padding(4);
             btnFind.Name = "btnFind";
@@ -281,7 +292,7 @@
             // btnOut2File
             // 
             btnOut2File.BackColor = System.Drawing.SystemColors.Control;
-            btnOut2File.Location = new System.Drawing.Point(164, 145);
+            btnOut2File.Location = new System.Drawing.Point(161, 133);
             btnOut2File.Margin = new System.Windows.Forms.Padding(4);
             btnOut2File.Name = "btnOut2File";
             btnOut2File.Size = new System.Drawing.Size(153, 29);
@@ -294,6 +305,7 @@
             // 
             groupBox2.Controls.Add(rbtnTab);
             groupBox2.Controls.Add(rbtnCSV);
+            groupBox2.Font = new System.Drawing.Font("Yu Gothic UI", 10F);
             groupBox2.Location = new System.Drawing.Point(323, 179);
             groupBox2.Margin = new System.Windows.Forms.Padding(4);
             groupBox2.Name = "groupBox2";
@@ -307,6 +319,7 @@
             // 
             rbtnTab.AutoSize = true;
             rbtnTab.Checked = true;
+            rbtnTab.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             rbtnTab.Location = new System.Drawing.Point(13, 19);
             rbtnTab.Margin = new System.Windows.Forms.Padding(4);
             rbtnTab.Name = "rbtnTab";
@@ -320,6 +333,7 @@
             // rbtnCSV
             // 
             rbtnCSV.AutoSize = true;
+            rbtnCSV.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             rbtnCSV.Location = new System.Drawing.Point(13, 46);
             rbtnCSV.Margin = new System.Windows.Forms.Padding(4);
             rbtnCSV.Name = "rbtnCSV";
@@ -358,15 +372,16 @@
             txtComment.Multiline = true;
             txtComment.Name = "txtComment";
             txtComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            txtComment.Size = new System.Drawing.Size(305, 290);
+            txtComment.Size = new System.Drawing.Size(305, 273);
             txtComment.TabIndex = 16;
+            txtComment.Text = "ファイル情報出力プログラム\r\n\r\n写真のExif情報をExcelに出力する\r\nExif情報が不要の場合は高速のファイルリスト作成アプリ\r\n\r\n使い方\r\n1.フォルダーを選択\r\n2.出力項目の選択\r\n3.探索開始\r\n4.クリップボードにコピー\r\n5.ExcelにCtr+v などでコピー\r\n\r\nExcelでは区切位置の指定が、コンマやタブだけになっていないとデータがずれます";
             // 
             // btnExit
             // 
-            btnExit.Location = new System.Drawing.Point(523, 604);
+            btnExit.Location = new System.Drawing.Point(537, 604);
             btnExit.Margin = new System.Windows.Forms.Padding(4);
             btnExit.Name = "btnExit";
-            btnExit.Size = new System.Drawing.Size(142, 39);
+            btnExit.Size = new System.Drawing.Size(128, 39);
             btnExit.TabIndex = 17;
             btnExit.Text = "設定を保存して終了";
             btnExit.UseVisualStyleBackColor = true;
@@ -382,11 +397,12 @@
             groupBox3.Controls.Add(chkLastAccessTime);
             groupBox3.Controls.Add(chkCreationTime);
             groupBox3.Controls.Add(chkLastWriteTime);
+            groupBox3.Font = new System.Drawing.Font("Yu Gothic UI", 10F);
             groupBox3.Location = new System.Drawing.Point(518, 10);
             groupBox3.Margin = new System.Windows.Forms.Padding(4);
             groupBox3.Name = "groupBox3";
             groupBox3.Padding = new System.Windows.Forms.Padding(4);
-            groupBox3.Size = new System.Drawing.Size(149, 234);
+            groupBox3.Size = new System.Drawing.Size(149, 239);
             groupBox3.TabIndex = 18;
             groupBox3.TabStop = false;
             groupBox3.Text = "出力項目の選択";
@@ -396,7 +412,7 @@
             chkExt.AutoSize = true;
             chkExt.Location = new System.Drawing.Point(6, 140);
             chkExt.Name = "chkExt";
-            chkExt.Size = new System.Drawing.Size(62, 19);
+            chkExt.Size = new System.Drawing.Size(70, 23);
             chkExt.TabIndex = 9;
             chkExt.Text = "拡張子";
             chkExt.UseVisualStyleBackColor = true;
@@ -437,7 +453,7 @@
             chkAttribute.Location = new System.Drawing.Point(7, 116);
             chkAttribute.Margin = new System.Windows.Forms.Padding(4);
             chkAttribute.Name = "chkAttribute";
-            chkAttribute.Size = new System.Drawing.Size(84, 19);
+            chkAttribute.Size = new System.Drawing.Size(97, 23);
             chkAttribute.TabIndex = 6;
             chkAttribute.Text = "ファイル属性";
             chkAttribute.UseVisualStyleBackColor = true;
@@ -450,7 +466,7 @@
             chkSize.Location = new System.Drawing.Point(7, 92);
             chkSize.Margin = new System.Windows.Forms.Padding(4);
             chkSize.Name = "chkSize";
-            chkSize.Size = new System.Drawing.Size(88, 19);
+            chkSize.Size = new System.Drawing.Size(100, 23);
             chkSize.TabIndex = 5;
             chkSize.Text = "ファイルサイズ";
             chkSize.UseVisualStyleBackColor = true;
@@ -461,7 +477,7 @@
             chkLastAccessTime.Location = new System.Drawing.Point(7, 68);
             chkLastAccessTime.Margin = new System.Windows.Forms.Padding(4);
             chkLastAccessTime.Name = "chkLastAccessTime";
-            chkLastAccessTime.Size = new System.Drawing.Size(111, 19);
+            chkLastAccessTime.Size = new System.Drawing.Size(128, 23);
             chkLastAccessTime.TabIndex = 4;
             chkLastAccessTime.Text = "最終アクセス日時";
             chkLastAccessTime.UseVisualStyleBackColor = true;
@@ -474,7 +490,7 @@
             chkCreationTime.Location = new System.Drawing.Point(7, 44);
             chkCreationTime.Margin = new System.Windows.Forms.Padding(4);
             chkCreationTime.Name = "chkCreationTime";
-            chkCreationTime.Size = new System.Drawing.Size(74, 19);
+            chkCreationTime.Size = new System.Drawing.Size(84, 23);
             chkCreationTime.TabIndex = 3;
             chkCreationTime.Text = "作成日時";
             chkCreationTime.UseVisualStyleBackColor = true;
@@ -487,7 +503,7 @@
             chkLastWriteTime.Location = new System.Drawing.Point(7, 20);
             chkLastWriteTime.Margin = new System.Windows.Forms.Padding(4);
             chkLastWriteTime.Name = "chkLastWriteTime";
-            chkLastWriteTime.Size = new System.Drawing.Size(74, 19);
+            chkLastWriteTime.Size = new System.Drawing.Size(84, 23);
             chkLastWriteTime.TabIndex = 2;
             chkLastWriteTime.Text = "更新日時";
             chkLastWriteTime.UseVisualStyleBackColor = true;
@@ -502,35 +518,37 @@
             label6.TabIndex = 19;
             label6.Text = "記事、出力項目";
             // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new System.Drawing.Point(16, 559);
-            label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            label7.Name = "label7";
-            label7.Size = new System.Drawing.Size(77, 15);
-            label7.TabIndex = 20;
-            label7.Text = "出力ファイル数";
-            // 
-            // progressBar1
-            // 
-            progressBar1.Location = new System.Drawing.Point(6, 604);
-            progressBar1.Margin = new System.Windows.Forms.Padding(4);
-            progressBar1.Minimum = 100;
-            progressBar1.Name = "progressBar1";
-            progressBar1.Size = new System.Drawing.Size(454, 39);
-            progressBar1.TabIndex = 21;
-            progressBar1.Value = 100;
-            // 
             // lblQty
             // 
             lblQty.AutoSize = true;
-            lblQty.Location = new System.Drawing.Point(118, 559);
+            lblQty.Font = new System.Drawing.Font("Yu Gothic UI", 10F);
+            lblQty.Location = new System.Drawing.Point(9, 517);
             lblQty.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             lblQty.Name = "lblQty";
-            lblQty.Size = new System.Drawing.Size(13, 15);
-            lblQty.TabIndex = 22;
-            lblQty.Text = "0";
+            lblQty.Size = new System.Drawing.Size(92, 19);
+            lblQty.TabIndex = 20;
+            lblQty.Text = "出力ファイル数";
+            // 
+            // progressBar1
+            // 
+            progressBar1.Location = new System.Drawing.Point(6, 609);
+            progressBar1.Margin = new System.Windows.Forms.Padding(4);
+            progressBar1.Minimum = 100;
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new System.Drawing.Size(454, 34);
+            progressBar1.TabIndex = 21;
+            progressBar1.Value = 100;
+            // 
+            // lblPrcsdQty
+            // 
+            lblPrcsdQty.AutoSize = true;
+            lblPrcsdQty.Font = new System.Drawing.Font("Yu Gothic UI", 12F);
+            lblPrcsdQty.Location = new System.Drawing.Point(30, 536);
+            lblPrcsdQty.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            lblPrcsdQty.Name = "lblPrcsdQty";
+            lblPrcsdQty.Size = new System.Drawing.Size(19, 21);
+            lblPrcsdQty.TabIndex = 22;
+            lblPrcsdQty.Text = "0";
             // 
             // groupBoxExifExt
             // 
@@ -543,6 +561,7 @@
             groupBoxExifExt.Controls.Add(chkMainExifExt);
             groupBoxExifExt.Controls.Add(label1);
             groupBoxExifExt.Controls.Add(rbtnAllExt);
+            groupBoxExifExt.Font = new System.Drawing.Font("Yu Gothic UI", 10F);
             groupBoxExifExt.Location = new System.Drawing.Point(320, 369);
             groupBoxExifExt.Margin = new System.Windows.Forms.Padding(4);
             groupBoxExifExt.Name = "groupBoxExifExt";
@@ -555,6 +574,7 @@
             // label9
             // 
             label9.AutoSize = true;
+            label9.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             label9.Location = new System.Drawing.Point(203, 129);
             label9.Name = "label9";
             label9.Size = new System.Drawing.Size(121, 30);
@@ -564,6 +584,7 @@
             // label4
             // 
             label4.AutoSize = true;
+            label4.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             label4.Location = new System.Drawing.Point(238, 110);
             label4.Name = "label4";
             label4.Size = new System.Drawing.Size(86, 15);
@@ -583,6 +604,7 @@
             // chkExifTextExt
             // 
             chkExifTextExt.AutoSize = true;
+            chkExifTextExt.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             chkExifTextExt.Location = new System.Drawing.Point(20, 162);
             chkExifTextExt.Margin = new System.Windows.Forms.Padding(4);
             chkExifTextExt.Name = "chkExifTextExt";
@@ -594,6 +616,7 @@
             // chkSubExifExt
             // 
             chkSubExifExt.AutoSize = true;
+            chkSubExifExt.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             chkSubExifExt.Location = new System.Drawing.Point(22, 125);
             chkSubExifExt.Margin = new System.Windows.Forms.Padding(4);
             chkSubExifExt.Name = "chkSubExifExt";
@@ -605,6 +628,7 @@
             // rbtnExtSelect
             // 
             rbtnExtSelect.AutoSize = true;
+            rbtnExtSelect.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             rbtnExtSelect.Location = new System.Drawing.Point(6, 88);
             rbtnExtSelect.Margin = new System.Windows.Forms.Padding(4);
             rbtnExtSelect.Name = "rbtnExtSelect";
@@ -616,6 +640,7 @@
             // 
             // chkMainExifExt
             // 
+            chkMainExifExt.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             chkMainExifExt.Location = new System.Drawing.Point(22, 106);
             chkMainExifExt.Margin = new System.Windows.Forms.Padding(4);
             chkMainExifExt.Name = "chkMainExifExt";
@@ -626,6 +651,7 @@
             // 
             // label1
             // 
+            label1.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             label1.Location = new System.Drawing.Point(6, 20);
             label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label1.Name = "label1";
@@ -636,6 +662,7 @@
             // rbtnAllExt
             // 
             rbtnAllExt.AutoSize = true;
+            rbtnAllExt.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             rbtnAllExt.Location = new System.Drawing.Point(6, 70);
             rbtnAllExt.Margin = new System.Windows.Forms.Padding(4);
             rbtnAllExt.Name = "rbtnAllExt";
@@ -651,6 +678,7 @@
             groupBox4.Controls.Add(rbExifToolAllways);
             groupBox4.Controls.Add(rbExiToolIfNeed);
             groupBox4.Controls.Add(rbExifToolDonotUse);
+            groupBox4.Font = new System.Drawing.Font("Yu Gothic UI", 10F);
             groupBox4.Location = new System.Drawing.Point(321, 251);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new System.Drawing.Size(346, 111);
@@ -660,6 +688,7 @@
             // 
             // label8
             // 
+            label8.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             label8.Location = new System.Drawing.Point(8, 19);
             label8.Name = "label8";
             label8.Size = new System.Drawing.Size(331, 60);
@@ -669,6 +698,7 @@
             // rbExifToolAllways
             // 
             rbExifToolAllways.AutoSize = true;
+            rbExifToolAllways.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             rbExifToolAllways.Location = new System.Drawing.Point(250, 82);
             rbExifToolAllways.Name = "rbExifToolAllways";
             rbExifToolAllways.Size = new System.Drawing.Size(87, 19);
@@ -681,6 +711,7 @@
             // rbExiToolIfNeed
             // 
             rbExiToolIfNeed.AutoSize = true;
+            rbExiToolIfNeed.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             rbExiToolIfNeed.Location = new System.Drawing.Point(132, 82);
             rbExiToolIfNeed.Name = "rbExiToolIfNeed";
             rbExiToolIfNeed.Size = new System.Drawing.Size(99, 19);
@@ -693,6 +724,7 @@
             // rbExifToolDonotUse
             // 
             rbExifToolDonotUse.AutoSize = true;
+            rbExifToolDonotUse.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             rbExifToolDonotUse.Location = new System.Drawing.Point(6, 82);
             rbExifToolDonotUse.Name = "rbExifToolDonotUse";
             rbExifToolDonotUse.Size = new System.Drawing.Size(113, 19);
@@ -702,17 +734,50 @@
             rbExifToolDonotUse.UseVisualStyleBackColor = true;
             rbExifToolDonotUse.CheckedChanged += rbExifToolDonotUse_CheckedChanged;
             // 
+            // lblEstTime
+            // 
+            lblEstTime.AutoSize = true;
+            lblEstTime.Font = new System.Drawing.Font("Yu Gothic UI", 10F);
+            lblEstTime.Location = new System.Drawing.Point(9, 565);
+            lblEstTime.Name = "lblEstTime";
+            lblEstTime.Size = new System.Drawing.Size(89, 19);
+            lblEstTime.TabIndex = 24;
+            lblEstTime.Text = "残り予想時間";
+            // 
+            // lblRmningTime
+            // 
+            lblRmningTime.AutoSize = true;
+            lblRmningTime.Font = new System.Drawing.Font("Yu Gothic UI", 12F);
+            lblRmningTime.Location = new System.Drawing.Point(30, 584);
+            lblRmningTime.Name = "lblRmningTime";
+            lblRmningTime.Size = new System.Drawing.Size(34, 21);
+            lblRmningTime.TabIndex = 27;
+            lblRmningTime.Text = "----";
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = Properties.Resources.KUPマーク123x60;
+            pictureBox1.Location = new System.Drawing.Point(467, 603);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new System.Drawing.Size(63, 45);
+            pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 28;
+            pictureBox1.TabStop = false;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.SystemColors.Control;
-            ClientSize = new System.Drawing.Size(679, 647);
+            ClientSize = new System.Drawing.Size(673, 647);
+            Controls.Add(pictureBox1);
+            Controls.Add(lblRmningTime);
+            Controls.Add(lblEstTime);
             Controls.Add(groupBox4);
             Controls.Add(groupBoxExifExt);
-            Controls.Add(lblQty);
+            Controls.Add(lblPrcsdQty);
             Controls.Add(progressBar1);
-            Controls.Add(label7);
+            Controls.Add(lblQty);
             Controls.Add(label6);
             Controls.Add(groupBox3);
             Controls.Add(btnExit);
@@ -731,7 +796,8 @@
             Controls.Add(btnCopy2Clip);
             Controls.Add(lblSearchPath);
             Controls.Add(btnFolderSelect);
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Margin = new System.Windows.Forms.Padding(4);
             MinimumSize = new System.Drawing.Size(585, 580);
             Name = "Form1";
@@ -747,6 +813,7 @@
             groupBoxExifExt.PerformLayout();
             groupBox4.ResumeLayout(false);
             groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -788,9 +855,9 @@
         private System.Windows.Forms.RadioButton rbtnOnlyExif;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label lblQty;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label lblPrcsdQty;
         private System.Windows.Forms.GroupBox groupBoxExifExt;
         private System.Windows.Forms.RadioButton rbtnAllExt;
         private System.Windows.Forms.Label label1;
@@ -807,6 +874,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.CheckBox chkExt;
+        private System.Windows.Forms.Label lblEstTime;
+        private System.Windows.Forms.Label lblRmningTime;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

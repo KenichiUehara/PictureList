@@ -70,9 +70,7 @@ namespace PictureList {
                             } else {
                                 // CIPA風の訳が無ければエラーログを作成
                             }
-
                         }
-
 
                         // 変換式があればそれを実行。なければそのまま値を使用
                         string fStr = foundTagValue;    // 変換前の値
@@ -100,7 +98,6 @@ namespace PictureList {
                                 break;
                             case "0x001d": tStr = fStr.Replace(":", "/"); break; // ExifToolでは日付の区切りが ":" なので修正
                         }
-
                         if (fStr != tStr) {
                             exifTagOutLists[eDic.Value - 1].EValue = tStr;
                         }
@@ -215,58 +212,6 @@ namespace PictureList {
                 }                
             }
             return ""; // GPS情報が不完全な場合は空文字を返す
-
-
-            //if (ExifToolValueDic.ContainsKey("0x0001") && ExifToolValueDic.ContainsKey("0x0002") && ExifToolValueDic.ContainsKey("0x0003") && ExifToolValueDic.ContainsKey("0x0004")) { // GPS座標すべての値がそろっていれば
-            //    lat = ExifToolValueDic["0x0001"];
-            //    if (lat.ToUpper().StartsWith("N") || lat.StartsWith("北")) { // 北緯または南緯
-            //        lat = "N ";
-            //    } else if (lat.ToUpper().StartsWith("S") || lat.StartsWith("南")) { // 北緯または南緯
-            //        lat = "S ";
-            //    } else {
-            //        return ""; // 値を返す
-            //    }
-            //    lon = ExifToolValueDic["0x0003"];
-            //    if (lon.ToUpper().StartsWith("E") || lon.StartsWith("東")) { // 東経または西経
-            //        lon = " , E ";
-            //    } else if (lon.ToUpper().StartsWith("W") || lon.StartsWith("西")) { // 東経または西経
-            //        lon = " , W ";
-            //    } else {
-            //        return ""; // 値を返す
-            //    }
-            //    double latitude = 0.0, longitude = 0.0; // 緯度と経度の初期化
-            //                                            // ここからは緯度のnn deg nn ' nn.nn " 形式を値への変換
-            //    string latStr = ExifToolValueDic["0x0002"]; // 緯度の値を取得
-            //    int posdeg = latStr.IndexOf(" deg");
-            //    string sDeg = latStr.Substring(0, posdeg).Trim(); // 度の部分を取得
-            //    int posmin = latStr.IndexOf('\'');
-            //    string sMin = latStr.Substring(posdeg + 4, posmin - posdeg - 4).Trim(); // 分の部分を取得
-            //    string sSec = latStr.Substring(posmin + 1).Trim(); // 秒の部分を取得
-            //    sSec = sSec.Replace("\"", "").Trim(); // 秒の部分からダブルクォーテーションを削除
-            //    if (int.TryParse(sDeg, out int deg) && int.TryParse(sMin, out int min) && double.TryParse(sSec, out double secD)) {
-            //        if (deg < 0 || deg >= 90 || min < 0 || min >= 60 || secD < 0 || secD >= 60) {
-            //            return ""; // 度、分、秒が不正な場合は空文字を返す
-            //        }
-            //        latitude = deg + min / 60.0 + secD / 3600.0; // 緯度を計算
-            //    }
-
-            //    // ここからは経度の 　nnn deg nn ' nn.nn " 形式を値への変換
-            //    string lonStr = ExifToolValueDic["0x0004"]; // 経度の値を取得
-            //    posdeg = lonStr.IndexOf(" deg");
-            //    sDeg = lonStr.Substring(0, posdeg).Trim(); // 度の部分を取得
-            //    posmin = lonStr.IndexOf('\'');
-            //    sMin = lonStr.Substring(posdeg + 4, posmin - posdeg - 4).Trim(); // 分の部分を取得
-            //    sSec = lonStr.Substring(posmin + 1).Trim(); // 秒の部分を取得
-            //    sSec = sSec.Replace("\"", "").Trim(); // 秒の部分からダブルクォーテーションを削除
-            //    if (int.TryParse(sDeg, out int deg2) && int.TryParse(sMin, out int min2) && double.TryParse(sSec, out double secD2)) {
-            //        if (deg2 < 0 || deg2 >= 180 || min2 < 0 || min2 >= 60 || secD2 < 0 || secD2 >= 60) {
-            //            return ""; // 度、分、秒が不正な場合は空文字を返す
-            //        }
-            //        longitude = deg2 + min2 / 60.0 + secD2 / 3600.0; // 経度を計算
-            //    }
-            //    return lat + latitude.ToString("#.########") + lon + longitude.ToString("#.########"); // 緯度と経度を返す
-            //}
-            //return ""; // GPS情報が不完全な場合は空文字を返す
         }
 
         // GPS高度を取得して返す
@@ -286,7 +231,6 @@ namespace PictureList {
                 return sAlt + ExifToolValueDic["0x0006"];
             return "";
         }
-
 
         /// <summary>
         /// exiftool -EXIF:ALL --IFD1:ALL --InteropIFD:All -G0:1 -H -a -s ファイル名 コマンドで取得されたデータを素早くTagIDと値の辞書に変換するメソッド
@@ -359,22 +303,7 @@ namespace PictureList {
             }
             tagName = str.Substring(0, pos).Trim(); // タグ名を取得
             value = str.Substring(pos + 1).Trim(); // 値を取得
-        }
-
-        // [File で始まる FileInfo関連の
-        //bool GetFileInfo(string str, out string tagName, out string value) {
-        //    // File情報の取得
-        //    int pos = str.IndexOf('-');
-        //    int pos2 = str.IndexOf(':');
-        //    if (pos < 0 || pos2 < pos) {
-        //        tagName = string.Empty;
-        //        value = string.Empty;
-        //        return false; // 見つからない場合は空の値を返す
-        //    }
-        //    tagName = str.Substring(pos + 2, pos2 - pos - 2).Trim(); // タグ名を取得
-        //    value = str.Substring(pos2 + 1).Trim(); // 値を取得
-        //    return true;
-        //}
+        }        
 
         /// <summary>
         /// コマンドラインで exiftoolを実行した結果と同じものを取り込む

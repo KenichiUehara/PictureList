@@ -65,11 +65,6 @@ namespace PictureList {
                     ListViewItem UnSelctViewItem = new ListViewItem();
                     UnSelctViewItem.Text = allLists[i].Property;
                     UnSelctViewItem.SubItems.Add(allLists[i].TagName);
-                    //if (allLists[i].Availeble == true) {  Availebleは使用しなくなったのでコメントアウト
-                    //    UnSelctViewItem.SubItems.Add("有効");
-                    //} else {
-                    //    UnSelctViewItem.SubItems.Add("未実装");
-                    //}
                     UnSelctViewItem.SubItems.Add(allLists[i].TagID);
                     listViewUnSelect.Items.Add(UnSelctViewItem);
                 }
@@ -114,11 +109,6 @@ namespace PictureList {
                 ListViewItem SelectViewItem = new ListViewItem();
                 SelectViewItem.Text = selectLists[i].Property;
                 SelectViewItem.SubItems.Add(selectLists[i].TagName);
-                //if (selectLists[i].Availeble == true) {
-                //    SelectViewItem.SubItems.Add("有効");
-                //} else {
-                //    SelectViewItem.SubItems.Add("未実装");
-                //}
                 SelectViewItem.SubItems.Add(selectLists[i].TagID);
                 SelectViewItem.SubItems.Add(selectLists[i].Order.ToString());
                 listViewSelect.Items.Add(SelectViewItem);
@@ -223,9 +213,7 @@ namespace PictureList {
                 MessageBox.Show("移動元と移動先を選んでください", "注意",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
-            }
-
-            //int SelectOrder = listViewSelect.Items[LastSelectIdx].Index + 1;
+            }                        
             int SelectOrder = LastSelectIdx + 1;    //候補で選択したもの新しいOrder
             int ChangingOrder = SelectOrder;    // alllistでインクリメントしなければいけない一番小さいOrder
                                                 // 結局 SelectOrederもCahngingOredrも同じ値
@@ -275,11 +263,7 @@ namespace PictureList {
             }
 
             ReWriteViews();
-        }
-
-        //private void Disp(string str) {
-        //    Console.WriteLine("{0,10} LUnSels={1,-5} LSel={2,-5}", str, LastUnSelectIdx, LastSelectIdx);
-        //}
+        }        
 
         private void Disp(string str) {
             string LName = "-";
@@ -289,8 +273,6 @@ namespace PictureList {
             string RName = "-";
             if (LastSelectIdx >= 0)
                 RName = listViewSelect.Items[LastSelectIdx].Text;
-            //Console.WriteLine("{0,10} 候補 {1,3} = {2,-5} / 出力 {3,3} = {4,-5}",
-            //    str, LastUnSelectIdx, LName, LastSelectIdx, RName);
         }
 
         private void listViewUnSelect_ItemCheck(object sender, ItemCheckEventArgs e) {
@@ -304,11 +286,7 @@ namespace PictureList {
                     item.Checked = false;
                 }
             }
-        }
-
-        private void listViewSelect_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e) {
-
-        }
+        }       
 
         private void listViewSelect_ItemChecked(object sender, ItemCheckedEventArgs e) {
             Console.WriteLine("出力_ItemChecked {0}", LastUnSelectIdx);
@@ -325,7 +303,6 @@ namespace PictureList {
         }
 
         /// <summary>
-        /// 項目をすべて追加 2024/09/06に追加
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
