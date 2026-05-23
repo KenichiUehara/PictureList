@@ -14,9 +14,11 @@
 - ソースコード公開
 - 並列処理化による高速化は、自信がないので現時点では未実装
 
+## 📸 スクリーンショット
+![PictureList Screenshot](https://github.com/KenichiUehara/PictureList/blob/main/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202026-05-23%20143912.png)
+
 ## ダウンロード
-最新版の MSI インストーラーは以下からダウンロードできます：
-https://github.com/KenichiUehara/PictureList/releases
+👉 [最新リリースはこちら](https://github.com/KenichiUehara/PictureList/releases/latest)
 
 ## 使い方
 1. MSI を実行してインストール
